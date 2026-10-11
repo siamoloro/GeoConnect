@@ -5,6 +5,108 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/glitter"
     tools:context=".CustomerSignupActivity">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="26dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Customer signup"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Let's get you\nconnected."
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="26dp"
+                android:text="Create your customer profile in just a minute"
+                android:textColor="#707070"
+                android:textSize="14sp" />
+            <TextView
+                style="@style/SignupLabel"
+                android:text="Full Name" />
+
+            <EditText
+                android:id="@+id/FillNameInput"
+                style="@style/SignupInput"
+                android:hint="Enter your full name"
+                android:inputType="textPersonName"
+                android:autofillHints="name"/>
+
+            <TextView
+                style="@style/SignupLabel"
+                android:text="Email address"/>
+            
+            <EditText
+                android:id="@+id/emailInput"
+                style="@style/SignupInput"
+                android:hint="you@example.com"
+                android:inputType="textEmailAddress"
+                android:autofillHints="emailAddress" />
+            
+            <TextView
+                style="@style/SignupLabel"
+                android:text="Phone number" />
+            
+            <EditText
+                android:id="@+id/phoneInput"
+                style="@style/SignupInput"
+                android:hint="Enter your phone number"
+                android:inputType="phone"
+                android:autofillHints="phone" />
+
+            <TextView
+                style="@style/SignupLabel"
+                android:text="Password"/>
+
+            <EditText
+                android:id="@+id/passwordInput"
+                style="@style/SignupInput"
+                android:hint="Create a password"
+                android:inputType="textPassword"
+                android:autofillHints="newPassword" />
+
+                <Button
+                   android:id="@+id/createAccountButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="@color/jade_green"
+                    android:text="Create My Account"
+                    android:textAllCaps="false"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Jade Twilight Color Palette -->
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="glitter">#E6E8FA</color>
+    <color name="forest_green">#1A4D1A</color>
+    <color name="jade_green">#3B8A3B</color>
+    <color name="sage_green">#A2D8A2</color>
 </resources>
