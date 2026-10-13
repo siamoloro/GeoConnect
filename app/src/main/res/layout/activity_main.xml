@@ -4,9 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A4D1A"> <!-- Match your splash screen background color -->
+    android:background="#1A4D1A">
 
-    <!-- Center Logo (Using your vector) -->
     <ImageView
         android:id="@+id/imgLogo"
         android:layout_width="120dp"
@@ -19,7 +18,6 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:layout_marginBottom="16dp" />
 
-    <!-- App Name Text ("GeoConnect") -->
     <TextView
         android:id="@+id/txtAppName"
         android:layout_width="wrap_content"
@@ -34,7 +32,6 @@
         app:layout_constraintTop_toBottomOf="@id/imgLogo"
         android:layout_marginBottom="8dp" />
 
-    <!-- Subtitle Text ("Find what you need...") -->
     <TextView
         android:id="@+id/txtSlogan"
         android:layout_width="wrap_content"
