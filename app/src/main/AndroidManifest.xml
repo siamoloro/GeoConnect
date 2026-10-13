@@ -34,7 +34,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".AdminSignupActivity"
+            android:name=".AdminSigninActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -151,6 +151,18 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".OpenCaseActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminReportsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminReviewActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminUsersActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>
