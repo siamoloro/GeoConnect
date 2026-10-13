@@ -1,10 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WelcomeActivity">
+    android:background="#FFFFFF"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/txtWelcomeTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Your neighborhood,\nconnected."
+        android:textColor="#111111"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        android:lineSpacingExtra="4dp"
+        app:layout_constraintBottom_toTopOf="@id/txtWelcomeSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/txtWelcomeSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Discover trusted businesses and talented freelancers nearby, ready when you are."
+        android:textColor="#666666"
+        android:textSize="16sp"
+        android:lineSpacingExtra="4dp"
+        app:layout_constraintBottom_toTopOf="@id/btnCreateAccount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtWelcomeTitle"
+        android:layout_marginBottom="48dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignIn"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:text="I already have an account"
+        android:textColor="#114224"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        app:backgroundTint="#F2F4F2"
+        app:cornerRadius="28dp"
+        app:elevation="0dp"
+        style="?attr/materialButtonOutlinedStyle"
+        app:strokeWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="32dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCreateAccount"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:text="Create an account"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        app:backgroundTint="#114224"
+        app:cornerRadius="28dp"
+        app:elevation="0dp"
+        app:layout_constraintBottom_toTopOf="@id/btnSignIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="12dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
