@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="‹ Back"
-            android:textColor="@color/jade_dark"
+            android:textColor="@color/forest_green"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Join as a freelancer"
-            android:textColor="@color/jade_dark"
+            android:textColor="@color/forest_green"
             android:textSize="26sp"
             android:textStyle="bold"
             android:layout_marginTop="24dp" />
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Offer your skills to people nearby."
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginTop="6dp" />
 
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Full name"
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_marginTop="24dp" />
@@ -63,13 +63,13 @@
             android:inputType="textPersonName"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="@color/charcoal" />
+            android:textColor="@color/black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email address"
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_marginTop="14dp" />
@@ -84,13 +84,13 @@
             android:inputType="textEmailAddress"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="@color/charcoal" />
+            android:textColor="@color/black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Phone number"
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_marginTop="14dp" />
@@ -105,13 +105,13 @@
             android:inputType="phone"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="@color/charcoal" />
+            android:textColor="@color/black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Service category"
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_marginTop="14dp" />
@@ -130,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Password"
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_marginTop="14dp" />
@@ -145,7 +145,7 @@
             android:inputType="textPassword"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="@color/charcoal" />
+            android:textColor="@color/black" />
 
         <CheckBox
             android:id="@+id/cbTerms"
@@ -154,15 +154,15 @@
             android:layout_marginTop="16dp"
             android:text="I agree to the Terms of Service and Privacy Policy"
             android:textSize="12sp"
-            android:textColor="@color/charcoal"
-            android:buttonTint="@color/jade_dark" />
+            android:textColor="@color/black"
+            android:buttonTint="@color/forest_green" />
 
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="16dp"
-            android:backgroundTint="@color/jade_dark"
+            android:backgroundTint="@color/forest_green"
             android:text="Create freelancer account"
             android:textColor="@color/glitter"
             android:textAllCaps="false" />
@@ -172,7 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Already have an account? Sign in"
-            android:textColor="@color/jade_dark"
+            android:textColor="@color/forest_green"
             android:textSize="13sp"
             android:textStyle="bold"
             android:gravity="center"

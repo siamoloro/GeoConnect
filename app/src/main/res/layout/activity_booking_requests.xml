@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Booking requests"
-                android:textColor="@color/jade_dark"
+                android:textColor="@color/forest_green"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp" />
@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Accepted"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:paddingStart="14dp"
@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Completed"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:paddingStart="14dp"
@@ -106,7 +106,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:text="SN"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:gravity="center"
@@ -123,7 +123,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Sam Nkosi"
-                            android:textColor="@color/charcoal"
+                            android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -131,7 +131,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Portrait session"
-                            android:textColor="@color/charcoal"
+                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:layout_marginTop="2dp" />
 
@@ -141,7 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="R450"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -151,7 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sat, 14 Oct · 10:00 AM"
-                    android:textColor="@color/charcoal"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="12dp" />
 
@@ -159,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sandton · 2.4 km away"
-                    android:textColor="@color/charcoal"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp" />
 
@@ -174,7 +174,7 @@
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:text="Decline"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:layout_weight="1"
@@ -224,7 +224,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:text="TM"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:gravity="center"
@@ -241,7 +241,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Thandi Mokoena"
-                            android:textColor="@color/charcoal"
+                            android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -249,7 +249,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Event coverage"
-                            android:textColor="@color/charcoal"
+                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:layout_marginTop="2dp" />
 
@@ -259,7 +259,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="R1,200"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -269,7 +269,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sun, 15 Oct · 1:00 PM"
-                    android:textColor="@color/charcoal"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="12dp" />
 
@@ -277,7 +277,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rosebank · 6.1 km away"
-                    android:textColor="@color/charcoal"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp" />
 
@@ -292,7 +292,7 @@
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:text="Decline"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:layout_weight="1"
@@ -342,7 +342,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:text="PV"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:gravity="center"
@@ -359,7 +359,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Pieter van Wyk"
-                            android:textColor="@color/charcoal"
+                            android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -367,7 +367,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Product photos"
-                            android:textColor="@color/charcoal"
+                            android:textColor="@color/black"
                             android:textSize="12sp"
                             android:layout_marginTop="2dp" />
 
@@ -377,7 +377,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="R800"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -387,7 +387,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tue, 17 Oct · 9:00 AM"
-                    android:textColor="@color/charcoal"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="12dp" />
 
@@ -395,7 +395,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fourways · 8.7 km away"
-                    android:textColor="@color/charcoal"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp" />
 
@@ -410,7 +410,7 @@
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:text="Decline"
-                        android:textColor="@color/jade_dark"
+                        android:textColor="@color/forest_green"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:layout_weight="1"
@@ -449,7 +449,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/jade_mint" />
+        android:background="@color/sage_green" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -462,7 +462,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Home"
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="normal"
             android:layout_weight="1"
@@ -478,7 +478,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Requests"
-            android:textColor="@color/jade_dark"
+            android:textColor="@color/forest_green"
             android:textSize="13sp"
             android:textStyle="bold"
             android:layout_weight="1"
@@ -494,7 +494,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Profile"
-            android:textColor="@color/charcoal"
+            android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="normal"
             android:layout_weight="1"

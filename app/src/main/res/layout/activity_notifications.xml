@@ -23,7 +23,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Notifications"
-                android:textColor="@color/jade_dark"
+                android:textColor="@color/forest_green"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_weight="1" />
@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mark all read"
-                android:textColor="@color/jade_dark"
+                android:textColor="@color/forest_green"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Today"
-            android:textColor="@color/jade_dark"
+            android:textColor="@color/forest_green"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp" />
@@ -71,7 +71,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:text="+"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -89,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="New booking request"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -97,7 +97,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Sam N. requested a portrait session for Sat, 14 Oct."
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />
 
@@ -112,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2m"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="11sp" />
 
                     <View
@@ -146,7 +146,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:text="★"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -164,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="New review"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Thandi M. left you a 5 star review."
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />
 
@@ -187,7 +187,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1h"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="11sp" />
 
                     <View
@@ -221,7 +221,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:text="✓"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -239,7 +239,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Booking confirmed"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -247,7 +247,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Your job with Maya T. is confirmed for tomorrow."
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />
 
@@ -262,7 +262,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3h"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="11sp" />
 
                 </LinearLayout>
@@ -275,7 +275,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Earlier"
-            android:textColor="@color/jade_dark"
+            android:textColor="@color/forest_green"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp" />
@@ -298,7 +298,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:text="\?"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -316,7 +316,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Support case update"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -324,7 +324,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Case #2041 has been marked as resolved."
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />
 
@@ -339,7 +339,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1d"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="11sp" />
 
                 </LinearLayout>
@@ -366,7 +366,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:text="✓"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -384,7 +384,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Profile verified"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -392,7 +392,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Your freelancer profile is now verified."
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />
 
@@ -407,7 +407,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2d"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="11sp" />
 
                 </LinearLayout>
@@ -434,7 +434,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:text="!"
-                    android:textColor="@color/jade_dark"
+                    android:textColor="@color/forest_green"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -452,7 +452,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Password changed"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -460,7 +460,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Your password was updated successfully."
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />
 
@@ -475,7 +475,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5d"
-                        android:textColor="@color/charcoal"
+                        android:textColor="@color/black"
                         android:textSize="11sp" />
 
                 </LinearLayout>
