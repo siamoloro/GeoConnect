@@ -70,10 +70,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".BusinessProfileActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".FreelancerProfileActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -118,23 +114,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ReviewActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".CasesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CaseDetailsActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ManageUsersActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ManageBusinessesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -147,10 +131,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SupportActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".OpenCaseActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
