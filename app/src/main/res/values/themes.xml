@@ -6,4 +6,17 @@
     </style>
 
     <style name="Theme.GeoConnect" parent="Base.Theme.GeoConnect" />
+
+    <style name="Theme.GeoConnect.Splash" parent="Theme.SplashScreen">
+        <!-- Set the window background color -->
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+
+        <!-- Set the center icon (vector drawable) -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo</item>
+
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/white</item>
+
+        <!-- Set the theme to transition to after the splash screen finishes -->
+        <item name="postSplashScreenTheme">@style/Theme.GeoConnect</item>
+    </style>
 </resources>

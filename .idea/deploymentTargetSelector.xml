@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-10-09T21:02:35.645577200Z">
+        <DropdownSelection timestamp="2026-10-12T18:18:58.151527100Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\zoeqo\.android\avd\Medium_Phone.avd" />
+              <DeviceId pluginId="Wireless" identifier="serviceName=adb-R58T3480F4X-qrGWav" />
             </handle>
           </Target>
         </DropdownSelection>

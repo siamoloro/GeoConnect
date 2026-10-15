@@ -1,24 +1,30 @@
 package com.example.geoconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import com.google.android.material.button.MaterialButton;
 
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        MaterialButton btnCreateAccount = findViewById(R.id.btnCreateAccount);
+        MaterialButton btnSignIn = findViewById(R.id.btnSignIn);
+
+        // Navigate to Signup screen when "Create an account" is clicked
+        btnCreateAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(WelcomeActivity.this, SignupNavActivity.class);
+            startActivity(intent);
+        });
+
+        // Navigate to Signin screen when "I already have an account" is clicked
+        btnSignIn.setOnClickListener(v -> {
+            Intent intent = new Intent(WelcomeActivity.this, SigninActivity.class);
+            startActivity(intent);
         });
     }
 }

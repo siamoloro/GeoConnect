@@ -7,4 +7,242 @@
     android:layout_height="match_parent"
     tools:context=".ReviewActivity">
 
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/submitReviewButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="22dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Write a Review"
+                    android:textColor="#1E3023"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/businessImage"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:background="#E1EDE3"
+                    android:contentDescription="Business image"
+                    android:padding="15dp"
+                    app:tint="#2D6840" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/businessName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Business name"
+                        android:textColor="#263A2C"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/businessCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Service category"
+                        android:textColor="#7B847E"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/bookingStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Booking status"
+                        android:textColor="#367B46"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:gravity="center"
+                android:text="How was your experience?"
+                android:textColor="#25392B"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Tap the stars to rate your experience"
+                android:textColor="#7B847E"
+                android:textSize="13sp" />
+
+            <RatingBar
+                android:id="@+id/reviewRatingBar"
+                style="?android:attr/ratingBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18dp"
+                android:isIndicator="false"
+                android:numStars="5"
+                android:rating="0"
+                android:stepSize="1" />
+
+            <TextView
+                android:id="@+id/ratingDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Select your rating"
+                android:textColor="#777777"
+                android:textSize="13sp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="What stood out?"
+                android:textColor="#263A2C"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Select the things that describe your experience"
+                android:textColor="#7B847E"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/tagCommunication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:buttonTint="#27673B"
+                android:text="Great communication"
+                android:textColor="#35443A"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/tagOnTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="#27673B"
+                android:text="On time"
+                android:textColor="#35443A"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/tagQuality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="#27673B"
+                android:text="Quality work"
+                android:textColor="#35443A"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/tagFriendly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="#27673B"
+                android:text="Friendly and professional"
+                android:textColor="#35443A"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:text="Tell us more"
+                android:textColor="#263A2C"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/reviewCommentInput"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/signup_input_background"
+                android:gravity="top|start"
+                android:hint="Share details about your experience..."
+                android:inputType="textCapSentences|textMultiLine"
+                android:minLines="4"
+                android:padding="16dp"
+                android:textColor="#25392B"
+                android:textColorHint="#9BA29D"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="Your review helps other customers make informed decisions."
+                android:textColor="#7B847E"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/submitReviewButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/jade_green"
+        android:text="Submit Review"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
