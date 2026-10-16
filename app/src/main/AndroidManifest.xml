@@ -29,9 +29,10 @@
             android:name=".SigninActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <!--suppress AndroidDomInspection -->
         <activity
             android:name=".ResetPasswordActivity"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AdminSigninActivity"
