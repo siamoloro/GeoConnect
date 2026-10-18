@@ -7,4 +7,281 @@
     android:layout_height="match_parent"
     tools:context=".BookingActivity">
 
+        <ScrollView
+            android:id="@+id/bookingScroll"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bookingFooter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#194D25"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingTop="22dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="22dp">
+
+                    <TextView
+                        android:id="@+id/backButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:text="←"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28sp"
+                        android:contentDescription="Back" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Request Booking"
+                            android:textColor="#FFFFFF"
+                            android:textSize="23sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Tell us what service you need"
+                            android:textColor="#D7E9DA"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="20dp"
+                    android:paddingTop="24dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="30dp">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Selected Provider"
+                        android:textColor="#26372B"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="#FFFFFF"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/providerImage"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="#E0EBE1"
+                            android:contentDescription="Selected provider photo"
+                            android:padding="14dp">
+
+                        </ImageView>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/providerName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Provider details unavailable"
+                                android:textColor="#26372B"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/providerCategory"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="Service category"
+                                android:textColor="#87918A"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="26dp"
+                        android:text="Choose a Service"
+                        android:textColor="#26372B"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/serviceSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/signup_input_background"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp" />
+
+                    <TextView
+                        android:id="@+id/servicePrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Price will depend on the selected service"
+                        android:textColor="#87918A"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="Preferred Date"
+                        android:textColor="#26372B"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <DatePicker
+                        android:id="@+id/bookingDatePicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:datePickerMode="calendar" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="Preferred Time"
+                        android:textColor="#26372B"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TimePicker
+                        android:id="@+id/bookingTimePicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:timePickerMode="spinner"
+                        android:is24HourView="false" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="Service Location"
+                        android:textColor="#26372B"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/serviceLocationInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/signup_input_background"
+                        android:hint="Enter service address or area"
+                        android:inputType="textPostalAddress"
+                        android:padding="14dp"
+                        android:textColor="#26372B"
+                        android:textColorHint="#929B94"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="Additional Instructions"
+                        android:textColor="#26372B"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/bookingNotesInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/signup_input_background"
+                        android:gravity="top|start"
+                        android:hint="Describe what you need or add special instructions..."
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:minLines="4"
+                        android:padding="14dp"
+                        android:textColor="#26372B"
+                        android:textColorHint="#929B94"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="Your booking request will need to be confirmed by the service provider."
+                        android:textColor="#75847A"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/bookingFooter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <Button
+                android:id="@+id/submitBookingButton"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:backgroundTint="#194D25"
+                android:text="Request Booking"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="service_categories">
+        <item>Select your service</item>
+        <item>Photography</item>
+        <item>Cleaning</item>
+        <item>Plumbing</item>
+        <item>Tutoring</item>
+        <item>Graphic design</item>
+        <item>Catering</item>
+        <item>Other</item>
+    </string-array>
+</resources>
