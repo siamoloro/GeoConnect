@@ -11,16 +11,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoConnect">
+
         <activity
-            android:name=".MainActivity"
+            android:name=".AdminDashboardActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".WelcomeActivity"
             android:exported="false"
@@ -29,9 +35,10 @@
             android:name=".SigninActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <!--suppress AndroidDomInspection -->
         <activity
             android:name=".ResetPasswordActivity"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AdminSigninActivity"
@@ -59,10 +66,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".FreelancerDashboardActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".AdminDashboardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -114,11 +117,23 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".ReviewActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".CasesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CaseDetailsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ManageUsersActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ManageBusinessesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -134,15 +149,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".AdminReportsActivity"
+            android:name=".OpenCaseActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".AdminReviewActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".AdminUsersActivity"
+            android:name=".SignupNavActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>
