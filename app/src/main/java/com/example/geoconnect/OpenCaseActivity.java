@@ -1,67 +1,62 @@
 package com.example.geoconnect;
 
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class OpenCaseActivity extends AppCompatActivity {
-
-    private MaterialToolbar toolbar;
-    private TextInputLayout inputLayoutTitle, inputLayoutDescription;
-    private TextInputEditText edtCaseTitle, edtCaseDescription;
-    private MaterialButton btnSubmitCase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_open_case);
+        FreelancerUi.applyInsets(findViewById(R.id.main));
+        FreelancerUi.setupBack(this);
 
-        // Bind Views
-        toolbar = findViewById(R.id.toolbar);
-        inputLayoutTitle = findViewById(R.id.inputLayoutTitle);
-        inputLayoutDescription = findViewById(R.id.inputLayoutDescription);
-        edtCaseTitle = findViewById(R.id.edtCaseTitle);
-        edtCaseDescription = findViewById(R.id.edtCaseDescription);
-        btnSubmitCase = findViewById(R.id.btnSubmitCase);
+        Spinner spCaseType = findViewById(R.id.spCaseType);
+        EditText etSubject = findViewById(R.id.etSubject);
+        EditText etDescription = findViewById(R.id.etDescription);
+        Button btnSubmit = findViewById(R.id.btnSubmitCase);
 
-        // Toolbar Navigation Back Button
-        toolbar.setNavigationOnClickListener(v -> finish());
+        findViewById(R.id.tvAttach).setOnClickListener(v -> {
+            //TODO: open the file/image picker and attach the file to the case
+            Toast.makeText(this, "Attachments coming soon", Toast.LENGTH_SHORT).show();
+        });
 
-        // Submit Case Action
-        btnSubmitCase.setOnClickListener(v -> submitCase());
-    }
+        btnSubmit.setOnClickListener(v -> {
+            String subject = etSubject.getText().toString().trim();
+            String description = etDescription.getText().toString().trim();
 
-    private void submitCase() {
-        String title = edtCaseTitle.getText() != null ? edtCaseTitle.getText().toString().trim() : "";
-        String description = edtCaseDescription.getText() != null ? edtCaseDescription.getText().toString().trim() : "";
+            if (spCaseType.getSelectedItemPosition() == 0) {
+                Toast.makeText(this, "Please select a case type", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (subject.isEmpty()) {
+                etSubject.setError("Enter a short subject");
+                etSubject.requestFocus();
+                return;
+            }
+            if (description.length() < 10) {
+                etDescription.setError("Please describe the problem (at least 10 characters)");
+                etDescription.requestFocus();
+                return;
+            }
 
-        // Reset errors
-        inputLayoutTitle.setError(null);
-        inputLayoutDescription.setError(null);
+            //TODO: send the case type, subject, description and attachment to the backend/API
+            Toast.makeText(this, "Case submitted. We will reply within 24 hours.", Toast.LENGTH_SHORT).show();
+            finish();
+        });
 
-        // Validation
-        if (TextUtils.isEmpty(title)) {
-            inputLayoutTitle.setError("Case title is required");
-            return;
-        }
+        findViewById(R.id.tvCancel).setOnClickListener(v -> finish());
 
-        if (TextUtils.isEmpty(description)) {
-            inputLayoutDescription.setError("Case description is required");
-            return;
-        }
-
-        if (description.length() < 15) {
-            inputLayoutDescription.setError("Please provide at least 15 characters describing the issue");
-            return;
-        }
-
-        // Action placeholder
-        Toast.makeText(this, "Case submitted successfully!", Toast.LENGTH_SHORT).show();
-        finish();
     }
 }

@@ -1,12 +1,10 @@
 package com.example.geoconnect;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class NotificationsActivity extends AppCompatActivity {
 
@@ -15,10 +13,11 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_notifications);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        FreelancerUi.applyInsets(findViewById(R.id.main));
+
+        findViewById(R.id.tvMarkAllRead).setOnClickListener(v -> {
+            //TODO: mark the notifications as read in the backend
+            Toast.makeText(this, "All notifications marked as read", Toast.LENGTH_SHORT).show();
         });
     }
 }

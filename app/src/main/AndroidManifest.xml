@@ -128,7 +128,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".BookingActivity"
+            android:name=".Booking"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity

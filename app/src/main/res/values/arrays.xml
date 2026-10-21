@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="open_case_types">
+        <item>Select a case type</item>
+        <item>Booking problem</item>
+        <item>Payment issue</item>
+        <item>Account or login</item>
+        <item>Report a user</item>
+        <item>Technical problem</item>
+        <item>Other</item>
+    </string-array>
+</resources>
