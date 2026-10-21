@@ -1,5 +1,6 @@
 package com.example.geoconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,12 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
+
+        FloatingActionButton fabAddProduct = findViewById(R.id.fabAddProduct);
+        fabAddProduct.setOnClickListener(v -> {
+            Intent intent = new Intent(BusinessOfferingsActivity.this, AddBusinessOfferingActivity.class);
+            startActivity(intent);
+        });
 
         recyclerView = findViewById(R.id.recyclerViewProducts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
