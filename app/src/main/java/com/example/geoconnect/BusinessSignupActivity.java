@@ -15,11 +15,19 @@ import com.google.android.material.button.MaterialButton;
 
 public class BusinessSignupActivity extends AppCompatActivity {
 
-    private EditText etBusinessName, etAddress, etContactNumber, etBusinessEmail, etAbout;
-    private AutoCompleteTextView spCategory;
-    private TextView txtErrorMessage;
-    private MaterialButton btnRegister;
     private ImageButton btnBack;
+    private TextView txtErrorMessage;
+    private EditText etBusinessName;
+    private AutoCompleteTextView spCategory;
+    private EditText etAbout;
+    private EditText etAddress;
+    private EditText etBusinessEmail;
+    private EditText etContactNumber;
+    private EditText etWebsite;
+    private EditText etPassword;
+    private EditText etConfirmPassword;
+    private MaterialButton btnRegister;
+
 
     // Standard business categories
     private static final String[] CATEGORIES = new String[]{
@@ -32,32 +40,52 @@ public class BusinessSignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_signup);
 
-        // Bind Views
         btnBack = findViewById(R.id.btnBack);
+        txtErrorMessage = findViewById(R.id.txtErrorMessage);
         etBusinessName = findViewById(R.id.etBusinessName);
         spCategory = findViewById(R.id.spCategory);
-        etAddress = findViewById(R.id.etAddress);
-        etContactNumber = findViewById(R.id.etContactNumber);
-        etBusinessEmail = findViewById(R.id.etBusinessEmail);
         etAbout = findViewById(R.id.etAbout);
-        txtErrorMessage = findViewById(R.id.txtErrorMessage);
+        etAddress = findViewById(R.id.etAddress);
+        etBusinessEmail = findViewById(R.id.etBusinessEmail);
+        etContactNumber = findViewById(R.id.etContactNumber);
+        etWebsite = findViewById(R.id.etWebsite);
+        etPassword = findViewById(R.id.etPassword);
+        etConfirmPassword = findViewById(R.id.etConfirmPassword);
         btnRegister = findViewById(R.id.btnRegister);
 
-        // Populate Category Dropdown
+        String[] categories = new String[]{
+                "Retail & Shopping",
+                "Food & Dining",
+                "Services",
+                "Health & Wellness",
+                "Technology & IT",
+                "Education & Training",
+                "Automotive"
+        };
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
-                CATEGORIES
+                categories
         );
         spCategory.setAdapter(adapter);
 
-        // Back button action
-        btnBack.setOnClickListener(v -> finish());
 
-        // Submission logic
         btnRegister.setOnClickListener(v -> {
+            ExtractData();
             Intent intent = new Intent(BusinessSignupActivity.this, BusinessDashboardActivity.class);
             startActivity(intent);
         });
+
+    }
+    private void ExtractData() {
+        String businessName = etBusinessName.getText().toString().trim();
+        String category = spCategory.getText().toString().trim();
+        String description = etAbout.getText().toString().trim();
+        String address = etAddress.getText().toString().trim();
+        String email = etBusinessEmail.getText().toString().trim();
+        String phone = etContactNumber.getText().toString().trim();
+        String website = etWebsite.getText().toString().trim(); // Optional
+        String password = etPassword.getText().toString().trim();
+        String confirmPassword = etConfirmPassword.getText().toString().trim();
     }
 }

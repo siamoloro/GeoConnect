@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white">
+
+    <!-- Top Navigation Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="#111111"
+        app:title="Operational Hours"
+        app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:titleTextColor="#111111" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:text="Click on the opening and closing times for each day to make edits, or mark the day as closed by clicking the closed button."
+        android:textColor="#777777"
+        android:textSize="13sp" />
+
+    <!-- COLUMN HEADINGS -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.15"
+            android:text="Day"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="#555555" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Opens"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="#555555" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Closes"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="#555555" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.85"
+            android:gravity="center"
+            android:text=""
+            android:textSize="11sp"
+            android:textColor="#555555" />
+    </LinearLayout>
+
+    <!-- MONDAY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/txtMonday"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.15"
+            android:gravity="center_vertical"
+            android:text="Monday"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/edtMondayOpening"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="09:00 AM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <TextView
+            android:id="@+id/edtMondayClosing"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="05:00 PM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMondayClosed"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="0.85"
+            android:layout_marginStart="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Closed"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="#114224"
+            app:cornerRadius="9dp"
+            app:strokeColor="#114224"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- TUESDAY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/txtTuesday"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.15"
+            android:gravity="center_vertical"
+            android:text="Tuesday"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/edtTuesdayOpening"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="09:00 AM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <TextView
+            android:id="@+id/edtTuesdayClosing"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="05:00 PM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTuesdayClosed"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="0.85"
+            android:layout_marginStart="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Closed"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="#114224"
+            app:cornerRadius="9dp"
+            app:strokeColor="#114224"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- WEDNESDAY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/txtWednesday"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.15"
+            android:gravity="center_vertical"
+            android:text="Wednesday"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/edtWednesdayOpening"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="09:00 AM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <TextView
+            android:id="@+id/edtWednesdayClosing"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="05:00 PM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnWednesdayClosed"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="0.85"
+            android:layout_marginStart="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Closed"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="#114224"
+            app:cornerRadius="9dp"
+            app:strokeColor="#114224"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- THURSDAY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/txtThursday"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.15"
+            android:gravity="center_vertical"
+            android:text="Thursday"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/edtThursdayOpening"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="09:00 AM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <TextView
+            android:id="@+id/edtThursdayClosing"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="05:00 PM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnThursdayClosed"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="0.85"
+            android:layout_marginStart="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Closed"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="#114224"
+            app:cornerRadius="9dp"
+            app:strokeColor="#114224"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- FRIDAY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/txtFriday"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.15"
+            android:gravity="center_vertical"
+            android:text="Friday"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/edtFridayOpening"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="09:00 AM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <TextView
+            android:id="@+id/edtFridayClosing"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="05:00 PM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFridayClosed"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="0.85"
+            android:layout_marginStart="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Closed"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="#114224"
+            app:cornerRadius="9dp"
+            app:strokeColor="#114224"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- SATURDAY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/txtSaturday"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.15"
+            android:gravity="center_vertical"
+            android:text="Saturday"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/edtSaturdayOpening"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="09:00 AM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <TextView
+            android:id="@+id/edtSaturdayClosing"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="05:00 PM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaturdayClosed"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="0.85"
+            android:layout_marginStart="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Closed"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="#114224"
+            app:cornerRadius="9dp"
+            app:strokeColor="#114224"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- SUNDAY -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:id="@+id/txtSunday"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.15"
+            android:gravity="center_vertical"
+            android:text="Sunday"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/edtSundayOpening"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="09:00 AM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <TextView
+            android:id="@+id/edtSundayClosing"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3dp"
+            android:hint="05:00 PM"
+            android:padding="4dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="#176282"
+            android:background="@drawable/bg_operating_time_input" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSundayClosed"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="0.85"
+            android:layout_marginStart="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Closed"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:textColor="#114224"
+            app:cornerRadius="9dp"
+            app:strokeColor="#114224"
+            app:strokeWidth="1.5dp"
+            app:backgroundTint="#FFFFFF" />
+    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSaveChanges"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="#114224"
+        android:text="Save Changes"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:cornerRadius="28dp" />
+
+</LinearLayout>

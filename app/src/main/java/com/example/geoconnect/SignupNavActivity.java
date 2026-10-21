@@ -6,6 +6,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 public class SignupNavActivity extends AppCompatActivity {
 
     @Override
@@ -13,13 +15,12 @@ public class SignupNavActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_nav);
 
-        ImageButton btnBack = findViewById(R.id.btnBack);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
         LinearLayout cardCustomer = findViewById(R.id.cardCustomer);
         LinearLayout cardBusiness = findViewById(R.id.cardBusiness);
         LinearLayout cardFreelancer = findViewById(R.id.cardFreelancer);
 
-        // Back button action
-        btnBack.setOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         // Navigate to Customer Signup form
         cardCustomer.setOnClickListener(v -> {

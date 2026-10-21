@@ -110,7 +110,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblBusinessName" />
 
-        <!-- ================= CATEGORY ================= -->
+        <!-- ================= CATEGORY (DROPDOWN) ================= -->
         <TextView
             android:id="@+id/lblCategory"
             android:layout_width="wrap_content"
@@ -131,6 +131,7 @@
             android:background="@drawable/bg_input_field"
             android:drawableStart="@drawable/ic_shapes"
             android:drawablePadding="12dp"
+            android:focusable="false"
             android:hint="Select category"
             android:inputType="none"
             android:paddingHorizontal="16dp"
@@ -140,6 +141,36 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblCategory" />
+
+        <!-- ================= DESCRIPTION / ABOUT ================= -->
+        <TextView
+            android:id="@+id/lblAbout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Description"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spCategory" />
+
+        <EditText
+            android:id="@+id/etAbout"
+            android:layout_width="0dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input_field"
+            android:gravity="top|start"
+            android:hint="Brief description of your products or services..."
+            android:inputType="textMultiLine"
+            android:padding="16dp"
+            android:textColor="#111111"
+            android:textColorHint="#999999"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblAbout" />
 
         <!-- ================= ADDRESS ================= -->
         <TextView
@@ -152,7 +183,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spCategory" />
+            app:layout_constraintTop_toBottomOf="@id/etAbout" />
 
         <EditText
             android:id="@+id/etAddress"
@@ -172,49 +203,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblAddress" />
 
-        <!-- ================= CONTACT NUMBER ================= -->
-        <TextView
-            android:id="@+id/lblContactNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Contact Number *"
-            android:textColor="#333333"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etAddress" />
-
-        <EditText
-            android:id="@+id/etContactNumber"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/bg_input_field"
-            android:drawableStart="@drawable/ic_person"
-            android:drawablePadding="12dp"
-            android:hint="+27 00 000 0000"
-            android:inputType="phone"
-            android:paddingHorizontal="16dp"
-            android:textColor="#111111"
-            android:textColorHint="#999999"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lblContactNumber" />
-
-        <!-- ================= BUSINESS EMAIL (OPTIONAL) ================= -->
+        <!-- ================= EMAIL ================= -->
         <TextView
             android:id="@+id/lblBusinessEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Business Email (Optional)"
+            android:text="Email *"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etContactNumber" />
+            app:layout_constraintTop_toBottomOf="@id/etAddress" />
 
         <EditText
             android:id="@+id/etBusinessEmail"
@@ -234,13 +234,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblBusinessEmail" />
 
-        <!-- ================= ABOUT ================= -->
+        <!-- ================= PHONE / CONTACT NUMBER ================= -->
         <TextView
-            android:id="@+id/lblAbout"
+            android:id="@+id/lblContactNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="About Business"
+            android:text="Phone *"
             android:textColor="#333333"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -248,21 +248,114 @@
             app:layout_constraintTop_toBottomOf="@id/etBusinessEmail" />
 
         <EditText
-            android:id="@+id/etAbout"
+            android:id="@+id/etContactNumber"
             android:layout_width="0dp"
-            android:layout_height="110dp"
+            android:layout_height="52dp"
             android:layout_marginTop="6dp"
             android:background="@drawable/bg_input_field"
-            android:gravity="top|start"
-            android:hint="Brief description of your products or services..."
-            android:inputType="textMultiLine"
-            android:padding="16dp"
+            android:drawableStart="@drawable/ic_phone"
+            android:drawablePadding="12dp"
+            android:hint="+27 00 000 0000"
+            android:inputType="phone"
+            android:paddingHorizontal="16dp"
             android:textColor="#111111"
             android:textColorHint="#999999"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lblAbout" />
+            app:layout_constraintTop_toBottomOf="@id/lblContactNumber" />
+
+        <TextView
+            android:id="@+id/lblWebsite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Website (Optional)"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etContactNumber" />
+
+        <EditText
+            android:id="@+id/etWebsite"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_web"
+            android:drawablePadding="12dp"
+            android:hint="www.business.com"
+            android:inputType="textUri"
+            android:paddingHorizontal="16dp"
+            android:textColor="#111111"
+            android:textColorHint="#999999"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblWebsite" />
+
+        <!-- ================= PASSWORD ================= -->
+        <TextView
+            android:id="@+id/lblPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Password *"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etWebsite" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="12dp"
+            android:hint="Create a password"
+            android:inputType="textPassword"
+            android:paddingHorizontal="16dp"
+            android:textColor="#111111"
+            android:textColorHint="#999999"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblPassword" />
+
+        <!-- ================= CONFIRM PASSWORD ================= -->
+        <TextView
+            android:id="@+id/lblConfirmPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Confirm Password *"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etPassword" />
+
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="12dp"
+            android:hint="Re-enter your password"
+            android:inputType="textPassword"
+            android:paddingHorizontal="16dp"
+            android:textColor="#111111"
+            android:textColorHint="#999999"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblConfirmPassword" />
 
         <!-- ================= SUBMIT BUTTON ================= -->
         <com.google.android.material.button.MaterialButton
@@ -271,7 +364,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="28dp"
             android:layout_marginBottom="24dp"
-            android:text="Complete Setup"
+            android:text="Signup"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -281,7 +374,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etAbout" />
+            app:layout_constraintTop_toBottomOf="@id/etConfirmPassword" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

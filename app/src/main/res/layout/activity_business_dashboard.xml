@@ -25,7 +25,7 @@
         app:elevation="8dp"
         app:itemIconTint="@color/nav_item_color_selector"
         app:itemTextColor="@color/nav_item_color_selector"
-        app:menu="@menu/bottom_nav_menu"
+        app:menu="@menu/business_bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

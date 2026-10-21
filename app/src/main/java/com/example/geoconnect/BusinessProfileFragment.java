@@ -7,15 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class BusinessProfileActivity extends Fragment {
+public class BusinessProfileFragment extends Fragment {
 
-    private ImageView btnSettings;
-    private TextView txtBusinessName, txtCategory, txtAbout, txtLocation, btnEditProfile;
+    ImageView btnSettings, btnEditProfile, btnEditHours, btnEditLocation, btnEditOfferings;
+    TextView txtBusinessName, txtCategory, txtAbout, txtLocation;
 
     @Nullable
     @Override
@@ -28,6 +28,9 @@ public class BusinessProfileActivity extends Fragment {
         txtAbout = view.findViewById(R.id.txtAbout);
         txtLocation = view.findViewById(R.id.txtLocation);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
+        btnEditHours = view.findViewById(R.id.btnEditHours);
+        btnEditLocation = view.findViewById(R.id.btnEditLocation);
+        btnEditOfferings = view.findViewById(R.id.btnEditOfferings);
 
         // Navigate to SettingsActivity on settings icon click
         btnSettings.setOnClickListener(v -> {
@@ -35,9 +38,24 @@ public class BusinessProfileActivity extends Fragment {
             startActivity(intent);
         });
 
-        btnEditProfile.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Opening Profile Editor...", Toast.LENGTH_SHORT).show()
-        );
+        btnEditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), BusinessEditProfileActivity.class);
+            startActivity(intent);
+        });
+
+        btnEditHours.setOnClickListener(v->{
+            Intent intent = new Intent(requireContext(), OperationalHoursActivity.class);
+            startActivity(intent);
+        });
+
+        btnEditLocation.setOnClickListener(v->{
+            //
+        });
+
+        btnEditOfferings.setOnClickListener(v->{
+            Intent intent = new Intent(requireContext(), BusinessOfferingsActivity.class);
+            startActivity(intent);
+        });
 
         return view;
     }

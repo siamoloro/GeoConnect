@@ -8,6 +8,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 
 public class SigninActivity extends AppCompatActivity {
@@ -16,14 +18,13 @@ public class SigninActivity extends AppCompatActivity {
     private TextView txtErrorMessage, txtForgotPassword;
     private MaterialButton btnSignIn;
     private LinearLayout layoutAdminPortal;
-    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        btnBack = findViewById(R.id.btnBack);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         txtErrorMessage = findViewById(R.id.txtErrorMessage);
@@ -31,8 +32,8 @@ public class SigninActivity extends AppCompatActivity {
         btnSignIn = findViewById(R.id.btnSignIn);
         layoutAdminPortal = findViewById(R.id.layoutAdminPortal);
 
-        // Back button action
-        btnBack.setOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(v -> finish());
+
 
         // Sign in logic with validation check
         btnSignIn.setOnClickListener(v -> {
@@ -40,8 +41,7 @@ public class SigninActivity extends AppCompatActivity {
             String password = etPassword.getText().toString().trim();
 
             // Example check: To be replaced with Firebase or backend authentication logic
-            if (email.isEmpty() || password.isEmpty() || !email.equals("user@example.com")) {
-                // Show the error banner if credentials are invalid/empty
+            if (email.isEmpty() || password.isEmpty() ) {
                 txtErrorMessage.setVisibility(View.VISIBLE);
             } else {
                 // Hide error banner and proceed to dashboard

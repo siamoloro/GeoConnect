@@ -2,49 +2,47 @@ package com.example.geoconnect;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private ImageButton btnBack;
-    private LinearLayout rowLocationPreferences, rowPrivacySecurity, rowNotifications, rowTrustSafety;
-    private TextView btnSignOut;
+    LinearLayout rowLocationPreferences, rowSecurity, rowSupport;
+    Button btnSignOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        btnBack = findViewById(R.id.btnBack);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
         rowLocationPreferences = findViewById(R.id.rowLocationPreferences);
-        rowPrivacySecurity = findViewById(R.id.rowPrivacySecurity);
-        rowNotifications = findViewById(R.id.rowNotifications);
-        rowTrustSafety = findViewById(R.id.rowTrustSafety);
+        rowSecurity = findViewById(R.id.rowPrivacySecurity);
+        rowSupport = findViewById(R.id.rowTrustSafety);
         btnSignOut = findViewById(R.id.btnSignOut);
 
-        // Back button action
-        btnBack.setOnClickListener(v -> finish());
+
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         // Option Row Actions
-        rowLocationPreferences.setOnClickListener(v ->
-                Toast.makeText(this, "Location preferences clicked", Toast.LENGTH_SHORT).show()
-        );
+        rowLocationPreferences.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, LocationPreferencesActivity.class);
+            startActivity(intent);
+        });
 
-        rowPrivacySecurity.setOnClickListener(v ->
-                Toast.makeText(this, "Privacy & security clicked", Toast.LENGTH_SHORT).show()
-        );
+        rowSecurity.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, SecurityActivity.class);
+            startActivity(intent);
+        });
 
-        rowNotifications.setOnClickListener(v ->
-                Toast.makeText(this, "Notifications clicked", Toast.LENGTH_SHORT).show()
-        );
-
-        rowTrustSafety.setOnClickListener(v ->
-                Toast.makeText(this, "Trust & safety clicked", Toast.LENGTH_SHORT).show()
-        );
+        rowSupport.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, SupportActivity.class);
+            startActivity(intent);
+        });
 
         // Sign Out action (Navigates back to SigninActivity)
         btnSignOut.setOnClickListener(v -> {
