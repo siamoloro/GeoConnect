@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "322935802132",
+    "project_id": "geoconnect-3fe4e",
+    "storage_bucket": "geoconnect-3fe4e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322935802132:android:f4345de38f32e39b4a1a01",
+        "android_client_info": {
+          "package_name": "com.example.geoconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOMwCS382mng846ogEi9fi-qH9m4Z7f0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
