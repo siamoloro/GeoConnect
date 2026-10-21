@@ -1,5 +1,17 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
+}
+
+val localProperties = Properties()
+
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { stream ->
+        localProperties.load(stream)
+    }
 }
 
 android {
@@ -16,6 +28,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders["MAPS_API_KEY"] =
+            localProperties.getProperty("MAPS_API_KEY", "")
+
+
     }
 
     buildTypes {
@@ -40,4 +57,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
+    implementation("com.google.android.gms:play-services-maps:20.1.0")
 }
