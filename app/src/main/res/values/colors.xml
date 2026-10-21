@@ -5,4 +5,9 @@
         <color name="sage_green">#A2D8A2</color>
         <color name="black">#2E2E2E</color>
         <color name="glitter">#E6E8FA</color>
+        <color name="background_dark">#1E1E1E</color>
+        <color name="card_dark">#2A2A2A</color>
+        <color name="green_primary">#2E7D32</color>
+        <color name="green_light">#4CAF50</color>
+        <color name="grey_text">#B0B0B0</color>
 </resources>

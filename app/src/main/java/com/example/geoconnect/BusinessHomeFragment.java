@@ -1,5 +1,6 @@
 package com.example.geoconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class HomeFragment extends Fragment {
+public class BusinessHomeFragment extends Fragment {
 
     @Nullable
     @Override
@@ -21,9 +22,10 @@ public class HomeFragment extends Fragment {
         ImageView btnNotifications = view.findViewById(R.id.btnNotifications);
         TextView btnViewProfile = view.findViewById(R.id.btnViewProfile);
 
-        btnNotifications.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "No new notifications", Toast.LENGTH_SHORT).show()
-        );
+        btnNotifications.setOnClickListener(v ->{
+                    Intent intent = new Intent(requireContext(), NotificationsActivity.class);
+                    startActivity(intent);
+        });
 
         btnViewProfile.setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Opening business profile preview...", Toast.LENGTH_SHORT).show()

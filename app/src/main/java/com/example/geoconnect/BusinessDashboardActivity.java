@@ -16,7 +16,7 @@ public class BusinessDashboardActivity extends AppCompatActivity {
 
         // Load Home Fragment by default when activity launches
         if (savedInstanceState == null) {
-            loadFragment(new HomeFragment());
+            loadFragment(new BusinessHomeFragment());
         }
 
         // Handle navigation tab clicks
@@ -25,9 +25,9 @@ public class BusinessDashboardActivity extends AppCompatActivity {
 
             int itemId = item.getItemId();
             if (itemId == R.id.nav_home) {
-                selectedFragment = new HomeFragment();
+                selectedFragment = new BusinessHomeFragment();
             } else if (itemId == R.id.nav_profile) {
-                selectedFragment = new BusinessProfileActivity();
+                selectedFragment = new BusinessProfileFragment();
             }
 
             if (selectedFragment != null) {

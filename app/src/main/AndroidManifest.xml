@@ -2,31 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Approximate location -->
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Precise location -->
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoConnect">
-
         <activity
-            android:name=".AdminDashboardActivity"
+            android:name=".MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.HideSplashScreen"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".MainActivity"
+            android:name=".AdminDashboardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".WelcomeActivity"
             android:exported="false"
@@ -35,7 +42,6 @@
             android:name=".SigninActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-        <!--suppress AndroidDomInspection -->
         <activity
             android:name=".ResetPasswordActivity"
             android:exported="true"
@@ -121,19 +127,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".CasesActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".CaseDetailsActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ManageUsersActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ManageBusinessesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -141,7 +135,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".PrivacyActivity"
+            android:name=".SecurityActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -154,6 +148,18 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SignupNavActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ActiveSessionsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".OperationalHoursActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".BusinessOfferingsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>

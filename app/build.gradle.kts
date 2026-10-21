@@ -35,11 +35,10 @@ dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
+    implementation(libs.core.splashscreen)
     implementation(libs.material)
 
-    implementation("com.google.android.gms:play-services-maps:20.1.0")
-    implementation("com.google.android.gms:play-services-location:21.4.0")
-    implementation("com.google.android.libraries.places:places:6.0.2")
+    implementation(libs.play.services.maps)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)

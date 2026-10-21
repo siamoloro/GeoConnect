@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/transparent"
-        app:title="Privacy &amp; Security"
+        app:title="Security"
         app:titleTextColor="#111111"
         app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:navigationIcon="@drawable/ic_arrow_back"
@@ -36,22 +36,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- SIGN-IN SECURITY SECTION  -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SECURITY"
-                android:textColor="#888888"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
-                <!-- Change Password -->
                 <LinearLayout
                     android:id="@+id/rowChangePassword"
                     android:layout_width="match_parent"
@@ -94,13 +84,11 @@
                         app:tint="#CCCCCC" />
                 </LinearLayout>
 
-                <!-- Divider -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#F0F0F0" />
 
-                <!-- Row 2: Active Sessions -->
                 <LinearLayout
                     android:id="@+id/rowActiveSessions"
                     android:layout_width="match_parent"
@@ -147,88 +135,18 @@
 
             </LinearLayout>
 
-            <!-- ================= PRIVACY SECTION ================= -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="PRIVACY"
-                android:textColor="#888888"
-                android:textSize="11sp"
-                android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="12dp">
-
-                <!-- Row 1: Profile Visibility Switch -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingVertical="8dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Profile visibility"
-                            android:textColor="#111111"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Let providers see your name and profile photo."
-                            android:textColor="#888888"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switchProfileVisibility"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        app:thumbTint="@android:color/white"
-                        app:trackTint="#114224" />
-                </LinearLayout>
-
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="4dp"
-                    android:background="#F0F0F0" />
-
-
-
-            </LinearLayout>
-
-            <!-- ================= DELETE ACCOUNT LINK ================= -->
-            <TextView
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:id="@+id/btnDeleteAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="48dp"
                 android:layout_marginBottom="24dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="12dp"
-                android:text="Delete my account"
-                android:textColor="#E53E3E"
+                android:drawableStart="@drawable/ic_delete"
+                android:text="Delete My Account"
+                android:textColor="#ff0000"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
