@@ -38,6 +38,7 @@
                     android:background="@drawable/bg_avatar" />
 
                 <TextView
+                    android:id="@+id/tvProfileName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Alex Khumalo"
@@ -47,12 +48,29 @@
                     android:layout_marginTop="12dp" />
 
                 <TextView
+                    android:id="@+id/tvProfileCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Freelance photographer · Johannesburg"
                     android:textColor="@color/sage_green"
                     android:textSize="13sp"
                     android:layout_marginTop="2dp" />
+                <TextView
+                    android:id="@+id/tvProfileServiceArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Johannesburg"
+                    android:textColor="@color/sage_green"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp" />
+                <TextView
+                    android:id="@+id/tvProfilePhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+27 00 000 0000"
+                    android:textColor="@color/glitter"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -62,6 +80,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tvProfileRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="★ 4.8 (126 reviews)"
@@ -110,6 +129,7 @@
                         android:layout_marginEnd="8dp">
 
                         <TextView
+                            android:id="@+id/tvProfileJobsDone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="128"
@@ -138,6 +158,7 @@
                         android:layout_marginEnd="8dp">
 
                         <TextView
+                            android:id="@+id/tvProfileResponse"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="98%"
@@ -165,6 +186,7 @@
                         android:padding="12dp">
 
                         <TextView
+                            android:id="@+id/tvProfileExperience"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="4 yrs"
@@ -203,9 +225,10 @@
                     android:padding="14dp">
 
                     <TextView
+                        android:id="@+id/tvProfileBio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Portrait and event photographer with 4 years of experience. Available weekdays and weekends within 20 km."
+                        android:text="Portrait and event photographer with 4 years of experience..."
                         android:textColor="@color/black"
                         android:textSize="13sp" />
 
@@ -242,6 +265,7 @@
                             android:layout_weight="1" />
 
                         <TextView
+                            android:id="@+id/tvServiceRate1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="R450"

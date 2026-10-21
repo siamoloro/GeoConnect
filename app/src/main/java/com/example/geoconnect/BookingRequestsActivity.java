@@ -67,28 +67,47 @@ public class BookingRequestsActivity extends AppCompatActivity {
     }
 
     private void loadBookingsFromFirestore(String status) {
-        db.collection("bookings")
-                .whereEqualTo("status", status)
+        if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() == null) return;
+        String currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // First, get the freelancer record corresponding to this user account (matching userID foreign key)
+        db.collection("freelancer")
+                .whereEqualTo("userID", currentUserId)
+                .limit(1)
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    bookingList.clear();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Booking booking = new Booking(
-                                document.getId(),
-                                document.getString("customerName"),
-                                document.getString("serviceTitle"),
-                                document.getString("price"),
-                                document.getString("dateTime"),
-                                document.getString("location"),
-                                document.getString("status"),
-                                document.getString("initials")
-                        );
-                        bookingList.add(booking);
+                .addOnSuccessListener(freelancerSnapshots -> {
+                    if (!freelancerSnapshots.isEmpty()) {
+                        String freelancerId = freelancerSnapshots.getDocuments().get(0).getId();
+
+                        // Now query bookings filtered by both status and this freelancer's ID
+                        db.collection("bookings")
+                                .whereEqualTo("status", status)
+                                .whereEqualTo("freelancerId", freelancerId) // Matches ERD relationship
+                                .get()
+                                .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    bookingList.clear();
+                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                        Booking booking = new Booking(
+                                                document.getId(),
+                                                document.getString("customerName"),
+                                                document.getString("serviceTitle"),
+                                                document.getString("price"),
+                                                document.getString("dateTime"),
+                                                document.getString("location"),
+                                                document.getString("status"),
+                                                document.getString("initials")
+                                        );
+                                        bookingList.add(booking);
+                                    }
+                                    bookingAdapter.notifyDataSetChanged();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
                     }
-                    bookingAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to identify freelancer profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
