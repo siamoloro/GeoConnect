@@ -62,7 +62,7 @@
                                 android:layout_marginTop="4dp"
                                 android:drawableStart="@drawable/ic_location"
                                 android:drawablePadding="8dp"
-                                android:text="Location not selected"
+                                android:text="Detecting your location..."
                                 android:textColor="#FFFFFF"
                                 android:textSize="15sp"
                                 android:textStyle="bold"/>
