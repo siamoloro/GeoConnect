@@ -37,31 +37,31 @@
                         android:scaleType="centerCrop"
                         android:src="@android:drawable/ic_menu_gallery" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/backButton"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:layout_gravity="top|start"
                         android:layout_margin="18dp"
-                        android:background="#FFFFFF"
-                        android:gravity="center"
-                        android:text="←"
-                        android:textColor="#194D25"
-                        android:textSize="26sp"
-                        android:contentDescription="Back" />
+                        android:src="@drawable/ic_arrow_back"
+                        android:padding="10dp"
+                        android:contentDescription="Go back"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:tint="#194D25" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/saveProviderButton"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:layout_gravity="top|end"
                         android:layout_margin="18dp"
-                        android:background="#FFFFFF"
-                        android:gravity="center"
-                        android:text="♡"
-                        android:textColor="#194D25"
-                        android:textSize="26sp"
-                        android:contentDescription="Save provider" />
+                        android:src="@drawable/ic_favorite"
+                        android:padding="10dp"
+                        android:contentDescription="save provider"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:tint="#194D25" />
 
                 </FrameLayout>
 
