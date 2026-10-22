@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,330 +8,308 @@
     android:layout_height="match_parent"
     tools:context=".DiscoverActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ScrollView
-            android:id="@+id/searchScroll"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            android:scrollbars="none"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+        <!-- HEADER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/forest_green"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:text="Explore Local Market"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Discover businesses and freelancers near you"
+                android:textColor="#D7F0E5"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/marketSearchInput"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/signup_input_background"
+                android:hint="Search services or providers"
+                android:inputType="text"
+                android:singleLine="true"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="#173D31"
+                android:textColorHint="#819189" />
+
+        </LinearLayout>
+
+        <!-- FILTERS AND VIEW SWITCH -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RadioGroup
+                android:id="@+id/marketProviderFilters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:checkedButton="@id/marketFilterAll">
+
+                <RadioButton
+                    android:id="@+id/marketFilterAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/forest_green"
+                    android:text="All"
+                    android:textSize="13sp" />
+
+                <RadioButton
+                    android:id="@+id/marketFilterBusinesses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/forest_green"
+                    android:text="Businesses"
+                    android:textSize="13sp" />
+
+                <RadioButton
+                    android:id="@+id/marketFilterFreelancers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/forest_green"
+                    android:text="Freelancers"
+                    android:textSize="13sp" />
+
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/marketViewGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:checkedButton="@id/mapViewRadio">
+
+                <RadioButton
+                    android:id="@+id/mapViewRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/forest_green"
+                    android:text="Map View" />
+
+                <RadioButton
+                    android:id="@+id/listViewRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/forest_green"
+                    android:text="List View" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <!-- MAP OR LIST AREA -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp">
+
+            <!-- MAP PLACEHOLDER -->
+            <FrameLayout
+                android:id="@+id/marketMapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/marketMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </FrameLayout>
+
+            <!-- LIST VIEW -->
+            <ScrollView
+                android:id="@+id/marketListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:fillViewport="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#194D25"
+                    android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingTop="28dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="26dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/backButton"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:gravity="center"
-                            android:text="←"
-                            android:textColor="#FFFFFF"
-                            android:textSize="27sp"
-                            android:contentDescription="Back" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Discover"
-                            android:textColor="#FFFFFF"
-                            android:textSize="25sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Find businesses and freelancers near you"
-                        android:textColor="#D7E9DA"
-                        android:textSize="13sp" />
-
-                    <EditText
-                        android:id="@+id/searchInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/signup_input_background"
-                        android:drawableStart="@android:drawable/ic_menu_search"
-                        android:drawablePadding="10dp"
-                        android:hint="Search services or providers"
-                        android:inputType="text"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:singleLine="true"
-                        android:textColor="#263A2C"
-                        android:textColorHint="#929B94"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingStart="20dp"
-                    android:paddingTop="24dp"
-                    android:paddingEnd="20dp"
-                    android:paddingBottom="30dp">
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Explore Providers"
-                        android:textColor="#26372B"
+                        android:gravity="center"
+                        android:text="Providers near you"
+                        android:textColor="#173D31"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <RadioGroup
-                        android:id="@+id/providerTypeGroup"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:orientation="horizontal"
-                        android:checkedButton="@id/allProvidersRadio">
-
-                        <RadioButton
-                            android:id="@+id/allProvidersRadio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="#194D25"
-                            android:text="All"
-                            android:textColor="#26372B"
-                            android:textSize="13sp" />
-
-                        <RadioButton
-                            android:id="@+id/businessesRadio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.5"
-                            android:buttonTint="#194D25"
-                            android:text="Businesses"
-                            android:textColor="#26372B"
-                            android:textSize="13sp" />
-
-                        <RadioButton
-                            android:id="@+id/freelancersRadio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.5"
-                            android:buttonTint="#194D25"
-                            android:text="Freelancers"
-                            android:textColor="#26372B"
-                            android:textSize="13sp" />
-
-                    </RadioGroup>
-
                     <TextView
+                        android:id="@+id/marketListEmpty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:text="Location"
-                        android:textColor="#26372B"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/locationInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/signup_input_background"
-                        android:hint="Enter city or area"
-                        android:inputType="textCapWords"
-                        android:padding="14dp"
-                        android:textColor="#26372B"
-                        android:textColorHint="#929B94"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="22dp"
-                        android:text="Service Category"
-                        android:textColor="#26372B"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/categorySpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/signup_input_background"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp" />
-
-                    <Button
-                        android:id="@+id/searchButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="22dp"
-                        android:backgroundTint="#194D25"
-                        android:text="Search Providers"
-                        android:textAllCaps="false"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="Provider listings will appear after API integration."
+                        android:textColor="#74867D"
+                        android:textSize="13sp" />
 
                     <LinearLayout
+                        android:id="@+id/marketProvidersList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/resultsTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Search Results"
-                            android:textColor="#26372B"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/resultsCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="#79867C"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/providersListContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/emptyStateContainer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#FFFFFF"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="30dp">
-
-                            <ImageView
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:contentDescription="No providers found"
-                                android:src="@android:drawable/ic_menu_search"
-                                app:tint="#73947A" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
-                                android:gravity="center"
-                                android:text="Find your next service"
-                                android:textColor="#26372B"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:gravity="center"
-                                android:text="Search for businesses or freelancers using a name, service or category."
-                                android:textColor="#87918A"
-                                android:textSize="13sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
+                        android:orientation="vertical" />
 
                 </LinearLayout>
 
-            </LinearLayout>
-        </ScrollView>
+            </ScrollView>
 
+        </FrameLayout>
 
+        <!-- BOTTOM NAVIGATION -->
         <LinearLayout
-            android:id="@+id/bottomNavigation"
-            android:layout_width="0dp"
-            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
             android:background="#FFFFFF"
-            android:elevation="8dp"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:elevation="8dp">
 
-            <TextView
+            <LinearLayout
                 android:id="@+id/navHome"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Home"
-                android:textColor="#858585"
-                android:textSize="12sp" />
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
 
-            <TextView
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="#74867D"
+                    android:contentDescription="Home" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="12sp"
+                    android:textColor="#74867D" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/navMarket"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Market"
-                android:textColor="#858585"
-                android:textSize="12sp" />
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
 
-            <TextView
-                android:id="@+id/navFreelancers"
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_market"
+                    app:tint="@color/forest_green"
+                    android:contentDescription="Market" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Market"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/forest_green" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/navProviders"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Freelancers"
-                android:textColor="#858585"
-                android:textSize="12sp" />
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
 
-            <TextView
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_freelancer"
+                    app:tint="#74867D"
+                    android:contentDescription="Providers" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Providers"
+                    android:textSize="12sp"
+                    android:textColor="#74867D" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/navProfile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Profile"
-                android:textColor="#858585"
-                android:textSize="12sp" />
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_person"
+                    app:tint="#74867D"
+                    android:contentDescription="Profile" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile"
+                    android:textSize="12sp"
+                    android:textColor="#74867D" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
