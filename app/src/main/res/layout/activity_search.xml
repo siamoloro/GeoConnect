@@ -78,7 +78,7 @@
                     android:layout_marginTop="20dp"
                     android:imeOptions="actionSearch"
                     android:background="@drawable/signup_input_background"
-                    android:drawableStart="@android:drawable/ic_search"
+                    android:src="@drawable/ic_search"
                     android:drawablePadding="10dp"
                     android:hint="Search services or providers"
                     android:inputType="text"
@@ -251,7 +251,7 @@
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:contentDescription="No providers found"
-                            android:src="@android:drawable/ic_search"
+                            android:src="@drawable/ic_search"
                             app:tint="#73947A" />
 
                         <TextView

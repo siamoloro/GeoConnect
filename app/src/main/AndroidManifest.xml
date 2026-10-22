@@ -124,7 +124,8 @@
         <activity
             android:name=".Booking"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".ReviewActivity"
             android:exported="false"
