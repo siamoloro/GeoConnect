@@ -98,7 +98,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
         // Disable button to prevent multiple clicks during network call
         btnRegister.setEnabled(false);
 
-        // 1. Create user in Firebase Authentication
+        // Create user in Firebase Authentication
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (!isFinishing()) {
@@ -113,8 +113,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
                             // 2. Prepare data for 'users' collection
                             Map<String, Object> userMap = new HashMap<>();
                             userMap.put("email", email);
-                            userMap.put("type", "business");
-                            userMap.put("status", "active");
+                            userMap.put("role", "business");
                             userMap.put("created_at", FieldValue.serverTimestamp());
 
                             // 3. Prepare data for 'businesses' collection
@@ -125,7 +124,8 @@ public class BusinessSignupActivity extends AppCompatActivity {
                             businessMap.put("address", address);
                             businessMap.put("phone", phone);
                             businessMap.put("website", website);
-                            businessMap.put("display_picture_url", "");
+                            businessMap.put("totalRatings", 0);
+                            businessMap.put("totalReviews", 0);
                             businessMap.put("accountStatus", "active");
                             businessMap.put("reviewStatus", "pending");
                             businessMap.put("approvalStatus", "pending");

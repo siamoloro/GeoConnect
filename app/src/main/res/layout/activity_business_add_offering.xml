@@ -38,26 +38,23 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Offering Name -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilOfferingName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:boxStrokeColor="#114224"
-                app:hintTextColor="#114224"
+                app:boxStrokeColor="#000000"
+                app:hintTextColor="#000000"
                 android:hint="Offering Name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etOfferingName"
                     android:layout_width="match_parent"
-                    android:background="@drawable/bg_input_field"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName|textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Price -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPrice"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -72,11 +69,9 @@
                     android:id="@+id/etPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_input_field"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Description -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilDescription"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -92,11 +87,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:gravity="top|start"
-                    android:background="@drawable/bg_input_field"
                     android:inputType="textMultiLine" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Save Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSaveOffering"
                 android:layout_width="match_parent"

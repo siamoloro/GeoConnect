@@ -49,6 +49,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
 
     implementation(libs.play.services.maps)
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
