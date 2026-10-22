@@ -113,7 +113,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
                             // 2. Prepare data for 'users' collection
                             Map<String, Object> userMap = new HashMap<>();
                             userMap.put("email", email);
-                            userMap.put("role", "business");
+                            userMap.put("type", "business");
                             userMap.put("created_at", FieldValue.serverTimestamp());
 
                             // 3. Prepare data for 'businesses' collection
