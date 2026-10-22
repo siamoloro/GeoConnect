@@ -147,13 +147,13 @@ public class CustomerSignupActivity extends AppCompatActivity {
                     WriteBatch batch = firestore.batch();
 
                     batch.set(
-                            firestore.collection("user")
+                            firestore.collection("users")
                                     .document(userId),
                             user
                     );
 
                     batch.set(
-                            firestore.collection("Customer")
+                            firestore.collection("customers")
                                     .document(userId),
                             customer
                     );
