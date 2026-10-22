@@ -110,7 +110,7 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                                     freelancerData.put("serviceArea", ""); // Initial blank service area
                                     freelancerData.put("availability", true);
 
-                                    db.collection("freelancer")
+                                    db.collection("freelancers")
                                             .add(freelancerData)
                                             .addOnSuccessListener(documentReference -> {
                                                 Toast.makeText(this, "Freelancer account created successfully!", Toast.LENGTH_SHORT).show();
