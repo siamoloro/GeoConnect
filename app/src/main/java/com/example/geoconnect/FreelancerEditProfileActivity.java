@@ -72,7 +72,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() == null) return;
         String userId = mAuth.getCurrentUser().getUid();
 
-        db.collection("Freelancers")
+        db.collection("freelancers")
                 .whereEqualTo("userID", userId)
                 .limit(1)
                 .get()
@@ -141,7 +141,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         data.put("description", bio);
         data.put("userID", userId);
 
-        db.collection("Freelancers")
+        db.collection("freelancers")
                 .whereEqualTo("userID", userId)
                 .limit(1)
                 .get()

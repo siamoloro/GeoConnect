@@ -213,12 +213,10 @@ public class DiscoverActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap map) {
-
         googleMap = map;
 
-        // INITIAL CAMERA POSITION ONLY
-        LatLng initialLocation =
-                new LatLng(-25.7479, 28.2293);
+        // INITIAL CAMERA POSITION ONLY (-25.7479, 28.2293)
+        LatLng initialLocation = new LatLng(-25.7479, 28.2293);
 
         googleMap.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
@@ -226,20 +224,48 @@ public class DiscoverActivity extends AppCompatActivity
                 )
         );
 
-        googleMap.getUiSettings()
-                .setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         // OPEN PROVIDER DETAILS WHEN MARKER IS CLICKED
         googleMap.setOnInfoWindowClickListener(marker -> {
-
             Object tag = marker.getTag();
-
             if (tag instanceof ProviderItem) {
                 openProviderDetails((ProviderItem) tag);
             }
         });
 
+        // Safely draw markers now that the map instance is ready
         updateMapMarkers();
+    }
+
+    // ADD PROVIDERS WITH LOCATIONS TO GOOGLE MAPS
+    private void updateMapMarkers() {
+        // Guard check: do nothing if the map hasn't finished initializing yet
+        if (googleMap == null) return;
+
+        googleMap.clear();
+
+        for (ProviderItem provider : filteredProviders) {
+            if (provider.location == null) {
+                continue;
+            }
+
+            LatLng position = new LatLng(
+                    provider.location.getLatitude(),
+                    provider.location.getLongitude()
+            );
+
+            Marker marker = googleMap.addMarker(
+                    new MarkerOptions()
+                            .position(position)
+                            .title(provider.name)
+                            .snippet(provider.category)
+            );
+
+            if (marker != null) {
+                marker.setTag(provider);
+            }
+        }
     }
 
     // LOAD BUSINESSES AND FREELANCERS
@@ -531,36 +557,6 @@ public class DiscoverActivity extends AppCompatActivity
         }
     }
 
-    // ADD PROVIDERS WITH LOCATIONS TO GOOGLE MAPS
-    private void updateMapMarkers() {
-
-        if (googleMap == null) return;
-
-        googleMap.clear();
-
-        for (ProviderItem provider : filteredProviders) {
-
-            if (provider.location == null) {
-                continue;
-            }
-
-            LatLng position = new LatLng(
-                    provider.location.getLatitude(),
-                    provider.location.getLongitude()
-            );
-
-            Marker marker = googleMap.addMarker(
-                    new MarkerOptions()
-                            .position(position)
-                            .title(provider.name)
-                            .snippet(provider.category)
-            );
-
-            if (marker != null) {
-                marker.setTag(provider);
-            }
-        }
-    }
 
     // OPEN SELECTED PROVIDER DETAILS
     private void openProviderDetails(ProviderItem provider) {
