@@ -65,9 +65,6 @@ public class DetailsActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        // CONNECT XML COMPONENTS
-        providerCoverImage =
-                findViewById(R.id.providerCoverImage);
 
         providerName =
                 findViewById(R.id.providerName);
