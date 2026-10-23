@@ -2,7 +2,7 @@
 
 GeoConnect is an Android app that connects people with nearby service providers. Customers can discover freelancers and businesses on a map or in a list, view their details and make booking requests. Freelancers and businesses manage their profiles and incoming requests, and administrators oversee users and support cases.
 
-> **Course project:** replace this line with your module name, institution and submission date.
+> **Course project:** Eduvos - ITMDA3-4 Group Project - due 23/10/26 
 
 ## Team
 
@@ -11,7 +11,7 @@ GeoConnect is an Android app that connects people with nearby service providers.
 | Khensani Baloyi | _e.g. Customer features_   |
 | Zoë Qobo        | _e.g. Freelancer features_ |
 | Osiame Moloro   | _e.g. Business features_   |
-| Bruno Thinya    | _e.g. Admin features       |
+| Bruno Thinya Setwaba   | _e.g. Admin features       |
 | All             | Database implementation     |  
 
 ## Features
@@ -188,8 +188,6 @@ Sign-in routes users by the role stored in their `users` document.
 1. In the Firebase console, go to **Authentication > Users** and add a user with an email and password.
 2. In **Firestore > users**, create a document whose ID is that user's UID, with fields `email` and `role` set to `admin`.
 3. Sign in through the **Admin portal** link on the sign-in screen.
-
-> Do not put real passwords in this README. Share demo credentials with markers privately.
 
 ## Troubleshooting
 
