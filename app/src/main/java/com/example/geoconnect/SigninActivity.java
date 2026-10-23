@@ -31,7 +31,7 @@ public class SigninActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin); // Keeps your existing XML layout name
+        setContentView(R.layout.activity_signin);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -53,7 +53,8 @@ public class SigninActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(v -> signinUser());
 
         txtForgotPassword.setOnClickListener(v -> {
-            Toast.makeText(this, "Forgot password clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SigninActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
 
         layoutAdminPortal.setOnClickListener(v -> {
