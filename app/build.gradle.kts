@@ -45,6 +45,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    packagingOptions {
+        resources.excludes += "META-INF/NOTICE.md"
+        resources.excludes += "META-INF/LICENSE.md"
+    }
 }
 
 dependencies {
@@ -62,6 +66,9 @@ dependencies {
 
     implementation(libs.play.services.maps)
     implementation("com.google.android.gms:play-services-location:21.2.0")
+
+    implementation("com.sun.mail:android-mail:1.6.7")
+    implementation("com.sun.mail:android-activation:1.6.7")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)

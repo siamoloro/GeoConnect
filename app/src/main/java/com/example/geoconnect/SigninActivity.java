@@ -33,9 +33,7 @@ public class SigninActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_signin); // Keeps your existing XML layout name
-        FreelancerUi.applyInsets(findViewById(android.R.id.content));
+        setContentView(R.layout.activity_signin);
 
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -59,7 +57,8 @@ public class SigninActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(v -> signinUser());
 
         txtForgotPassword.setOnClickListener(v -> {
-            Toast.makeText(this, "Forgot password clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SigninActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
 
         layoutAdminPortal.setOnClickListener(v ->
