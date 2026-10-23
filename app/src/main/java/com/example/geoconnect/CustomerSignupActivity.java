@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,9 +36,13 @@ public class CustomerSignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_customer_signup);
-        FreelancerUi.applyInsets(findViewById(android.R.id.content));
+
+        TextView backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(v -> {
+            finish();
+        });
 
         // Connect XML components
         fullNameInput = findViewById(R.id.FillNameInput);

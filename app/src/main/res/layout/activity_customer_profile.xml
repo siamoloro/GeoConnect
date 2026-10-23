@@ -36,9 +36,7 @@
                     android:gravity="center"
                     android:drawableStart="@drawable/ic_settings"
                     android:paddingStart="12dp"
-                    android:textColor="#FFFFFF"
-                    android:textSize="22sp"
-                    android:background="#397344" />
+                    android:textSize="22sp" />
             </FrameLayout>
 
             <LinearLayout
@@ -78,10 +76,11 @@
                             android:textSize="20sp"
                             android:textStyle="bold" />
                         <TextView
+                            android:id="@+id/memberSince"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Date they started using it"
+                            android:text="Member since..."
                             android:textColor="#777777"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -122,10 +121,11 @@
                             android:textStyle="bold"
                             android:textSize="12sp" />
                         <TextView
+                            android:id="@+id/bookingCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="No bookings"
+                            android:text="Loading bookings..."
                             android:textColor="#777777"
                             android:textSize="10sp" />
                     </LinearLayout>
@@ -252,7 +252,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/navFreelancers"
+            android:id="@+id/navProviders"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -266,13 +266,13 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_freelancer"
                 app:tint="#74867D"
-                android:contentDescription="Freelancers"/>
+                android:contentDescription="Provider"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Freelancers"
+                android:text="Providers"
                 android:textColor="#74867D"
                 android:textSize="12sp"/>
 
