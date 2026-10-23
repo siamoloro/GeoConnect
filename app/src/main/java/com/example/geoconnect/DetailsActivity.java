@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,7 +61,9 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_details);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -191,8 +194,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         String collectionName =
                 "Business".equalsIgnoreCase(currentProviderType)
-                        ? "Business"
-                        : "Freelancer";
+                        ? "businesses"
+                        : "freelancers";
 
         firestore.collection(collectionName)
                 .document(currentProviderId)

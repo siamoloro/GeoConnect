@@ -18,14 +18,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FieldValue;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class ReviewActivity extends AppCompatActivity {
 
     private ImageView businessImage;
@@ -46,16 +38,13 @@ public class ReviewActivity extends AppCompatActivity {
     private String providerId;
     private String providerType;
     private String bookingId;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_review);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // CONNECT XML VIEWS
         businessImage = findViewById(R.id.businessImage);
@@ -179,105 +168,11 @@ public class ReviewActivity extends AppCompatActivity {
             selectedTags.add("Friendly and professional");
         }
 
-        submitReview(rating, comment, selectedTags);
-    }
-    private void submitReview(
-            float rating,
-            String comment,
-            ArrayList<String> selectedTags) {
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        if (user == null) {
-            Toast.makeText(this,
-                    "Please log in to submit a review",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (bookingId == null || bookingId.trim().isEmpty()) {
-            Toast.makeText(this,
-                    "Booking information is missing",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (providerId == null || providerId.trim().isEmpty()
-                || providerType == null || providerType.trim().isEmpty()) {
-            Toast.makeText(this,
-                    "Provider information is missing",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        submitReviewButton.setEnabled(false);
-
-        firestore.collection("booking")
-                .document(bookingId)
-                .get()
-                .addOnSuccessListener(booking -> {
-
-                    if (!booking.exists()
-                            || !user.getUid().equals(
-                            booking.getString("customerID"))
-                            || !"Completed".equalsIgnoreCase(
-                            booking.getString("status"))
-                            || !providerId.equals(
-                            booking.getString("providerId"))
-                            || !providerType.equalsIgnoreCase(
-                            booking.getString("providerType"))) {
-
-                        submitReviewButton.setEnabled(true);
-
-                        Toast.makeText(this,
-                                "Only your completed bookings can be reviewed",
-                                Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    Map<String, Object> review = new HashMap<>();
-
-                    review.put("customerID", user.getUid());
-                    review.put("providerId", providerId);
-                    review.put("providerType", providerType);
-                    review.put("bookingId", bookingId);
-                    review.put("rating", rating);
-                    review.put("comment", comment);
-                    review.put("tags", selectedTags);
-                    review.put("createdAt", FieldValue.serverTimestamp());
-
-                    // One review document per booking
-                    firestore.collection("reviews")
-                            .document(bookingId)
-                            .set(review)
-                            .addOnSuccessListener(unused -> {
-
-                                Toast.makeText(
-                                        ReviewActivity.this,
-                                        "Review submitted successfully!",
-                                        Toast.LENGTH_LONG
-                                ).show();
-
-                                finish();
-                            })
-                            .addOnFailureListener(e -> {
-
-                                submitReviewButton.setEnabled(true);
-
-                                Toast.makeText(
-                                        ReviewActivity.this,
-                                        "Unable to submit review: " + e.getMessage(),
-                                        Toast.LENGTH_LONG
-                                ).show();
-                            });
-                })
-                .addOnFailureListener(e -> {
-
-                    submitReviewButton.setEnabled(true);
-
-                    Toast.makeText(this,
-                            "Unable to verify booking: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                });
+        // FRONTEND ONLY - NO DATABASE SUBMISSION YET
+        Toast.makeText(
+                this,
+                "Review validated. Submission will be available when the backend is connected.",
+                Toast.LENGTH_LONG
+        ).show();
     }
 }

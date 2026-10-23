@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,7 +69,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_customer_profile);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // INITIALIZE FIREBASE
         firebaseAuth = FirebaseAuth.getInstance();
@@ -86,9 +89,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
         // BOTTOM NAVIGATION
         navHome = findViewById(R.id.navHome);
         navMarket = findViewById(R.id.navMarket);
-        navFreelancers = findViewById(R.id.navProviders);
+        navFreelancers = findViewById(R.id.navFreelancers);
         navProfile = findViewById(R.id.navProfile);
-
 
         // PROFILE ICON
         profileImage.setImageResource(R.drawable.ic_person);

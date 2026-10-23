@@ -102,8 +102,10 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
     }
 
     private void loadLatestPendingRequest() {
-        // Query the 'bookings' collection for pending items matching your ERD architecture
+        if (mAuth.getCurrentUser() == null) return;
+        // Only this freelancer's requests — without the providerID filter Accept/Decline hit anyone's booking
         db.collection("bookings")
+                .whereEqualTo("providerID", mAuth.getCurrentUser().getUid())
                 .whereEqualTo("status", "Pending")
                 .limit(1)
                 .get()

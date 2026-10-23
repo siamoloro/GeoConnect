@@ -13,6 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class BusinessAddOfferingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_add_offering);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -104,6 +106,8 @@ public class BusinessAddOfferingActivity extends AppCompatActivity {
                 .collection("offerings")
                 .add(offeringMap)
                 .addOnSuccessListener(documentReference -> {
+                    // Booking and Details screens read a 'services' list on the business doc, so keep it in sync
+                    db.collection("businesses").document(userId).update("services", FieldValue.arrayUnion(name));
                     Toast.makeText(BusinessAddOfferingActivity.this, "Offering added successfully!", Toast.LENGTH_SHORT).show();
                     finish(); // Return back to the previous screen
                 })
