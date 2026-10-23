@@ -28,9 +28,10 @@
                 android:gravity="center_horizontal">
 
                 <TextView
+                    android:id="@+id/tvProfileInitials"
                     android:layout_width="84dp"
                     android:layout_height="84dp"
-                    android:text="AK"
+                    android:text="--"
                     android:textColor="@color/forest_green"
                     android:textSize="26sp"
                     android:textStyle="bold"
@@ -41,7 +42,7 @@
                     android:id="@+id/tvProfileName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Alex Khumalo"
+                    android:text="Loading..."
                     android:textColor="@color/glitter"
                     android:textSize="22sp"
                     android:textStyle="bold"
@@ -51,23 +52,25 @@
                     android:id="@+id/tvProfileCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Freelance photographer · Johannesburg"
+                    android:text=""
                     android:textColor="@color/sage_green"
                     android:textSize="13sp"
                     android:layout_marginTop="2dp" />
+
                 <TextView
                     android:id="@+id/tvProfileServiceArea"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Johannesburg"
+                    android:text=""
                     android:textColor="@color/sage_green"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
+
                 <TextView
                     android:id="@+id/tvProfilePhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+27 00 000 0000"
+                    android:text=""
                     android:textColor="@color/glitter"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp" />
@@ -83,7 +86,7 @@
                         android:id="@+id/tvProfileRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="★ 4.8 (126 reviews)"
+                        android:text="★ --"
                         android:textColor="@color/glitter"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -132,7 +135,7 @@
                             android:id="@+id/tvProfileJobsDone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="128"
+                            android:text="0"
                             android:textColor="@color/forest_green"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -161,7 +164,7 @@
                             android:id="@+id/tvProfileResponse"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="98%"
+                            android:text="--"
                             android:textColor="@color/forest_green"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -189,7 +192,7 @@
                             android:id="@+id/tvProfileExperience"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="4 yrs"
+                            android:text="--"
                             android:textColor="@color/forest_green"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -228,7 +231,7 @@
                         android:id="@+id/tvProfileBio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Portrait and event photographer with 4 years of experience..."
+                        android:text="No bio provided."
                         android:textColor="@color/black"
                         android:textSize="13sp" />
 
@@ -259,7 +262,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Portrait session"
+                            android:text="Standard Service"
                             android:textColor="@color/black"
                             android:textSize="14sp"
                             android:layout_weight="1" />
@@ -268,40 +271,7 @@
                             android:id="@+id/tvServiceRate1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="R450"
-                            android:textColor="@color/forest_green"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_card"
-                    android:padding="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="Event coverage"
-                            android:textColor="@color/black"
-                            android:textSize="14sp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="R1,200"
+                            android:text="--"
                             android:textColor="@color/forest_green"
                             android:textSize="14sp"
                             android:textStyle="bold" />

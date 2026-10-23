@@ -89,7 +89,7 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                     .addOnSuccessListener(authResult -> {
                         String userId = authResult.getUser().getUid();
 
-                        // 1. Store base account details in 'users' collection (matches User_Account ERD table)
+                        // 1. Store base account details in 'users' collection
                         Map<String, Object> userAccount = new HashMap<>();
                         userAccount.put("userID", userId);
                         userAccount.put("email", email);
@@ -100,17 +100,24 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                         db.collection("users").document(userId)
                                 .set(userAccount)
                                 .addOnSuccessListener(aVoid -> {
-                                    // 2. Store profile specifics in 'freelancer' collection linked by foreign key (userID)
+                                    // 2. Store profile specifics in 'freelancers' collection with default profile metadata
                                     Map<String, Object> freelancerData = new HashMap<>();
                                     freelancerData.put("userID", userId);
                                     freelancerData.put("name", name);
                                     freelancerData.put("phone", phone);
                                     freelancerData.put("category", category);
-                                    freelancerData.put("description", ""); // Initial blank bio
-                                    freelancerData.put("serviceArea", ""); // Initial blank service area
+                                    freelancerData.put("description", "New freelancer on GeoConnect.");
+                                    freelancerData.put("serviceArea", "Johannesburg");
                                     freelancerData.put("availability", true);
 
-                                    // Doc ID = auth uid, like customers and businesses, so bookings can point at it
+                                    // Default initial stats to match profile view components cleanly
+                                    freelancerData.put("rating", 5.0);
+                                    freelancerData.put("reviewsCount", 0L);
+                                    freelancerData.put("jobsDone", 0L);
+                                    freelancerData.put("responseRate", "100%");
+                                    freelancerData.put("experience", "1 yr");
+                                    freelancerData.put("serviceRate1", "R350");
+
                                     db.collection("freelancers").document(userId)
                                             .set(freelancerData)
                                             .addOnSuccessListener(documentReference -> {
