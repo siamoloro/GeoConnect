@@ -113,6 +113,8 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                                     freelancerData.put("serviceArea", "Johannesburg");
                                     freelancerData.put("availability", true);
 
+                                    freelancerData.put("approvalStatus", "Pending");
+
                                     // Default initial stats to match profile view components cleanly
                                     freelancerData.put("rating", 5.0);
                                     freelancerData.put("reviewsCount", 0L);

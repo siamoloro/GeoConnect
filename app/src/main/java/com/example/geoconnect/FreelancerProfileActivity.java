@@ -55,12 +55,10 @@ public class FreelancerProfileActivity extends AppCompatActivity {
         super.onResume();
         loadFreelancerProfile();
     }
-
     private void loadFreelancerProfile() {
         if (mAuth.getCurrentUser() == null) return;
         String userId = mAuth.getCurrentUser().getUid();
 
-        // Query Firestore 'freelancers' collection matching your ERD relation (userID foreign key)
         db.collection("freelancers")
                 .whereEqualTo("userID", userId)
                 .limit(1)
@@ -70,12 +68,18 @@ public class FreelancerProfileActivity extends AppCompatActivity {
                         var document = queryDocumentSnapshots.getDocuments().get(0);
 
                         String name = document.getString("name");
+                        if (name == null || name.isEmpty()) {
+                            name = document.getString("fullName");
+                        }
+
                         String category = document.getString("category");
                         String serviceArea = document.getString("serviceArea");
                         String bio = document.getString("description");
                         String phone = document.getString("phone");
 
-                        // Fetch dynamic stats and rates (with fallback safety if fields are missing in Firestore)
+                        // Fetch approval status from database
+                        String approvalStatus = document.getString("approvalStatus");
+
                         Double rating = document.getDouble("rating");
                         Long reviewsCount = document.getLong("reviewsCount");
                         Long jobsDone = document.getLong("jobsDone");
@@ -83,29 +87,35 @@ public class FreelancerProfileActivity extends AppCompatActivity {
                         String experience = document.getString("experience");
                         String serviceRate1 = document.getString("serviceRate1");
 
-                        // Dynamically update the main profile info
-                        if (tvProfileName != null && name != null) tvProfileName.setText(name);
+                        // Update standard UI fields
+                        if (tvProfileName != null) tvProfileName.setText(name != null ? name : "Unnamed Freelancer");
                         if (tvProfileCategory != null && category != null) tvProfileCategory.setText(category);
                         if (tvProfileServiceArea != null && serviceArea != null) tvProfileServiceArea.setText(serviceArea);
                         if (tvProfilePhone != null && phone != null) tvProfilePhone.setText(phone);
                         if (tvProfileBio != null && bio != null) tvProfileBio.setText(bio);
 
-                        // Dynamically update stats and rates
                         if (tvProfileRating != null && rating != null) {
                             String reviews = reviewsCount != null ? " (" + reviewsCount + " reviews)" : "";
                             tvProfileRating.setText("★ " + rating + reviews);
                         }
-                        if (tvProfileJobsDone != null && jobsDone != null) {
-                            tvProfileJobsDone.setText(String.valueOf(jobsDone));
-                        }
-                        if (tvProfileResponse != null && responseRate != null) {
-                            tvProfileResponse.setText(responseRate);
-                        }
-                        if (tvProfileExperience != null && experience != null) {
-                            tvProfileExperience.setText(experience);
-                        }
-                        if (tvServiceRate1 != null && serviceRate1 != null) {
-                            tvServiceRate1.setText(serviceRate1);
+                        if (tvProfileJobsDone != null && jobsDone != null) tvProfileJobsDone.setText(String.valueOf(jobsDone));
+                        if (tvProfileResponse != null && responseRate != null) tvProfileResponse.setText(responseRate);
+                        if (tvProfileExperience != null && experience != null) tvProfileExperience.setText(experience);
+                        if (tvServiceRate1 != null && serviceRate1 != null) tvServiceRate1.setText(serviceRate1);
+
+                        // --- Dynamic Verified Badge Logic ---
+                        TextView tvVerifiedBadge = findViewById(R.id.tvVerifiedBadge); // Make sure to give your badge TextView this ID in XML if it doesn't have one
+                        if (tvVerifiedBadge != null) {
+                            if ("Approved".equalsIgnoreCase(approvalStatus) || "Verified".equalsIgnoreCase(approvalStatus)) {
+                                tvVerifiedBadge.setVisibility(android.view.View.VISIBLE);
+                                tvVerifiedBadge.setText(approvalStatus); // Displays "Approved" or "Verified"
+                            } else if ("Pending".equalsIgnoreCase(approvalStatus)) {
+                                tvVerifiedBadge.setVisibility(android.view.View.VISIBLE);
+                                tvVerifiedBadge.setText("Pending Approval");
+                            } else {
+                                // Hide badge or show unverified if status is missing/rejected
+                                tvVerifiedBadge.setVisibility(android.view.View.GONE);
+                            }
                         }
                     }
                 })
