@@ -2,47 +2,103 @@ package com.example.geoconnect;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminReviewActivity extends AppCompatActivity {
 
-    private FirebaseFirestore db;
+    FirebaseFirestore db;
+    LinearLayout reviewContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_review2);
         FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Load reviews from Firestore
-        loadReviewsData();
+        reviewContainer =
+                findViewById(R.id.reviewContainer);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        Button btnPending =
+                findViewById(R.id.btnPending);
+
+        Button btnApproved =
+                findViewById(R.id.btnResolved);
+
+        Button btnRejected =
+                findViewById(R.id.btnArchived);
+
+        btnPending.setOnClickListener(v -> {
+
+            loadPendingApplications();
+            setActiveTab(btnPending);
+
+        });
+
+        loadPendingApplications();
+        setActiveTab(btnPending);
+
+
+        btnApproved.setOnClickListener(v -> {
+
+            loadApprovedApplications();
+            setActiveTab(btnApproved);
+
+        });
+
+
+        btnRejected.setOnClickListener(v -> {
+
+            loadRejectedApplications();
+            setActiveTab(btnRejected);
+
+        });
+
+
+
+        BottomNavigationView bottomNav =
+                findViewById(R.id.bottomNav);
+
         bottomNav.setSelectedItemId(R.id.nav_review);
 
         bottomNav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
 
-            if (id == R.id.nav_overview) {
-                startActivity(new Intent(AdminReviewActivity.this, AdminDashboardActivity.class));
+            if (item.getItemId() == R.id.nav_overview) {
+                startActivity(new Intent(
+                        AdminReviewActivity.this,
+                        AdminDashboardActivity.class));
                 return true;
-            } else if (id == R.id.nav_users) {
-                startActivity(new Intent(AdminReviewActivity.this, AdminUsersActivity.class));
+            }
+
+            if (item.getItemId() == R.id.nav_users) {
+                startActivity(new Intent(
+                        AdminReviewActivity.this,
+                        AdminUsersActivity.class));
                 return true;
-            } else if (id == R.id.nav_review) {
+            }
+
+            if (item.getItemId() == R.id.nav_review) {
                 return true;
-            } else if (id == R.id.nav_reports) {
-                startActivity(new Intent(AdminReviewActivity.this, AdminReportsActivity.class));
+            }
+
+            if (item.getItemId() == R.id.nav_reports) {
+                startActivity(new Intent(
+                        AdminReviewActivity.this,
+                        AdminReportsActivity.class));
                 return true;
             }
 
@@ -50,16 +106,255 @@ public class AdminReviewActivity extends AppCompatActivity {
         });
     }
 
-    private void loadReviewsData() {
-        // Fetch reviews/feedback from Firestore 'reviews' collection
-        db.collection("reviews")
+    private void setActiveTab(Button activeButton)
+    {
+        Button btnPending =
+                findViewById(R.id.btnPending);
+
+        Button btnApproved =
+                findViewById(R.id.btnResolved);
+
+        Button btnRejected =
+                findViewById(R.id.btnArchived);
+
+        btnPending.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        android.graphics.Color.parseColor("#444444")));
+
+        btnApproved.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        android.graphics.Color.parseColor("#444444")));
+
+        btnRejected.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        android.graphics.Color.parseColor("#444444")));
+
+        // Active button turns green
+        activeButton.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        android.graphics.Color.parseColor("#4CAF50")));
+    }
+
+
+    private void loadPendingApplications()
+    {
+        reviewContainer.removeAllViews();
+
+        db.collection("businesses")
+                .whereEqualTo(
+                        "approvalStatus",
+                        "pending")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    int totalReviews = queryDocumentSnapshots.size();
-                    // TODO: Bind reviews list/adapter or display totalReviews count here
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load reviews: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    for(QueryDocumentSnapshot document :
+                            queryDocumentSnapshots)
+                    {
+                        addApplicationCard(
+                                document.getId(),
+                                document.getString("name"),
+                                "Business",
+                                true
+                        );
+                    }
+                });
+
+        db.collection("freelancers")
+                .whereEqualTo(
+                        "approvalStatus",
+                        "pending")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(QueryDocumentSnapshot document :
+                            queryDocumentSnapshots)
+                    {
+                        addApplicationCard(
+                                document.getId(),
+                                document.getString("fullName"),
+                                "Freelancer",
+                                false
+                        );
+                    }
                 });
     }
+
+    private void addApplicationCard(
+            String documentId,
+            String name,
+            String type,
+            boolean isBusiness) {
+        LayoutInflater inflater =
+                LayoutInflater.from(this);
+
+        android.view.View card =
+                inflater.inflate(
+                        R.layout.item_review_card,
+                        reviewContainer,
+                        false);
+
+        TextView txtName =
+                card.findViewById(R.id.txtName);
+
+        TextView txtType =
+                card.findViewById(R.id.txtType);
+
+        Button btnApprove =
+                card.findViewById(R.id.btnApprove);
+
+        Button btnReject =
+                card.findViewById(R.id.btnReject);
+
+        txtName.setText(name);
+        txtType.setText(type);
+
+        btnApprove.setOnClickListener(v -> {
+
+            String collection =
+                    isBusiness
+                            ? "businesses"
+                            : "freelancers";
+
+            db.collection(collection)
+                    .document(documentId)
+                    .update(
+                            "approvalStatus",
+                            "approved",
+                            "reviewStatus",
+                            "reviewed"
+                    )
+                    .addOnSuccessListener(unused -> {
+
+                        Toast.makeText(
+                                this,
+                                "Approved",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        loadPendingApplications();
+                    });
+
+        });
+
+        btnReject.setOnClickListener(v -> {
+
+            String collection =
+                    isBusiness
+                            ? "businesses"
+                            : "freelancers";
+
+            db.collection(collection)
+                    .document(documentId)
+                    .update(
+                            "approvalStatus",
+                            "rejected",
+                            "reviewStatus",
+                            "reviewed"
+                    )
+                    .addOnSuccessListener(unused -> {
+
+                        Toast.makeText(
+                                this,
+                                "Rejected",
+                                Toast.LENGTH_SHORT
+                        ).show();
+
+                        loadPendingApplications();
+                    });
+            });
+            reviewContainer.addView(card);
+        }
+
+    private void loadApprovedApplications()
+    {
+        reviewContainer.removeAllViews();
+
+        db.collection("businesses")
+                .whereEqualTo(
+                        "approvalStatus",
+                        "approved")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(QueryDocumentSnapshot document :
+                            queryDocumentSnapshots)
+                    {
+                        addApplicationCard(
+                                document.getId(),
+                                document.getString("name"),
+                                "Business",
+                                true
+                        );
+                    }
+                });
+
+        db.collection("freelancers")
+                .whereEqualTo(
+                        "approvalStatus",
+                        "approved")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(QueryDocumentSnapshot document :
+                            queryDocumentSnapshots)
+                    {
+                        addApplicationCard(
+                                document.getId(),
+                                document.getString("fullName"),
+                                "Freelancer",
+                                false
+                        );
+                    }
+                });
+        }
+
+    private void loadRejectedApplications()
+    {
+        reviewContainer.removeAllViews();
+
+        db.collection("businesses")
+                .whereEqualTo(
+                        "approvalStatus",
+                        "rejected")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(QueryDocumentSnapshot document :
+                            queryDocumentSnapshots)
+                    {
+                        addApplicationCard(
+                                document.getId(),
+                                document.getString("name"),
+                                "Business",
+                                true
+                        );
+                    }
+                });
+
+        db.collection("freelancers")
+                .whereEqualTo(
+                        "approvalStatus",
+                        "rejected")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    for(QueryDocumentSnapshot document :
+                            queryDocumentSnapshots)
+                    {
+                        addApplicationCard(
+                                document.getId(),
+                                document.getString("fullName"),
+                                "Freelancer",
+                                false
+                        );
+                    }
+                });
+    }
+
+
+
+
 }
+
+
+

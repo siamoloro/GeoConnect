@@ -22,7 +22,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
     private ImageView btnSettings, btnEditProfile, btnEditHours, btnEditLocation, btnEditOfferings, btnNotifications;
     private TextView txtBusinessName, txtCategory, txtAbout, txtLocation, txtStatus, txtRating, txtMemberSince;
 
-    // Firebase instances
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -33,11 +32,11 @@ public class BusinessDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business_dashboard);
         FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
-        // Initialize Firebase
+        // Initializes Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize Views
+        // Initializes Views
         btnSettings = findViewById(R.id.btnSettings);
         btnNotifications = findViewById(R.id.btnNotifications);
         txtBusinessName = findViewById(R.id.txtBusinessName);
@@ -55,10 +54,8 @@ public class BusinessDashboardActivity extends AppCompatActivity {
         btnEditLocation = findViewById(R.id.btnEditLocation);
         btnEditOfferings = findViewById(R.id.btnEditOfferings);
 
-        // Fetch and populate data from Firebase DB for the currently logged-in user
         loadBusinessDataFromFirestore();
 
-        // Setup Button Click Listeners & Navigation
         btnSettings.setOnClickListener(v -> {
             Intent intent = new Intent(BusinessDashboardActivity.this, SettingsActivity.class);
             startActivity(intent);
@@ -103,7 +100,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
 
         String userId = currentUser.getUid();
 
-        // 1. Fetch business information from the 'businesses' collection
         db.collection("businesses").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -113,7 +109,7 @@ public class BusinessDashboardActivity extends AppCompatActivity {
                         String address = documentSnapshot.getString("address");
                         String approvalStatus = documentSnapshot.getString("approvalStatus");
 
-                        // Populate text fields safely
+                        // Populates text fields
                         if (name != null) {
                             txtBusinessName.setText(name);
                         }
@@ -131,7 +127,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
                             txtLocation.setText("Location not set.");
                         }
 
-                        // Handle Status field mapping
                         if (approvalStatus != null) {
                             if (approvalStatus.equalsIgnoreCase("approved")) {
                                 txtStatus.setText("Verified");
@@ -142,7 +137,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
                             txtStatus.setText("Pending");
                         }
 
-                        // Handle Rating Calculation safely (preventing division by zero)
                         Long totalRatings = documentSnapshot.getLong("totalRatings");
                         Long totalReviews = documentSnapshot.getLong("totalReviews");
 
@@ -159,7 +153,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to load profile: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
-        // 2. Fetch account creation details from the 'users' collection to calculate 'Member Since'
         db.collection("users").document(userId).get()
                 .addOnSuccessListener(userDoc -> {
                     if (userDoc.exists()) {
@@ -173,7 +166,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
                             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
                             int yearsDifference = currentYear - creationYear;
 
-                            // If 0 or negative (created this year), default to 1 yr
                             if (yearsDifference <= 0) {
                                 txtMemberSince.setText("1 yr");
                             } else {

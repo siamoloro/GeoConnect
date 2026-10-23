@@ -34,6 +34,18 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".AdminReviewActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminReportsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminUsersActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -171,18 +183,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MyBookingActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".AdminUsersActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".AdminReportsActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".AdminReviewActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>

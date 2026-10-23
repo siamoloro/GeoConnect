@@ -70,7 +70,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
     }
 
     private void registerBusinessUser() {
-        // Extract data safely
+        // Extract data
         String businessName = etBusinessName.getText() != null ? etBusinessName.getText().toString().trim() : "";
         String category = etCategory.getText() != null ? etCategory.getText().toString().trim() : "";
         String description = etAbout.getText() != null ? etAbout.getText().toString().trim() : "";
@@ -113,13 +113,11 @@ public class BusinessSignupActivity extends AppCompatActivity {
                         if (firebaseUser != null) {
                             String userId = firebaseUser.getUid();
 
-                            // 2. Prepare data for 'users' collection
                             Map<String, Object> userMap = new HashMap<>();
                             userMap.put("email", email);
                             userMap.put("type", "business");
                             userMap.put("created_at", FieldValue.serverTimestamp());
 
-                            // 3. Prepare data for 'businesses' collection
                             Map<String, Object> businessMap = new HashMap<>();
                             businessMap.put("name", businessName);
                             businessMap.put("description", description);
@@ -133,11 +131,9 @@ public class BusinessSignupActivity extends AppCompatActivity {
                             businessMap.put("reviewStatus", "pending");
                             businessMap.put("approvalStatus", "pending");
 
-                            // Save to 'users' collection using userId as document ID
                             db.collection("users").document(userId)
                                     .set(userMap)
                                     .addOnSuccessListener(aVoid -> {
-                                        // Save to 'businesses' collection using the same userId as document ID
                                         db.collection("businesses").document(userId)
                                                 .set(businessMap)
                                                 .addOnSuccessListener(aVoid1 -> {
@@ -152,7 +148,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
                                     .addOnFailureListener(e -> showError("Failed to save user data: " + e.getMessage()));
                         }
                     } else {
-                        // Handle registration failure gracefully
+                        // Handle registration failures
                         try {
                             throw task.getException();
                         } catch (com.google.firebase.auth.FirebaseAuthUserCollisionException e) {
