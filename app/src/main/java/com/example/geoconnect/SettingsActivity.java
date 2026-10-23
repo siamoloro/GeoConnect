@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Sign Out action (Navigates back to SigninActivity)
+        // Sign Out action navigates back to Signin
         btnSignOut.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(SettingsActivity.this, SigninActivity.class);

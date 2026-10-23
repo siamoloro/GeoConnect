@@ -5,7 +5,7 @@ public class BusinessModel {
     private String category;
     private String address;
     private String contactNumber;
-    private String businessEmail; // Optional
+    private String businessEmail;
     private String about;
 
     public BusinessModel(String businessName, String category, String address,
@@ -18,7 +18,6 @@ public class BusinessModel {
         this.about = about;
     }
 
-    // Getters and Setters
     public String getBusinessName() { return businessName; }
     public void setBusinessName(String businessName) { this.businessName = businessName; }
 

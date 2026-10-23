@@ -103,8 +103,11 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                                     // 2. Store profile specifics in 'freelancers' collection with default profile metadata
                                     Map<String, Object> freelancerData = new HashMap<>();
                                     freelancerData.put("userID", userId);
-                                    freelancerData.put("name", name);
+                                    freelancerData.put("fullname", name);
                                     freelancerData.put("phone", phone);
+                                    freelancerData.put("accountStatus", "active");
+                                    freelancerData.put("reviewStatus", "pending");
+                                    freelancerData.put("approvalStatus", "pending");
                                     freelancerData.put("category", category);
                                     freelancerData.put("description", "New freelancer on GeoConnect.");
                                     freelancerData.put("serviceArea", "Johannesburg");

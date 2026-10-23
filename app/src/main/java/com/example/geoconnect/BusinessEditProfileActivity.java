@@ -33,8 +33,6 @@ public class BusinessEditProfileActivity extends AppCompatActivity{
     }
 
     private void loadDataFromDatabase() {
-        // --- A. Load General Business Details ---
-        // (Replace these simulated values with actual data read from your database/cursor/API)
         String dbName = "North & Pine Studio";
         String dbCategory = "Home styling & interiors";
         String dbDescription = "Specializing in modern minimalist interior design.";
@@ -51,15 +49,12 @@ public class BusinessEditProfileActivity extends AppCompatActivity{
     }
 
     private void extractUserInputsAndSave() {
-        // --- A. Extract General Business Details ---
         String businessName = edtBusinessName.getText().toString().trim();
         String category     = edtCategory.getText().toString().trim();
         String description  = edtDescription.getText().toString().trim();
         String phone        = edtPhone.getText().toString().trim();
         String website      = edtWebsite.getText().toString().trim();
         String address      = edtAddress.getText().toString().trim();
-
-        // Basic validation check
         if (businessName.isEmpty()) {
             edtBusinessName.setError("Business name cannot be empty");
             edtBusinessName.requestFocus();

@@ -30,7 +30,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         btnSendLink = findViewById(R.id.btnSendLink);
         tvBackToSignIn = findViewById(R.id.tvBackToSignIn);
 
-        // Click listener to send native Firebase password reset email
         btnSendLink.setOnClickListener(v -> sendFirebasePasswordResetEmail());
 
         tvBackToSignIn.setOnClickListener(v -> finish());
@@ -48,7 +47,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         btnSendLink.setEnabled(false);
         btnSendLink.setText("Sending...");
 
-        // Native Firebase Auth method to email a secure reset link
+        // Email a secure reset link
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     btnSendLink.setEnabled(true);
