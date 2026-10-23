@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
 
     private TextView txtErrorMessage;
     private EditText etBusinessName;
-    private EditText etCategory;
+    private Spinner spCategory;
     private EditText etAbout;
     private EditText etAddress;
     private EditText etBusinessEmail;
@@ -50,9 +51,8 @@ public class BusinessSignupActivity extends AppCompatActivity {
 
         txtErrorMessage = findViewById(R.id.txtErrorMessage);
         etBusinessName = findViewById(R.id.etBusinessName);
-        etCategory = findViewById(R.id.etCategory);
+        spCategory = findViewById(R.id.spCategory);
         etAbout = findViewById(R.id.etAbout);
-        etAddress = findViewById(R.id.etAddress);
         etBusinessEmail = findViewById(R.id.etBusinessEmail);
         etContactNumber = findViewById(R.id.etContactNumber);
         etWebsite = findViewById(R.id.etWebsite);
@@ -69,9 +69,8 @@ public class BusinessSignupActivity extends AppCompatActivity {
     private void registerBusinessUser() {
         // Extract data safely
         String businessName = etBusinessName.getText() != null ? etBusinessName.getText().toString().trim() : "";
-        String category = etCategory.getText() != null ? etCategory.getText().toString().trim() : "";
+        String category = spCategory.getSelectedItem() != null ? spCategory.getSelectedItem().toString() : "";
         String description = etAbout.getText() != null ? etAbout.getText().toString().trim() : "";
-        String address = etAddress.getText() != null ? etAddress.getText().toString().trim() : "";
         String email = etBusinessEmail.getText() != null ? etBusinessEmail.getText().toString().trim() : "";
         String phone = etContactNumber.getText() != null ? etContactNumber.getText().toString().trim() : "";
         String website = etWebsite.getText() != null ? etWebsite.getText().toString().trim() : "";
@@ -80,7 +79,6 @@ public class BusinessSignupActivity extends AppCompatActivity {
 
         // Basic Validation
         if (TextUtils.isEmpty(businessName) || TextUtils.isEmpty(category) ||
-                TextUtils.isEmpty(address) || TextUtils.isEmpty(email) ||
                 TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
             showError("Please fill in all required fields.");
             return;
@@ -121,7 +119,6 @@ public class BusinessSignupActivity extends AppCompatActivity {
                             businessMap.put("name", businessName);
                             businessMap.put("description", description);
                             businessMap.put("category", category);
-                            businessMap.put("address", address);
                             businessMap.put("phone", phone);
                             businessMap.put("website", website);
                             businessMap.put("totalRatings", 0);
