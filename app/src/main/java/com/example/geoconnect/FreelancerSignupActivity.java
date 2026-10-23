@@ -14,6 +14,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -124,6 +125,9 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                                     db.collection("freelancers").document(userId)
                                             .set(freelancerData)
                                             .addOnSuccessListener(documentReference -> {
+                                                // Automatically add welcome notification
+                                                addWelcomeNotification(userId);
+
                                                 Toast.makeText(this, "Freelancer account created successfully!", Toast.LENGTH_SHORT).show();
                                                 startActivity(new Intent(this, FreelancerDashboardActivity.class));
                                                 finish();
@@ -148,5 +152,17 @@ public class FreelancerSignupActivity extends AppCompatActivity {
             startActivity(new Intent(this, SigninActivity.class));
             finish();
         });
+    }
+
+    private void addWelcomeNotification(String userId) {
+        Map<String, Object> notificationMap = new HashMap<>();
+        notificationMap.put("title", "Welcome to GeoConnect");
+        notificationMap.put("content", "Your freelancer account has been successfully created. Complete your service listings and profile details to start receiving requests.");
+        notificationMap.put("timestamp", FieldValue.serverTimestamp());
+
+        db.collection("users")
+                .document(userId)
+                .collection("notifications")
+                .add(notificationMap);
     }
 }

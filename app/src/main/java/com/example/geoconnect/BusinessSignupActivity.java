@@ -68,7 +68,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
     }
 
     private void registerBusinessUser() {
-        // Extract data (address removed)
+        // Extract data
         String businessName = etBusinessName.getText() != null ? etBusinessName.getText().toString().trim() : "";
         String category = spCategory.getSelectedItem() != null ? spCategory.getSelectedItem().toString() : "";
         String description = etAbout.getText() != null ? etAbout.getText().toString().trim() : "";
@@ -78,7 +78,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
         String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
         String confirmPassword = etConfirmPassword.getText() != null ? etConfirmPassword.getText().toString().trim() : "";
 
-        // Basic Validation (address check removed)
+        // Basic Validation
         if (TextUtils.isEmpty(businessName) || TextUtils.isEmpty(category) ||
                 TextUtils.isEmpty(email) || TextUtils.isEmpty(phone) ||
                 TextUtils.isEmpty(password)) {
@@ -133,6 +133,9 @@ public class BusinessSignupActivity extends AppCompatActivity {
                                         db.collection("businesses").document(userId)
                                                 .set(businessMap)
                                                 .addOnSuccessListener(aVoid1 -> {
+                                                    // Automatically add "Welcome to GeoConnect" notification
+                                                    addWelcomeNotification(userId);
+
                                                     Toast.makeText(BusinessSignupActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
                                                     Intent intent = new Intent(BusinessSignupActivity.this, BusinessDashboardActivity.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -158,6 +161,18 @@ public class BusinessSignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void addWelcomeNotification(String userId) {
+        Map<String, Object> notificationMap = new HashMap<>();
+        notificationMap.put("title", "Welcome to GeoConnect");
+        notificationMap.put("content", "Your business account has been successfully created. Set up your location and operating hours to get started.");
+        notificationMap.put("timestamp", FieldValue.serverTimestamp());
+
+        db.collection("users")
+                .document(userId)
+                .collection("notifications")
+                .add(notificationMap);
     }
 
     private void showError(String message) {
