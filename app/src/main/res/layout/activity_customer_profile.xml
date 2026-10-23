@@ -76,10 +76,11 @@
                             android:textSize="20sp"
                             android:textStyle="bold" />
                         <TextView
+                            android:id="@+id/memberSince"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Date they started using it"
+                            android:text="Member since..."
                             android:textColor="#777777"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -120,10 +121,11 @@
                             android:textStyle="bold"
                             android:textSize="12sp" />
                         <TextView
+                            android:id="@+id/bookingCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="No bookings"
+                            android:text="Loading bookings..."
                             android:textColor="#777777"
                             android:textSize="10sp" />
                     </LinearLayout>

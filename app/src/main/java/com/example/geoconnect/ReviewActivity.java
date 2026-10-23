@@ -151,15 +151,6 @@ public class ReviewActivity extends AppCompatActivity {
             return;
         }
 
-        // CHECK COMMENT
-        if (comment.isEmpty()) {
-            reviewCommentInput.setError(
-                    "Please write a review"
-            );
-            reviewCommentInput.requestFocus();
-            return;
-        }
-
         // COLLECT SELECTED TAGS
         ArrayList<String> selectedTags = new ArrayList<>();
 

@@ -178,11 +178,18 @@ public class DetailsActivity extends AppCompatActivity {
         // WRITE REVIEW
         writeReviewButton.setOnClickListener(v -> {
 
-            Toast.makeText(
-                    this,
-                    "Review page will be connected later",
-                    Toast.LENGTH_SHORT
-            ).show();
+
+            Intent intent = new Intent(
+                    DetailsActivity.this,
+                    ReviewActivity.class
+            );
+
+            intent.putExtra("providerId", currentProviderId);
+            intent.putExtra("providerType", currentProviderType);
+            intent.putExtra("providerName", currentProviderName);
+            intent.putExtra("providerCategory", currentProviderCategory);
+
+            startActivity(intent);
         });
     }
 
@@ -191,8 +198,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         String collectionName =
                 "Business".equalsIgnoreCase(currentProviderType)
-                        ? "Business"
-                        : "Freelancer";
+                        ? "businesses"
+                        : "freelancers";
 
         firestore.collection(collectionName)
                 .document(currentProviderId)
@@ -247,10 +254,11 @@ public class DetailsActivity extends AppCompatActivity {
                     String address = firstString(
                             document,
                             "address",
+                            "businessAddress",
+                            "physicalAddress",
                             "city",
                             "locationName"
                     );
-
                     providerDistance.setText(
                             address.isEmpty()
                                     ? "Location not available"
@@ -350,7 +358,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         firestore.collection("customers")
                 .document(user.getUid())
-                .collection("SavedProviders")
+                .collection("savedProviders")
                 .document(savedId)
                 .get()
                 .addOnSuccessListener(document -> {
@@ -398,7 +406,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             firestore.collection("customers")
                     .document(user.getUid())
-                    .collection("SavedProviders")
+                    .collection("savedProviders")
                     .document(savedId)
                     .set(savedProvider)
                     .addOnSuccessListener(unused -> {
@@ -425,7 +433,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             firestore.collection("customers")
                     .document(user.getUid())
-                    .collection("SavedProviders")
+                    .collection("savedProviders")
                     .document(savedId)
                     .delete()
                     .addOnSuccessListener(unused -> {

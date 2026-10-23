@@ -260,8 +260,16 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         navMarket.setOnClickListener(v ->
                 openPage(DiscoverActivity.class));
 
-        navProviders.setOnClickListener(v ->
-                openPage(SearchActivity.class));
+        navProviders.setOnClickListener(v -> {
+
+            Toast.makeText(
+                    CustomerDashboardActivity.this,
+                    "Providers button clicked",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            openPage(SearchActivity.class);
+        });
 
         navProfile.setOnClickListener(v ->
                 openPage(CustomerProfileActivity.class));
@@ -330,7 +338,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
                     currentName.trim().split("\\s+")[0];
 
             customerGreeting.setText(
-                    "Hello, " + firstName + "!"
+                    "Hello, " + firstName
             );
 
         } else {

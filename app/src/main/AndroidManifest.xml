@@ -119,7 +119,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".BookingActivity"
+            android:name=".BookingsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -162,6 +162,14 @@
             android:name=".BusinessAddOfferingActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".SearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity android:name=".MyBookingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
