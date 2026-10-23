@@ -48,6 +48,8 @@ public class FreelancerProfileActivity extends AppCompatActivity {
 
         findViewById(R.id.btnEditProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, FreelancerEditProfileActivity.class)));
+        findViewById(R.id.btnSettings).setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
     }
 
     @Override
