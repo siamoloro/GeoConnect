@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoConnect">
         <activity
-            android:name=".MainActivity"
+            android:name=".AdminSigninActivity"
             android:exported="true"
             android:theme="@style/Theme.HideSplashScreen"
             android:windowSoftInputMode="adjustResize">
@@ -32,6 +32,18 @@
         </activity>
         <activity
             android:name=".AdminDashboardActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminReviewActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminReportsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AdminUsersActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -47,7 +59,7 @@
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".AdminSigninActivity"
+            android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -116,10 +128,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".DetailsActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".Booking"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity

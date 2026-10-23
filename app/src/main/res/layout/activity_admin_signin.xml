@@ -8,19 +8,6 @@
     android:layout_height="match_parent"
     android:background="@color/background_dark">
 
-    <!-- Back Button -->
-
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/white"
-        android:src="@android:drawable/ic_media_previous"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <!-- Green Icon Box -->
 
     <com.google.android.material.card.MaterialCardView
@@ -31,7 +18,7 @@
         app:cardBackgroundColor="@color/green_primary"
         app:cardCornerRadius="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="30dp">
 
         <ImageView
@@ -71,10 +58,10 @@
     <!-- Email Label -->
 
     <TextView
-        android:id="@+id/emailLabel"
+        android:id="@+id/usernameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email"
+        android:text="Username"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:layout_marginTop="32dp"
@@ -84,28 +71,28 @@
     <!-- Email Field -->
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailLayout"
+        android:id="@+id/usernameLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
+        app:hintEnabled="false"
         app:boxBackgroundMode="outline"
         app:boxStrokeColor="#383838"
         app:boxCornerRadiusTopStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusBottomEnd="15dp"
-        app:layout_constraintTop_toBottomOf="@id/emailLabel"
+        app:layout_constraintTop_toBottomOf="@id/usernameLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etEmail"
+            android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="admin@yourmarket.com"
-            android:textColor="@android:color/white"
-            android:textColorHint="#888888"/>
+            android:hint="Enter Username"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Label -->
@@ -118,8 +105,8 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/emailLayout"
-        app:layout_constraintStart_toStartOf="@id/emailLayout"/>
+        app:layout_constraintTop_toBottomOf="@id/usernameLayout"
+        app:layout_constraintStart_toStartOf="@id/usernameLayout"/>
 
     <!-- Password Field -->
 
@@ -149,18 +136,6 @@
             android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Forgot Password -->
-    <TextView
-        android:id="@+id/txtForgot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reset Password"
-        android:textColor="@color/green_light"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/passwordLayout"
-        app:layout_constraintStart_toStartOf="@id/passwordLayout"/>
-
     <!-- Login Button -->
 
     <com.google.android.material.button.MaterialButton
@@ -174,7 +149,7 @@
         android:textColor="@android:color/white"
         android:backgroundTint="@color/green_primary"
         app:cornerRadius="20dp"
-        app:layout_constraintTop_toBottomOf="@id/txtForgot"
+        app:layout_constraintTop_toBottomOf="@id/passwordLayout"
         android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

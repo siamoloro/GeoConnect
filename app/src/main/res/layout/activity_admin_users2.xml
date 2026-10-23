@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12,842 registered accounts"
+                        android:text="Manage user accounts"
                         android:textColor="#DDDDDD"
                         android:textSize="14sp" />
 
@@ -55,6 +55,7 @@
             <!-- SEARCH BAR -->
 
             <EditText
+                android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
@@ -77,6 +78,7 @@
                     android:layout_height="wrap_content">
 
                     <Button
+                        android:id="@+id/btnAll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="All"
@@ -84,6 +86,7 @@
                         android:backgroundTint="#4CAF50"/>
 
                     <Button
+                        android:id="@+id/btnCustomers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Customers"
@@ -91,6 +94,7 @@
                         android:backgroundTint="#444444"/>
 
                     <Button
+                        android:id="@+id/btnBusinesses"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Businesses"
@@ -98,6 +102,7 @@
                         android:backgroundTint="#444444"/>
 
                     <Button
+                        android:id="@+id/btnFreelancers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Freelancers"
@@ -134,200 +139,12 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- USER 1 -->
-
-            <androidx.cardview.widget.CardView
+            <LinearLayout
+                android:id="@+id/usersContainer"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="20dp"
-                app:cardBackgroundColor="#2E2E2E"
-                app:cardCornerRadius="14dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@android:drawable/sym_def_app_icon"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="12dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:text="Maya Thompson"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="Customer • Joined 2026"
-                            android:textColor="#AAAAAA"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Active"
-                        android:textColor="#4CAF50"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- USER 2 -->
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#2E2E2E"
-                app:cardCornerRadius="14dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:text="North &amp; Pine Studio"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="Business • Joined 2026"
-                            android:textColor="#AAAAAA"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:text="Verified"
-                        android:textColor="#4CAF50"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- USER 3 -->
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#2E2E2E"
-                app:cardCornerRadius="14dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:text="Avery Martinez"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="Freelancer • Joined 2026"
-                            android:textColor="#AAAAAA"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:text="Verified"
-                        android:textColor="#4CAF50"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- USER 4 -->
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                app:cardBackgroundColor="#2E2E2E"
-                app:cardCornerRadius="14dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:text="Bright Clean Co."
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="Business • Joined 2026"
-                            android:textColor="#AAAAAA"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:text="Flagged"
-                        android:textColor="#FF5A5A"
-                        android:textStyle="bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"/>
 
         </LinearLayout>
 
