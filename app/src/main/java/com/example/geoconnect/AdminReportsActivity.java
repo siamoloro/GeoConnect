@@ -32,6 +32,7 @@ public class AdminReportsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_reports2);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         db = FirebaseFirestore.getInstance();
 

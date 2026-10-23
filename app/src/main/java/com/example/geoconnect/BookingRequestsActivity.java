@@ -10,9 +10,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,28 +69,50 @@ public class BookingRequestsActivity extends AppCompatActivity {
     }
 
     private void loadBookingsFromFirestore(String status) {
-        db.collection("bookings")
-                .whereEqualTo("status", status)
+        if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() == null) return;
+        String currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // First, get the freelancer record corresponding to this user account (matching userID foreign key)
+        db.collection("freelancers")
+                .whereEqualTo("userID", currentUserId)
+                .limit(1)
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    bookingList.clear();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Booking booking = new Booking(
-                                document.getId(),
-                                document.getString("customerName"),
-                                document.getString("serviceTitle"),
-                                document.getString("price"),
-                                document.getString("dateTime"),
-                                document.getString("location"),
-                                document.getString("status"),
-                                document.getString("initials")
-                        );
-                        bookingList.add(booking);
+                .addOnSuccessListener(freelancerSnapshots -> {
+                    if (!freelancerSnapshots.isEmpty()) {
+                        String freelancerId = freelancerSnapshots.getDocuments().get(0).getId();
+
+                        // Field names must match what BookingsActivity writes (providerID, service, bookingDate)
+                        db.collection("bookings")
+                                .whereEqualTo("status", status)
+                                .whereEqualTo("providerID", freelancerId)
+                                .get()
+                                .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    bookingList.clear();
+                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                        String customerName = document.getString("customerName");
+                                        if (customerName == null || customerName.isEmpty()) customerName = "Customer";
+                                        Timestamp when = document.getTimestamp("bookingDate");
+                                        Booking booking = new Booking(
+                                                document.getId(),
+                                                customerName,
+                                                document.getString("service"),
+                                                "",
+                                                when != null ? DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(when.toDate()) : "",
+                                                document.getString("location"),
+                                                document.getString("status"),
+                                                customerName.substring(0, 1).toUpperCase()
+                                        );
+                                        bookingList.add(booking);
+                                    }
+                                    bookingAdapter.notifyDataSetChanged();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
                     }
-                    bookingAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to identify freelancer profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 

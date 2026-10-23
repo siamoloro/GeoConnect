@@ -5,20 +5,23 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
-public class OperationalHoursActivity extends AppCompatActivity {
+public class BusinessOperatingHoursActivity extends AppCompatActivity {
 
     private final String[] timeFieldIds = {
             "edtMondayOpening", "edtMondayClosing",
@@ -39,15 +42,41 @@ public class OperationalHoursActivity extends AppCompatActivity {
     private boolean isSaturdayClosed = false;
     private boolean isSundayClosed = false;
 
+    private MaterialButton btnSaveChanges;
+
+    // Firebase instances
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private String userId;
+
+    private final String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_operational_hours);
+        setContentView(R.layout.activity_business_operating_hours);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
+
+        // Initialize Firebase
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            userId = currentUser.getUid();
+        } else {
+            Toast.makeText(this, "User session not found. Please log in again.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
+        btnSaveChanges = findViewById(R.id.btnSaveChanges);
+
+        // Setup click listeners for opening/closing time pickers
         for (String fieldId : timeFieldIds) {
             int resId = getResources().getIdentifier(fieldId, "id", getPackageName());
             TextView textView = findViewById(resId);
@@ -59,59 +88,63 @@ public class OperationalHoursActivity extends AppCompatActivity {
 
         setupClosedButtons();
 
+        // 1. Load existing operating hours document if it already exists
+        loadDataFromDatabase();
+
+        // 2. Save or update changes to Firestore when button is clicked
+        if (btnSaveChanges != null) {
+            btnSaveChanges.setOnClickListener(v -> extractUserInputsAndSave());
+        }
     }
 
     private void loadDataFromDatabase() {
-        for (String fieldId : timeFieldIds) {
-            int resId = getResources().getIdentifier(fieldId, "id", getPackageName());
-            TextView textView = findViewById(resId);
+        // Path: businesses/{userId}/operating_hours/schedule
+        db.collection("businesses").document(userId)
+                .collection("operating_hours").document("schedule")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Document exists: Read data and populate screen
+                        for (String day : days) {
+                            String openingTime = documentSnapshot.getString(day.toLowerCase() + "_opening");
+                            String closingTime = documentSnapshot.getString(day.toLowerCase() + "_closing");
+                            Boolean isClosed = documentSnapshot.getBoolean(day.toLowerCase() + "_is_closed");
 
-            if (textView != null) {
-                textView.setOnClickListener(v -> openTimePicker(textView));
-            }
-        }
+                            int openingResId = getResources().getIdentifier("edt" + day + "Opening", "id", getPackageName());
+                            int closingResId = getResources().getIdentifier("edt" + day + "Closing", "id", getPackageName());
+                            int buttonResId  = getResources().getIdentifier("btn" + day + "Closed", "id", getPackageName());
 
-        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-        for (String day : days) {
-            // Dynamically find the views using the loop technique
-            int openingResId = getResources().getIdentifier("edt" + day + "Opening", "id", getPackageName());
-            int closingResId = getResources().getIdentifier("edt" + day + "Closing", "id", getPackageName());
-            int buttonResId  = getResources().getIdentifier("btn" + day + "Closed", "id", getPackageName());
+                            TextView openingView = findViewById(openingResId);
+                            TextView closingView = findViewById(closingResId);
+                            MaterialButton btnClosed = findViewById(buttonResId);
 
-            TextView openingView = findViewById(openingResId);
-            TextView closingView = findViewById(closingResId);
-            MaterialButton btnClosed = findViewById(buttonResId);
+                            if (openingView != null && openingTime != null) openingView.setText(openingTime);
+                            if (closingView != null && closingTime != null) closingView.setText(closingTime);
 
-            // Mock Database Values for this Day
-            String dbOpening = "09:00";
-            String dbClosing = day.equals("Sunday") ? "" : "17:00";
-            boolean dbIsClosed = day.equals("Sunday"); // Example: Sunday is closed from DB
-
-            // Set the text into the views of this day
-            if (openingView != null) openingView.setText(dbOpening);
-            if (closingView != null) closingView.setText(dbClosing);
-
-            // Update the boolean state and sync the Closed button color of this day
-            setClosedState(day, dbIsClosed);
-            if (btnClosed != null) {
-                updateClosedButtonStyle(btnClosed, dbIsClosed);
-            }
-        }
+                            boolean closedState = (isClosed != null) ? isClosed : false;
+                            setClosedState(day, closedState);
+                            if (btnClosed != null) {
+                                updateClosedButtonStyle(btnClosed, closedState);
+                            }
+                        }
+                    } else {
+                        // Document does not exist yet: Leave fields at default or blank
+                        Toast.makeText(this, "No operating hours found. Set your hours and click Save Changes.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to load hours: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     private void openTimePicker(TextView targetTextView) {
-        // Get the current system time to set as default in the picker
         final Calendar calendar = Calendar.getInstance();
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         int currentMinute = calendar.get(Calendar.MINUTE);
 
-        // Initialize the TimePickerDialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (TimePicker view, int hourOfDay, int minute) -> {
-                    // Format and display the selected time into the specific TextView that was clicked
                     String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
                     targetTextView.setText(formattedTime);
-                }, currentHour, currentMinute, false); // 'false' sets it to 12-hour format with AM/PM
+                }, currentHour, currentMinute, false);
 
         timePickerDialog.show();
     }
@@ -131,12 +164,9 @@ public class OperationalHoursActivity extends AppCompatActivity {
 
         if (btnClosed != null) {
             btnClosed.setOnClickListener(v -> {
-                // Toggle boolean state
                 boolean currentState = getClosedState(day);
                 boolean newState = !currentState;
                 setClosedState(day, newState);
-
-                // Update button background and text colors based on boolean
                 updateClosedButtonStyle(btnClosed, newState);
             });
         }
@@ -144,11 +174,9 @@ public class OperationalHoursActivity extends AppCompatActivity {
 
     private void updateClosedButtonStyle(MaterialButton button, boolean isClosed) {
         if (isClosed) {
-            // True: Background #114224, Text White
             button.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#114224")));
             button.setTextColor(Color.parseColor("#FFFFFF"));
         } else {
-            // False: Background White, Text #114224
             button.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#FFFFFF")));
             button.setTextColor(Color.parseColor("#114224"));
         }
@@ -180,8 +208,7 @@ public class OperationalHoursActivity extends AppCompatActivity {
     }
 
     private void extractUserInputsAndSave() {
-        // --- B. Extract Operating Hours & Closed Status Dynamically ---
-        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        Map<String, Object> hoursMap = new HashMap<>();
 
         for (String day : days) {
             int openingResId = getResources().getIdentifier("edt" + day + "Opening", "id", getPackageName());
@@ -190,15 +217,38 @@ public class OperationalHoursActivity extends AppCompatActivity {
             TextView openingView = findViewById(openingResId);
             TextView closingView = findViewById(closingResId);
 
-            // Extract the current text from the views and the boolean state
             String openingTime = (openingView != null) ? openingView.getText().toString().trim() : "";
             String closingTime = (closingView != null) ? closingView.getText().toString().trim() : "";
             boolean isClosed   = getClosedState(day);
 
-            // TODO: Pass or save these values (openingTime, closingTime, isClosed)
-            // to your database table/model for each specific day here.
+            // Put into map with lowercase prefix keys (e.g., monday_opening, monday_closing, monday_is_closed)
+            String prefix = day.toLowerCase();
+            hoursMap.put(prefix + "_opening", openingTime);
+            hoursMap.put(prefix + "_closing", closingTime);
+            hoursMap.put(prefix + "_is_closed", isClosed);
         }
 
-        // TODO: Finalize and execute your database save/update operation for the general info too
+        // Disable save button during network write to avoid duplicate clicks
+        if (btnSaveChanges != null) {
+            btnSaveChanges.setEnabled(false);
+        }
+
+        // Save or update the single "schedule" document under the operating_hours subcollection
+        db.collection("businesses").document(userId)
+                .collection("operating_hours").document("schedule")
+                .set(hoursMap) // .set() creates the document if it doesn't exist, or overwrites/updates if it does
+                .addOnSuccessListener(aVoid -> {
+                    if (btnSaveChanges != null) {
+                        btnSaveChanges.setEnabled(true);
+                    }
+                    Toast.makeText(BusinessOperatingHoursActivity.this, "Operating hours saved successfully!", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    if (btnSaveChanges != null) {
+                        btnSaveChanges.setEnabled(true);
+                    }
+                    Toast.makeText(BusinessOperatingHoursActivity.this, "Failed to save hours: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 }

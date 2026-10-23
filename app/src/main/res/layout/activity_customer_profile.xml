@@ -34,7 +34,8 @@
                     android:layout_gravity="end|top"
                     android:layout_margin="18dp"
                     android:gravity="center"
-                    android:text="⚙"
+                    android:drawableStart="@drawable/ic_settings"
+                    android:paddingStart="12dp"
                     android:textColor="#FFFFFF"
                     android:textSize="22sp"
                     android:background="#397344" />
@@ -53,8 +54,10 @@
                     android:layout_height="78dp"
                     android:layout_marginTop="-36dp"
                     android:background="#D8E6D9"
+                    android:src="@drawable/ic_person"
+                    android:padding="15dp"
                     android:contentDescription="Customer profile picture"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="fitCenter"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -144,6 +147,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:text="Saved"
+                            android:drawableStart="@drawable/ic_favorite"
+                            android:drawablePadding="5dp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:textSize="12sp" />
@@ -191,43 +196,115 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
+        <LinearLayout
             android:id="@+id/navHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Home"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home"
+                app:tint="#74867D"
+                android:contentDescription="Home"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Home"
+                android:textColor="#176B50"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/navMarket"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Market"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_market"
+                app:tint="#74867D"
+                android:contentDescription="Market"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Market"
+                android:textColor="#74867D"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/navFreelancers"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Freelancers"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
-        <TextView
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_freelancer"
+                app:tint="#74867D"
+                android:contentDescription="Freelancers"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Freelancers"
+                android:textColor="#74867D"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:id="@+id/navProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Profile"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="24dp"
+                android:contentDescription="Profile"
+                android:src="@drawable/ic_person"
+                app:tint="#74867D" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Profile"
+                android:textColor="#74867D"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

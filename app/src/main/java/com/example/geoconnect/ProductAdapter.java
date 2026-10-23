@@ -41,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Product product = productList.get(position);
         holder.tvProductName.setText(product.getName());
         holder.tvProductDescription.setText(product.getDescription());
-        holder.tvProductPrice.setText(String.format(Locale.getDefault(), "$%.2f", product.getPrice()));
+        holder.tvProductPrice.setText(String.format(Locale.getDefault(), "R%.2f", product.getPrice()));
     }
 
     @Override

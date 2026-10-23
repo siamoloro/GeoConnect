@@ -124,7 +124,7 @@
             android:background="@drawable/bg_input"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:entries="@array/service_categories" />
+            android:entries="@array/business_categories_array" />
 
         <TextView
             android:layout_width="wrap_content"
