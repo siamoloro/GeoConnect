@@ -170,6 +170,10 @@
         <activity android:name=".MyBookingActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
+
+        <activity android:name=".ActiveSessionsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
