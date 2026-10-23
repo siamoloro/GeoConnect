@@ -23,7 +23,7 @@ public class BusinessEditProfileActivity extends AppCompatActivity {
     private MaterialButton btnSaveDetails;
 
     private FirebaseFirestore db;
-    private String businessId; // Typically the user's UID or a specific business document ID
+    private String businessId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +32,11 @@ public class BusinessEditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business_edit_profile);
         FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
-        // Initialize Firestore instance
         db = FirebaseFirestore.getInstance();
 
-        // Get the current logged-in user's ID as the business document ID (adjust if using a different logic)
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         } else {
-            // Fallback or handle unauthenticated state
             businessId = "default_business_id";
         }
 
@@ -53,7 +50,7 @@ public class BusinessEditProfileActivity extends AppCompatActivity {
         edtWebsite = findViewById(R.id.edtWebsite);
         edtAddress = findViewById(R.id.edtAddress);
 
-        btnSaveDetails = findViewById(R.id.btnSaveDetails); // Uncomment if your button has this ID in XML
+        btnSaveDetails = findViewById(R.id.btnSaveDetails);
         btnSaveDetails.setOnClickListener(v -> extractUserInputsAndSave());
 
         loadDataFromDatabase();
