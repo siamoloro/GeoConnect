@@ -3,6 +3,7 @@ package com.example.geoconnect;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ public class MyBookingActivity extends AppCompatActivity {
     private LinearLayout bookingsContainer;
     private LinearLayout emptyState;
     private TextView emptyMessage;
-    private TextView backButton;
+    private ImageView backButton;
 
     // BOOKING DATA
     private final List<DocumentSnapshot> allBookings =
@@ -47,6 +48,12 @@ public class MyBookingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_my_booking);
+
+        Toast.makeText(
+                this,
+                "My Bookings Activity opened",
+                Toast.LENGTH_LONG
+        ).show();
 
         // INITIALIZE FIREBASE
         firebaseAuth = FirebaseAuth.getInstance();

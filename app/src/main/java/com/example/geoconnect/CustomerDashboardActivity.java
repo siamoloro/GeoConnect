@@ -42,7 +42,7 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationTokenSource;
 
 import java.io.IOException;
-import java.util.List;
+
 
 public class CustomerDashboardActivity extends AppCompatActivity {
 
@@ -276,7 +276,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
                 firebaseAuth.getCurrentUser();
 
         if (firebaseUser == null) {
-            customerGreeting.setText("Hello, welcome!");
+            customerGreeting.setText("Hello, welcome");
 
             Toast.makeText(this,
                     "Please log in to access your account",
@@ -304,7 +304,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
                         displayCustomerName();
 
                     } else {
-                        customerGreeting.setText("Hello, welcome!");
+                        customerGreeting.setText("Hello, welcome");
 
                         Toast.makeText(this,
                                 "Customer profile not found",
@@ -334,7 +334,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
             );
 
         } else {
-            customerGreeting.setText("Hello, welcome!");
+            customerGreeting.setText("Hello, welcome");
         }
     }
 

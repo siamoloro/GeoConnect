@@ -20,14 +20,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
+        <ImageView
             android:id="@+id/backButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:gravity="center"
-            android:text="←"
-            android:textColor="#FFFFFF"
-            android:textSize="28sp"
+            android:src="@drawable/ic_arrow_back"
+            android:padding="12dp"
             android:contentDescription="Go back"
             android:clickable="true"
             android:focusable="true" />
