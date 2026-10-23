@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Title -->
         <TextView
             android:id="@+id/txtHeaderTitle"
             android:layout_width="0dp"
@@ -25,7 +24,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <!-- Subtitle -->
         <TextView
             android:id="@+id/txtHeaderSubtitle"
             android:layout_width="0dp"
@@ -68,7 +66,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtHeaderSubtitle" />
 
-        <!-- ================= BUSINESS NAME ================= -->
         <TextView
             android:id="@+id/lblBusinessName"
             android:layout_width="wrap_content"
@@ -111,25 +108,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etBusinessName" />
 
-        <EditText
-            android:id="@+id/etCategory"
+        <Spinner
+            android:id="@+id/spCategory"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginTop="6dp"
             android:background="@drawable/bg_input_field"
-            android:drawableStart="@drawable/ic_shapes"
-            android:drawablePadding="12dp"
-            android:hint="e.g. Retail &amp; Shopping"
-            android:inputType="textCapWords"
-            android:paddingHorizontal="16dp"
-            android:textColor="#111111"
-            android:textColorHint="#999999"
-            android:textSize="14sp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:entries="@array/business_categories_array"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblCategory" />
 
-        <!-- ================= DESCRIPTION / ABOUT ================= -->
         <TextView
             android:id="@+id/lblAbout"
             android:layout_width="wrap_content"
@@ -140,7 +131,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etCategory" />
+            app:layout_constraintTop_toBottomOf="@id/spCategory" />
 
         <EditText
             android:id="@+id/etAbout"
@@ -159,7 +150,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblAbout" />
 
-        <!-- ================= ADDRESS ================= -->
         <TextView
             android:id="@+id/lblAddress"
             android:layout_width="wrap_content"
@@ -190,7 +180,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblAddress" />
 
-        <!-- ================= EMAIL ================= -->
         <TextView
             android:id="@+id/lblBusinessEmail"
             android:layout_width="wrap_content"
@@ -221,7 +210,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblBusinessEmail" />
 
-        <!-- ================= PHONE / CONTACT NUMBER ================= -->
         <TextView
             android:id="@+id/lblContactNumber"
             android:layout_width="wrap_content"
@@ -282,7 +270,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblWebsite" />
 
-        <!-- ================= PASSWORD ================= -->
         <TextView
             android:id="@+id/lblPassword"
             android:layout_width="wrap_content"
@@ -313,7 +300,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblPassword" />
 
-        <!-- ================= CONFIRM PASSWORD ================= -->
         <TextView
             android:id="@+id/lblConfirmPassword"
             android:layout_width="wrap_content"
@@ -344,7 +330,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblConfirmPassword" />
 
-        <!-- ================= SUBMIT BUTTON ================= -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
             android:layout_width="0dp"
