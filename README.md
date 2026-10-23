@@ -222,4 +222,4 @@ git push
 
 ## Licence
 
-Add a licence here, or state that this project was created for educational purposes only.
+Created for educational purposes only.
