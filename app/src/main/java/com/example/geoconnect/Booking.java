@@ -12,7 +12,6 @@ public class Booking {
     private String status;
     private String initials;
 
-    // Required for Firestore
     public Booking() {
     }
 

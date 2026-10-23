@@ -44,7 +44,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
         txtAbout = findViewById(R.id.txtAbout);
         txtLocation = findViewById(R.id.txtLocation);
 
-        // Additional metric/status views present in your dashboard XML
         txtStatus = findViewById(R.id.txtStatus);
         txtRating = findViewById(R.id.txtRating);
         txtMemberSince = findViewById(R.id.txtMemberSince);
@@ -90,7 +89,6 @@ public class BusinessDashboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Reloads data whenever returning to the dashboard (e.g., after updating location/profile)
         loadBusinessDataFromFirestore();
     }
 

@@ -90,7 +90,6 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                     .addOnSuccessListener(authResult -> {
                         String userId = authResult.getUser().getUid();
 
-                        // 1. Store base account details in 'users' collection
                         Map<String, Object> userAccount = new HashMap<>();
                         userAccount.put("userID", userId);
                         userAccount.put("email", email);
@@ -101,7 +100,6 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                         db.collection("users").document(userId)
                                 .set(userAccount)
                                 .addOnSuccessListener(aVoid -> {
-                                    // 2. Store profile specifics in 'freelancers' collection with default profile metadata
                                     Map<String, Object> freelancerData = new HashMap<>();
                                     freelancerData.put("userID", userId);
                                     freelancerData.put("fullName", name);
@@ -114,7 +112,6 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                                     freelancerData.put("serviceArea", "Johannesburg");
                                     freelancerData.put("availability", true);
 
-                                    // Default initial stats to match profile view components cleanly
                                     freelancerData.put("rating", 5.0);
                                     freelancerData.put("reviewsCount", 0L);
                                     freelancerData.put("jobsDone", 0L);

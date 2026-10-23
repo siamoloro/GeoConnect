@@ -47,7 +47,6 @@ public class AdminSigninActivity extends AppCompatActivity {
             // Clear previous errors
             textViewError.setText("");
 
-            // Standard Firebase Authentication sign-in
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener(authResult -> {
                         Toast.makeText(

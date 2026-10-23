@@ -47,7 +47,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         btnSendLink.setEnabled(false);
         btnSendLink.setText("Sending...");
 
-        // Email a secure reset link
+        // Emails a secure reset link
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     btnSendLink.setEnabled(true);
@@ -56,7 +56,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Toast.makeText(ResetPasswordActivity.this, "Password reset link sent to your email!", Toast.LENGTH_LONG).show();
 
-                        // Go back to Sign In
+                        // Goes back to Sign In
                         Intent intent = new Intent(ResetPasswordActivity.this, SigninActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);

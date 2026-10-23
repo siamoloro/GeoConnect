@@ -31,7 +31,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate your CardView layout xml here
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
         return new ProductViewHolder(view, onProductListener);
     }
@@ -46,7 +45,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public int getItemCount() {
-        return productList.size(); // Automatically repeats based on database list size!
+        return productList.size();
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

@@ -35,11 +35,9 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize Views safely
         toolbar = findViewById(R.id.toolbar);
         txtErrorMessage = findViewById(R.id.txtErrorMessage);
         etEmail = findViewById(R.id.etEmail);
@@ -82,7 +80,6 @@ public class SigninActivity extends AppCompatActivity {
         // Disable button to prevent double-clicks during signin network request
         btnSignIn.setEnabled(false);
 
-        // 1. Authenticate with Firebase Auth
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -110,7 +107,6 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void fetchUserRoleAndRedirect(String userId) {
-        // 2. Query the 'users' collection to check the user 'role' field
         db.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -119,7 +115,6 @@ public class SigninActivity extends AppCompatActivity {
                     }
 
                     if (documentSnapshot.exists()) {
-                        // The signup screens save the role as 'type'; admins (made by hand) use 'role'
                         String userRole = documentSnapshot.getString("type");
                         if (userRole == null) userRole = documentSnapshot.getString("role");
 
@@ -129,7 +124,6 @@ public class SigninActivity extends AppCompatActivity {
                         }
 
                         Intent intent;
-                        // 3. Route user to the appropriate Dashboard based on their role
                         switch (userRole.toLowerCase()) {
                             case "customer":
                                 intent = new Intent(SigninActivity.this, CustomerDashboardActivity.class);
@@ -148,7 +142,6 @@ public class SigninActivity extends AppCompatActivity {
                                 return;
                         }
 
-                        // Clear task stack so user cannot press back into signin screen after signing in
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
