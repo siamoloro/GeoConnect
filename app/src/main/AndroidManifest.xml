@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -34,18 +35,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".AdminReviewActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".AdminReportsActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".AdminUsersActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".WelcomeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -55,7 +44,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ResetPasswordActivity"
-            android:exported="false"
+            android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AdminSigninActivity"
@@ -130,6 +119,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".BookingsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ReviewActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -158,10 +151,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ActiveSessionsActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".BusinessOperatingHoursActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -173,18 +162,14 @@
             android:name=".BusinessAddOfferingActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".SearchActivity"
+
+        <activity android:name=".SearchActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".BookingsActivity"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity android:name=".MyBookingActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".MyBookingActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

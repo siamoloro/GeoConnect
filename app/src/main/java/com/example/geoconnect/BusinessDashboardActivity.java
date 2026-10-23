@@ -87,6 +87,13 @@ public class BusinessDashboardActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reloads data whenever returning to the dashboard (e.g., after updating location/profile)
+        loadBusinessDataFromFirestore();
+    }
+
     private void loadBusinessDataFromFirestore() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
@@ -121,6 +128,8 @@ public class BusinessDashboardActivity extends AppCompatActivity {
                         } else {
                             txtAbout.setText("No description provided yet.");
                         }
+
+                        // Populate txtLocation with the database address field
                         if (address != null && !address.trim().isEmpty()) {
                             txtLocation.setText(address);
                         } else {
