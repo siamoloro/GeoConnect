@@ -25,7 +25,6 @@ public class SigninActivity extends AppCompatActivity {
     private View layoutAdminPortal;
     private MaterialToolbar toolbar;
 
-    // Firebase instances
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -34,11 +33,9 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin); // Keeps your existing XML layout name
 
-        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize Views safely
         toolbar = findViewById(R.id.toolbar);
         txtErrorMessage = findViewById(R.id.txtErrorMessage);
         etEmail = findViewById(R.id.etEmail);
@@ -68,7 +65,6 @@ public class SigninActivity extends AppCompatActivity {
         String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
         String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
 
-        // Basic Validation
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             showError("Please enter both email and password.");
             return;
@@ -78,10 +74,8 @@ public class SigninActivity extends AppCompatActivity {
             txtErrorMessage.setVisibility(View.GONE);
         }
 
-        // Disable button to prevent double-clicks during signin network request
         btnSignIn.setEnabled(false);
 
-        // 1. Authenticate with Firebase Auth
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -93,7 +87,7 @@ public class SigninActivity extends AppCompatActivity {
                         if (!isFinishing()) {
                             btnSignIn.setEnabled(true);
                         }
-                        // Handle signin failure messages cleanly
+
                         try {
                             throw task.getException();
                         } catch (com.google.firebase.auth.FirebaseAuthInvalidUserException e) {
@@ -108,7 +102,6 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void fetchUserRoleAndRedirect(String userId) {
-        // 2. Query the 'users' collection to check the user 'role' field
         db.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -117,8 +110,7 @@ public class SigninActivity extends AppCompatActivity {
                     }
 
                     if (documentSnapshot.exists()) {
-                        // Look up 'role' field
-                        String userRole = documentSnapshot.getString("role");
+                        String userRole = documentSnapshot.getString("type");
 
                         if (userRole == null) {
                             showError("User role is undefined. Please contact support.");
@@ -126,7 +118,7 @@ public class SigninActivity extends AppCompatActivity {
                         }
 
                         Intent intent;
-                        // 3. Route user to the appropriate Dashboard based on their role
+
                         switch (userRole.toLowerCase()) {
                             case "customer":
                                 intent = new Intent(SigninActivity.this, CustomerDashboardActivity.class);
@@ -141,11 +133,10 @@ public class SigninActivity extends AppCompatActivity {
                                 intent = new Intent(SigninActivity.this, BusinessDashboardActivity.class);
                                 break;
                             default:
-                                showError("Unknown user role type.");
+                                showError("Unknown user type.");
                                 return;
                         }
 
-                        // Clear task stack so user cannot press back into signin screen after signing in
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
@@ -158,7 +149,7 @@ public class SigninActivity extends AppCompatActivity {
                     if (!isFinishing()) {
                         btnSignIn.setEnabled(true);
                     }
-                    showError("Failed to fetch user role: " + e.getMessage());
+                    showError("Failed to fetch user type: " + e.getMessage());
                 });
     }
 

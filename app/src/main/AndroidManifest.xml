@@ -146,10 +146,6 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ActiveSessionsActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".BusinessOperatingHoursActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

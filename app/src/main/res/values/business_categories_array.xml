@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="business_categories_array">
+        <item>Select your category</item>
+        <item>Retail &amp; FMCG</item>
+        <item>Renewable Energy &amp; Back-up Power Solutions</item>
+        <item>Food, Hospitality &amp; Catering</item>
+        <item>Professional &amp; Digital Services</item>
+        <item>Logistics, Delivery &amp; Transportation</item>
+        <item>Personal &amp; Property Maintenance Services</item>
+    </string-array>
+</resources>

@@ -23,18 +23,12 @@ public class SecurityActivity extends AppCompatActivity {
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         rowChangePassword = findViewById(R.id.rowChangePassword);
-        rowActiveSessions = findViewById(R.id.rowActiveSessions);
         btnDeleteAccount = findViewById(R.id.btnDeleteAccount);
 
         toolbar.setNavigationOnClickListener(v -> finish());
 
         rowChangePassword.setOnClickListener(v -> {
             Intent intent = new Intent(SecurityActivity.this, ChangePasswordActivity.class);
-            startActivity(intent);
-        });
-
-        rowActiveSessions.setOnClickListener(v -> {
-            Intent intent = new Intent(SecurityActivity.this, ActiveSessionsActivity.class);
             startActivity(intent);
         });
 
