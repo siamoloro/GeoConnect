@@ -27,8 +27,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders["MAPS_API_KEY"] =
-            localProperties.getProperty("MAPS_API_KEY", "")
+        val mapsApiKey = localProperties.getProperty("MAPS_API_KEY", "")
+        // local.properties is git-ignored, so every teammate has to add the key on their own machine
+        if (mapsApiKey.isBlank()) {
+            logger.warn("w: MAPS_API_KEY is missing from local.properties - the Google map will be blank")
+        }
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -44,6 +48,10 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    lint {
+        // Make "./gradlew lint" fail when an Activity class is missing from AndroidManifest.xml (crashes at runtime)
+        error += "Registered"
     }
     packagingOptions {
         resources.excludes += "META-INF/NOTICE.md"
