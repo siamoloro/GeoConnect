@@ -16,8 +16,9 @@ public class FreelancerProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
-    // Declare all your private TextView variables here
+    // Declare all TextView variables (including stats and rates)
     private TextView tvProfileName, tvProfileCategory, tvProfileBio, tvProfilePhone, tvProfileServiceArea;
+    private TextView tvProfileRating, tvProfileJobsDone, tvProfileResponse, tvProfileExperience, tvServiceRate1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,13 @@ public class FreelancerProfileActivity extends AppCompatActivity {
         tvProfilePhone = findViewById(R.id.tvProfilePhone);
         tvProfileServiceArea = findViewById(R.id.tvProfileServiceArea);
 
+        // Bind dynamic stat and rate fields
+        tvProfileRating = findViewById(R.id.tvProfileRating);
+        tvProfileJobsDone = findViewById(R.id.tvProfileJobsDone);
+        tvProfileResponse = findViewById(R.id.tvProfileResponse);
+        tvProfileExperience = findViewById(R.id.tvProfileExperience);
+        tvServiceRate1 = findViewById(R.id.tvServiceRate1);
+
         findViewById(R.id.btnEditProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, FreelancerEditProfileActivity.class)));
     }
@@ -47,13 +55,11 @@ public class FreelancerProfileActivity extends AppCompatActivity {
         super.onResume();
         loadFreelancerProfile();
     }
-
     private void loadFreelancerProfile() {
         if (mAuth.getCurrentUser() == null) return;
         String userId = mAuth.getCurrentUser().getUid();
 
-        // Query Firestore 'freelancer' collection matching your ERD relation (userID foreign key)
-        db.collection("freelancer")
+        db.collection("freelancers")
                 .whereEqualTo("userID", userId)
                 .limit(1)
                 .get()
@@ -62,26 +68,54 @@ public class FreelancerProfileActivity extends AppCompatActivity {
                         var document = queryDocumentSnapshots.getDocuments().get(0);
 
                         String name = document.getString("name");
+                        if (name == null || name.isEmpty()) {
+                            name = document.getString("fullName");
+                        }
+
                         String category = document.getString("category");
                         String serviceArea = document.getString("serviceArea");
                         String bio = document.getString("description");
                         String phone = document.getString("phone");
 
-                        // Dynamically update the UI fields safely
-                        if (tvProfileName != null && name != null) {
-                            tvProfileName.setText(name);
+                        // Fetch approval status from database
+                        String approvalStatus = document.getString("approvalStatus");
+
+                        Double rating = document.getDouble("rating");
+                        Long reviewsCount = document.getLong("reviewsCount");
+                        Long jobsDone = document.getLong("jobsDone");
+                        String responseRate = document.getString("responseRate");
+                        String experience = document.getString("experience");
+                        String serviceRate1 = document.getString("serviceRate1");
+
+                        // Update standard UI fields
+                        if (tvProfileName != null) tvProfileName.setText(name != null ? name : "Unnamed Freelancer");
+                        if (tvProfileCategory != null && category != null) tvProfileCategory.setText(category);
+                        if (tvProfileServiceArea != null && serviceArea != null) tvProfileServiceArea.setText(serviceArea);
+                        if (tvProfilePhone != null && phone != null) tvProfilePhone.setText(phone);
+                        if (tvProfileBio != null && bio != null) tvProfileBio.setText(bio);
+
+                        if (tvProfileRating != null && rating != null) {
+                            String reviews = reviewsCount != null ? " (" + reviewsCount + " reviews)" : "";
+                            tvProfileRating.setText("★ " + rating + reviews);
                         }
-                        if (tvProfileCategory != null && category != null) {
-                            tvProfileCategory.setText(category);
-                        }
-                        if (tvProfileServiceArea != null && serviceArea != null) {
-                            tvProfileServiceArea.setText(serviceArea);
-                        }
-                        if (tvProfilePhone != null && phone != null) {
-                            tvProfilePhone.setText(phone);
-                        }
-                        if (tvProfileBio != null && bio != null) {
-                            tvProfileBio.setText(bio);
+                        if (tvProfileJobsDone != null && jobsDone != null) tvProfileJobsDone.setText(String.valueOf(jobsDone));
+                        if (tvProfileResponse != null && responseRate != null) tvProfileResponse.setText(responseRate);
+                        if (tvProfileExperience != null && experience != null) tvProfileExperience.setText(experience);
+                        if (tvServiceRate1 != null && serviceRate1 != null) tvServiceRate1.setText(serviceRate1);
+
+                        // --- Dynamic Verified Badge Logic ---
+                        TextView tvVerifiedBadge = findViewById(R.id.tvVerifiedBadge); // Make sure to give your badge TextView this ID in XML if it doesn't have one
+                        if (tvVerifiedBadge != null) {
+                            if ("Approved".equalsIgnoreCase(approvalStatus) || "Verified".equalsIgnoreCase(approvalStatus)) {
+                                tvVerifiedBadge.setVisibility(android.view.View.VISIBLE);
+                                tvVerifiedBadge.setText(approvalStatus); // Displays "Approved" or "Verified"
+                            } else if ("Pending".equalsIgnoreCase(approvalStatus)) {
+                                tvVerifiedBadge.setVisibility(android.view.View.VISIBLE);
+                                tvVerifiedBadge.setText("Pending Approval");
+                            } else {
+                                // Hide badge or show unverified if status is missing/rejected
+                                tvVerifiedBadge.setVisibility(android.view.View.GONE);
+                            }
                         }
                     }
                 })

@@ -33,7 +33,6 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
             "edtSundayOpening", "edtSundayClosing"
     };
 
-    // Boolean states for each day's "Closed" status
     private boolean isMondayClosed = false;
     private boolean isTuesdayClosed = false;
     private boolean isWednesdayClosed = false;
@@ -44,7 +43,6 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
 
     private MaterialButton btnSaveChanges;
 
-    // Firebase instances
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String userId;
@@ -56,8 +54,9 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_operating_hours);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
-        // Initialize Firebase
+        // Initializes Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -75,7 +74,6 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
 
         btnSaveChanges = findViewById(R.id.btnSaveChanges);
 
-        // Setup click listeners for opening/closing time pickers
         for (String fieldId : timeFieldIds) {
             int resId = getResources().getIdentifier(fieldId, "id", getPackageName());
             TextView textView = findViewById(resId);
@@ -87,17 +85,14 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
 
         setupClosedButtons();
 
-        // 1. Load existing operating hours document if it already exists
         loadDataFromDatabase();
 
-        // 2. Save or update changes to Firestore when button is clicked
         if (btnSaveChanges != null) {
             btnSaveChanges.setOnClickListener(v -> extractUserInputsAndSave());
         }
     }
 
     private void loadDataFromDatabase() {
-        // Path: businesses/{userId}/operating_hours/schedule
         db.collection("businesses").document(userId)
                 .collection("operating_hours").document("schedule")
                 .get()
@@ -127,7 +122,6 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        // Document does not exist yet: Leave fields at default or blank
                         Toast.makeText(this, "No operating hours found. Set your hours and click Save Changes.", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -220,22 +214,19 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
             String closingTime = (closingView != null) ? closingView.getText().toString().trim() : "";
             boolean isClosed   = getClosedState(day);
 
-            // Put into map with lowercase prefix keys (e.g., monday_opening, monday_closing, monday_is_closed)
             String prefix = day.toLowerCase();
             hoursMap.put(prefix + "_opening", openingTime);
             hoursMap.put(prefix + "_closing", closingTime);
             hoursMap.put(prefix + "_is_closed", isClosed);
         }
 
-        // Disable save button during network write to avoid duplicate clicks
         if (btnSaveChanges != null) {
             btnSaveChanges.setEnabled(false);
         }
 
-        // Save or update the single "schedule" document under the operating_hours subcollection
         db.collection("businesses").document(userId)
                 .collection("operating_hours").document("schedule")
-                .set(hoursMap) // .set() creates the document if it doesn't exist, or overwrites/updates if it does
+                .set(hoursMap)
                 .addOnSuccessListener(aVoid -> {
                     if (btnSaveChanges != null) {
                         btnSaveChanges.setEnabled(true);

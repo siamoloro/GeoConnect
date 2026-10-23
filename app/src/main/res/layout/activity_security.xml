@@ -84,7 +84,54 @@
                         app:tint="#CCCCCC" />
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F0F0F0" />
 
+                <LinearLayout
+                    android:id="@+id/rowActiveSessions"
+                    android:layout_width="match_parent"
+                    android:layout_height="68dp"
+                    android:background="@drawable/bg_settings_group_bottom"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_icon_container"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_cellphone_information"
+                        app:tint="#114224" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Active sessions"
+                            android:textColor="#111111"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="#CCCCCC" />
+                </LinearLayout>
 
             </LinearLayout>
 

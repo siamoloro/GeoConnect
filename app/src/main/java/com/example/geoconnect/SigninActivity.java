@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -25,17 +26,20 @@ public class SigninActivity extends AppCompatActivity {
     private View layoutAdminPortal;
     private MaterialToolbar toolbar;
 
+    // Firebase instances
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin); // Keeps your existing XML layout name
+        setContentView(R.layout.activity_signin);
 
+        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        // Initialize Views safely
         toolbar = findViewById(R.id.toolbar);
         txtErrorMessage = findViewById(R.id.txtErrorMessage);
         etEmail = findViewById(R.id.etEmail);
@@ -53,18 +57,19 @@ public class SigninActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(v -> signinUser());
 
         txtForgotPassword.setOnClickListener(v -> {
-            Toast.makeText(this, "Forgot password clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SigninActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
 
-        layoutAdminPortal.setOnClickListener(v -> {
-            Toast.makeText(this, "Admin portal clicked", Toast.LENGTH_SHORT).show();
-        });
+        layoutAdminPortal.setOnClickListener(v ->
+                startActivity(new Intent(this, AdminSigninActivity.class)));
     }
 
     private void signinUser() {
         String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
         String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
 
+        // Basic Validation
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             showError("Please enter both email and password.");
             return;
@@ -74,20 +79,23 @@ public class SigninActivity extends AppCompatActivity {
             txtErrorMessage.setVisibility(View.GONE);
         }
 
+        // Disable button to prevent double-clicks during signin network request
         btnSignIn.setEnabled(false);
 
+        // 1. Authenticate with Firebase Auth
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
+                            registerSession(firebaseUser.getUid());
                             fetchUserRoleAndRedirect(firebaseUser.getUid());
                         }
                     } else {
                         if (!isFinishing()) {
                             btnSignIn.setEnabled(true);
                         }
-
+                        // Handle signin failure messages cleanly
                         try {
                             throw task.getException();
                         } catch (com.google.firebase.auth.FirebaseAuthInvalidUserException e) {
@@ -102,6 +110,7 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void fetchUserRoleAndRedirect(String userId) {
+        // 2. Query the 'users' collection to check the user 'role' field
         db.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -110,7 +119,9 @@ public class SigninActivity extends AppCompatActivity {
                     }
 
                     if (documentSnapshot.exists()) {
+                        // The signup screens save the role as 'type'; admins (made by hand) use 'role'
                         String userRole = documentSnapshot.getString("type");
+                        if (userRole == null) userRole = documentSnapshot.getString("role");
 
                         if (userRole == null) {
                             showError("User role is undefined. Please contact support.");
@@ -118,7 +129,7 @@ public class SigninActivity extends AppCompatActivity {
                         }
 
                         Intent intent;
-
+                        // 3. Route user to the appropriate Dashboard based on their role
                         switch (userRole.toLowerCase()) {
                             case "customer":
                                 intent = new Intent(SigninActivity.this, CustomerDashboardActivity.class);
@@ -130,13 +141,14 @@ public class SigninActivity extends AppCompatActivity {
                                 intent = new Intent(SigninActivity.this, FreelancerDashboardActivity.class);
                                 break;
                             case "admin":
-                                intent = new Intent(SigninActivity.this, BusinessDashboardActivity.class);
+                                intent = new Intent(SigninActivity.this, AdminDashboardActivity.class);
                                 break;
                             default:
-                                showError("Unknown user type.");
+                                showError("Unknown user role type.");
                                 return;
                         }
 
+                        // Clear task stack so user cannot press back into signin screen after signing in
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
@@ -149,8 +161,19 @@ public class SigninActivity extends AppCompatActivity {
                     if (!isFinishing()) {
                         btnSignIn.setEnabled(true);
                     }
-                    showError("Failed to fetch user type: " + e.getMessage());
+                    showError("Failed to fetch user role: " + e.getMessage());
                 });
+    }
+    private void registerSession(String uid) {
+        java.util.Map<String, Object> session = new java.util.HashMap<>();
+        session.put("userID", uid);
+        session.put("deviceName", android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL);
+        session.put("locationInfo", "Active " + new java.text.SimpleDateFormat("dd MMM, HH:mm", java.util.Locale.getDefault()).format(new java.util.Date()));
+        session.put("createdAt", System.currentTimeMillis());
+
+        db.collection("sessions").add(session)
+                .addOnSuccessListener(ref -> getSharedPreferences("geoconnect", MODE_PRIVATE)
+                        .edit().putString("sessionId", ref.getId()).apply());
     }
 
     private void showError(String message) {

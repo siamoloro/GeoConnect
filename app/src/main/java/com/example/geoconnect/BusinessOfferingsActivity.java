@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -26,7 +27,6 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
     private ProductAdapter productAdapter;
     private List<Product> productList;
 
-    // Firebase instances
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String userId;
@@ -36,6 +36,7 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_offerings);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -70,8 +71,7 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
     @Override
     protected void onResume() {
         super.onResume();
-        // Refresh products every time the activity comes back to the foreground
-        // (e.g., after adding a new offering)
+
         loadProductsFromDatabase();
     }
 
@@ -87,7 +87,6 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
                         String name = document.getString("name");
                         String description = document.getString("description");
 
-                        // Handle price field safely whether saved as Double, Long, or String
                         double price = 0.0;
                         Object priceObj = document.get("price");
                         if (priceObj instanceof Number) {
@@ -98,7 +97,6 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
                             } catch (NumberFormatException ignored) {}
                         }
 
-                        // Create Product object using Firestore document ID as the ID field
                         Product product = new Product(offeringId, name, description, price);
                         productList.add(product);
                     }
@@ -109,9 +107,7 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
 
     @Override
     public void onEditClick(int position) {
-        Product clickedProduct = productList.get(position);
-        // TODO: Pass clickedProduct.getId() to an EditOfferingActivity if implemented
-        Toast.makeText(this, "Edit: " + clickedProduct.getName(), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -119,13 +115,17 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
         Product clickedProduct = productList.get(position);
         String offeringId = clickedProduct.getId();
 
-        // Delete from Firestore database subcollection
         db.collection("businesses").document(userId)
                 .collection("offerings").document(offeringId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    productList.remove(position);
-                    productAdapter.notifyItemRemoved(position);
+                    db.collection("businesses").document(userId).update("services", FieldValue.arrayRemove(clickedProduct.getName()));
+                    // Look the item up again: the list may have changed while the delete was in flight
+                    int index = productList.indexOf(clickedProduct);
+                    if (index >= 0) {
+                        productList.remove(index);
+                        productAdapter.notifyItemRemoved(index);
+                    }
                     Toast.makeText(BusinessOfferingsActivity.this, "Offering deleted successfully", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(BusinessOfferingsActivity.this, "Failed to delete offering: " + e.getMessage(), Toast.LENGTH_SHORT).show());

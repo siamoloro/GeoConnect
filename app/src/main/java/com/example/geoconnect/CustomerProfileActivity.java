@@ -26,8 +26,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
     // PROFILE COMPONENTS
     private ImageView profileImage;
     private TextView customerName;
-    private TextView memberSince;
-    private TextView bookingCount;
 
     // PROFILE BUTTONS
     private View settingsButton;
@@ -38,7 +36,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     // BOTTOM NAVIGATION
     private View navHome;
     private View navMarket;
-    private View navProviders;
+    private View navFreelancers;
     private View navProfile;
 
     // CUSTOMER INFORMATION
@@ -79,8 +77,6 @@ public class CustomerProfileActivity extends AppCompatActivity {
         // CONNECT XML COMPONENTS
         profileImage = findViewById(R.id.profileImage);
         customerName = findViewById(R.id.customerName);
-        memberSince = findViewById(R.id.memberSince);
-        bookingCount = findViewById(R.id.bookingCount);
 
         settingsButton = findViewById(R.id.settingsButton);
         editProfileButton = findViewById(R.id.editProfileButton);
@@ -97,6 +93,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
         // PROFILE ICON
         profileImage.setImageResource(R.drawable.ic_person);
 
+        // LOAD CUSTOMER INFORMATION
+        loadCustomerDetails();
 
         // SETTINGS
         settingsButton.setOnClickListener(v -> {
@@ -178,8 +176,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
             openPage(DiscoverActivity.class);
         });
 
-        //PROVIDER NAVIGATION
-        navProviders.setOnClickListener(v -> {
+        // FREELANCERS NAVIGATION
+        navFreelancers.setOnClickListener(v -> {
             openPage(SearchActivity.class);
         });
 
@@ -193,10 +191,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        // Refresh profile after returning from another page
         if (firebaseAuth != null) {
             loadCustomerDetails();
-            loadMemberSince();
-            loadBookingSummary();
         }
     }
 
@@ -278,77 +275,5 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, destination);
         startActivity(intent);
-    }
-
-    private void loadMemberSince() {
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        if (user == null || user.getMetadata() == null) {
-            memberSince.setText("Member since unavailable");
-            return;
-        }
-
-        long creationTime = user.getMetadata().getCreationTimestamp();
-
-        if (creationTime <= 0) {
-            memberSince.setText("Member since unavailable");
-            return;
-        }
-
-        java.text.SimpleDateFormat dateFormat =
-                new java.text.SimpleDateFormat(
-                        "MMMM yyyy",
-                        java.util.Locale.getDefault()
-                );
-
-        String formattedDate = dateFormat.format(
-                new java.util.Date(creationTime)
-        );
-
-        memberSince.setText("Member since " + formattedDate);
-    }
-    // LOAD LOGGED-IN CUSTOMER'S TOTAL BOOKINGS
-    private void loadBookingSummary() {
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        if (user == null) {
-            bookingCount.setText("Please log in");
-            return;
-        }
-
-        String customerId = user.getUid();
-
-        bookingCount.setText("Loading bookings...");
-
-        firestore.collection("booking")
-                .whereEqualTo("customerID", customerId)
-                .get()
-                .addOnSuccessListener(snapshot -> {
-
-                    int totalBookings = snapshot.size();
-
-                    if (totalBookings == 0) {
-                        bookingCount.setText("No bookings");
-                    } else if (totalBookings == 1) {
-                        bookingCount.setText("1 booking");
-                    } else {
-                        bookingCount.setText(
-                                totalBookings + " bookings"
-                        );
-                    }
-
-                })
-                .addOnFailureListener(e -> {
-
-                    bookingCount.setText("Bookings unavailable");
-
-                    Toast.makeText(
-                            CustomerProfileActivity.this,
-                            "Unable to load bookings: " + e.getMessage(),
-                            Toast.LENGTH_LONG
-                    ).show();
-                });
     }
 }

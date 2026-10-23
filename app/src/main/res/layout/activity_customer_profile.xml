@@ -36,7 +36,9 @@
                     android:gravity="center"
                     android:drawableStart="@drawable/ic_settings"
                     android:paddingStart="12dp"
-                    android:textSize="22sp" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    android:background="#397344" />
             </FrameLayout>
 
             <LinearLayout
@@ -252,7 +254,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/navProviders"
+            android:id="@+id/navFreelancers"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -266,13 +268,13 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_freelancer"
                 app:tint="#74867D"
-                android:contentDescription="Provider"/>
+                android:contentDescription="Freelancers"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Providers"
+                android:text="Freelancers"
                 android:textColor="#74867D"
                 android:textSize="12sp"/>
 

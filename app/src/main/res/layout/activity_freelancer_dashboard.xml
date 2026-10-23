@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,17 +40,21 @@
                         android:layout_weight="1">
 
                         <TextView
+                            android:id="@+id/tvGreeting"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Good morning, Alex"
+                            android:text=""
+                            tools:text="Hello, Alex"
                             android:textColor="@color/glitter"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvSubtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Freelance photographer"
+                            android:text=""
+                            tools:text="Photography"
                             android:textColor="@color/sage_green"
                             android:textSize="13sp"
                             android:layout_marginTop="2dp" />
@@ -92,13 +98,13 @@
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/swAvailable"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <!-- Body -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,6 +112,7 @@
                 android:padding="16dp"
                 android:layout_marginTop="0dp">
 
+                <!-- Stat cards -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -122,9 +129,10 @@
                         android:layout_marginEnd="8dp">
 
                         <TextView
+                            android:id="@+id/tvNewCount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="3"
+                            android:text="0"
                             android:textColor="@color/forest_green"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -150,9 +158,10 @@
                         android:layout_marginEnd="8dp">
 
                         <TextView
+                            android:id="@+id/tvAcceptedCount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="5"
+                            android:text="0"
                             android:textColor="@color/forest_green"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -161,7 +170,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="This week"
+                            android:text="Accepted"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:gravity="center" />
@@ -177,9 +186,10 @@
                         android:padding="12dp">
 
                         <TextView
+                            android:id="@+id/tvRating"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="4.8"
+                            android:text="—"
                             android:textColor="@color/forest_green"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -197,6 +207,7 @@
 
                 </LinearLayout>
 
+                <!-- New requests title -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -228,7 +239,9 @@
 
                 </LinearLayout>
 
+                <!-- Latest pending request card -->
                 <LinearLayout
+                    android:id="@+id/cardRequest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -243,9 +256,11 @@
                         android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tvInitials"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:text="SN"
+                            android:text=""
+                            tools:text="SN"
                             android:textColor="@color/forest_green"
                             android:textSize="13sp"
                             android:textStyle="bold"
@@ -260,17 +275,21 @@
                             android:layout_marginStart="12dp">
 
                             <TextView
+                                android:id="@+id/tvCustomerName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Sam Nkosi"
+                                android:text=""
+                                tools:text="Sam Nkosi"
                                 android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/tvServiceDetails"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Portrait session · Sat, 14 Oct"
+                                android:text=""
+                                tools:text="Portrait session · Sat, 14 Oct"
                                 android:textColor="@color/black"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp" />
@@ -278,9 +297,11 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/tvPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="R450"
+                            android:text=""
+                            tools:text="R450"
                             android:textColor="@color/forest_green"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -330,6 +351,7 @@
 
                 </LinearLayout>
 
+                <!-- Upcoming jobs title -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -347,7 +369,9 @@
 
                 </LinearLayout>
 
+                <!-- Upcoming job 1 -->
                 <LinearLayout
+                    android:id="@+id/cardUp1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -362,9 +386,11 @@
                         android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tvUp1Initials"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:text="MT"
+                            android:text=""
+                            tools:text="MT"
                             android:textColor="@color/forest_green"
                             android:textSize="13sp"
                             android:textStyle="bold"
@@ -379,17 +405,21 @@
                             android:layout_marginStart="12dp">
 
                             <TextView
+                                android:id="@+id/tvUp1Title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Maya T. · Event photos"
+                                android:text=""
+                                tools:text="Maya T. · Event photos"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/tvUp1Sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Tomorrow, 10:00 AM · 2.4 km"
+                                android:text=""
+                                tools:text="Tomorrow, 10:00 AM · Sandton"
                                 android:textColor="@color/black"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp" />
@@ -407,7 +437,9 @@
 
                 </LinearLayout>
 
+                <!-- Upcoming job 2 -->
                 <LinearLayout
+                    android:id="@+id/cardUp2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -422,9 +454,11 @@
                         android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tvUp2Initials"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:text="LD"
+                            android:text=""
+                            tools:text="LD"
                             android:textColor="@color/forest_green"
                             android:textSize="13sp"
                             android:textStyle="bold"
@@ -439,17 +473,21 @@
                             android:layout_marginStart="12dp">
 
                             <TextView
+                                android:id="@+id/tvUp2Title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Leo D. · Family shoot"
+                                android:text=""
+                                tools:text="Leo D. · Family shoot"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/tvUp2Sub"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Mon, 16 Oct · 2:00 PM · 5 km"
+                                android:text=""
+                                tools:text="Mon, 16 Oct · 2:00 PM · Rosebank"
                                 android:textColor="@color/black"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp" />
@@ -478,6 +516,7 @@
         android:layout_height="1dp"
         android:background="@color/sage_green" />
 
+    <!-- Bottom navigation -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

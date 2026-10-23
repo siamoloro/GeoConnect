@@ -133,8 +133,8 @@ public class BookingsActivity extends AppCompatActivity {
 
         String collection =
                 "Business".equalsIgnoreCase(providerType)
-                        ? "businesses"
-                        : "freelancers";
+                        ? "Business"
+                        : "Freelancer";
 
         db.collection(collection)
                 .document(providerId)

@@ -1,10 +1,6 @@
 
 package com.example.geoconnect;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.util.TypedValue;
-import android.widget.Button;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -252,8 +248,8 @@ public class DiscoverActivity extends AppCompatActivity
 
         updateMarketResults();
 
-        loadProviderCollection("businesses", "Business");
-        loadProviderCollection("freelancers", "Freelancer");
+        loadProviderCollection("Business", "Business");
+        loadProviderCollection("Freelancer", "Freelancer");
     }
 
     private void loadProviderCollection(
@@ -388,7 +384,7 @@ public class DiscoverActivity extends AppCompatActivity
         updateMapMarkers();
     }
 
-    // DISPLAY PROVIDERS AS CLICKABLE CARDS
+    // DISPLAY REAL PROVIDERS IN LIST VIEW
     private void displayProviderList() {
 
         marketProvidersList.removeAllViews();
@@ -400,8 +396,12 @@ public class DiscoverActivity extends AppCompatActivity
         }
 
         if (filteredProviders.isEmpty()) {
+
             marketListEmpty.setVisibility(View.VISIBLE);
-            marketListEmpty.setText("No matching providers found.");
+            marketListEmpty.setText(
+                    "No matching providers found."
+            );
+
             return;
         }
 
@@ -409,125 +409,32 @@ public class DiscoverActivity extends AppCompatActivity
 
         for (ProviderItem provider : filteredProviders) {
 
-            // MAIN CARD
-            LinearLayout card = new LinearLayout(this);
-            card.setOrientation(LinearLayout.VERTICAL);
-            card.setPadding(dp(16), dp(16), dp(16), dp(16));
-            card.setBackgroundResource(
-                    R.drawable.market_provider_card_background
-            );
-            card.setElevation(dp(3));
-            card.setClickable(true);
-            card.setFocusable(true);
+            TextView providerCard = new TextView(this);
 
-            LinearLayout.LayoutParams cardParams =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-
-            cardParams.setMargins(
-                    dp(8), dp(6), dp(8), dp(12)
-            );
-
-            card.setLayoutParams(cardParams);
-
-            // PROVIDER TYPE HEADING
-            TextView heading = new TextView(this);
-
-            heading.setText(
-                    provider.type.equalsIgnoreCase("Business")
-                            ? "BUSINESS"
-                            : "FREELANCER"
-            );
-
-            heading.setTextSize(12);
-            heading.setTextColor(Color.parseColor("#176B50"));
-            heading.setTypeface(null, Typeface.BOLD);
-
-            card.addView(heading);
-
-            // PROVIDER NAME
-            TextView nameText = new TextView(this);
-
-            String nameLabel =
-                    provider.type.equalsIgnoreCase("Business")
-                            ? "Business Name: "
-                            : "Freelancer Name: ";
-
-            nameText.setText(nameLabel + provider.name);
-            nameText.setTextSize(16);
-            nameText.setTextColor(Color.parseColor("#292929"));
-            nameText.setTypeface(null, Typeface.BOLD);
-
-            LinearLayout.LayoutParams nameParams =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-
-            nameParams.topMargin = dp(12);
-            nameText.setLayoutParams(nameParams);
-
-            card.addView(nameText);
-
-            // CATEGORY
-            TextView categoryText = new TextView(this);
-
-            categoryText.setText(
-                    "Category: " +
+            String details =
+                    provider.name + "\n" +
+                            provider.type +
                             (provider.category.isEmpty()
-                                    ? "Not specified"
-                                    : provider.category)
-            );
+                                    ? ""
+                                    : "\n" + provider.category);
 
-            categoryText.setTextSize(14);
-            categoryText.setTextColor(Color.parseColor("#666666"));
+            providerCard.setText(details);
+            providerCard.setTextSize(16);
+            providerCard.setPadding(28, 24, 28, 24);
 
-            LinearLayout.LayoutParams categoryParams =
+            LinearLayout.LayoutParams params =
                     new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                     );
 
-            categoryParams.topMargin = dp(8);
-            categoryText.setLayoutParams(categoryParams);
+            params.bottomMargin = 16;
+            providerCard.setLayoutParams(params);
 
-            card.addView(categoryText);
+            providerCard.setOnClickListener(v ->
+                    openProviderDetails(provider));
 
-            // VIEW DETAILS BUTTON
-            Button detailsButton = new Button(this);
-
-            detailsButton.setText("View Details");
-            detailsButton.setAllCaps(false);
-            detailsButton.setTextColor(Color.WHITE);
-            detailsButton.setBackgroundTintList(
-                    android.content.res.ColorStateList.valueOf(
-                            Color.parseColor("#176B50")
-                    )
-            );
-
-            LinearLayout.LayoutParams buttonParams =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            dp(48)
-                    );
-
-            buttonParams.topMargin = dp(14);
-            detailsButton.setLayoutParams(buttonParams);
-
-            detailsButton.setOnClickListener(v ->
-                    openProviderDetails(provider)
-            );
-
-            card.addView(detailsButton);
-
-            // ENTIRE CARD IS CLICKABLE
-            card.setOnClickListener(v ->
-                    openProviderDetails(provider)
-            );
-
-            marketProvidersList.addView(card);
+            marketProvidersList.addView(providerCard);
         }
     }
 
@@ -599,13 +506,5 @@ public class DiscoverActivity extends AppCompatActivity
         Intent intent = new Intent(this, destination);
         startActivity(intent);
         finish();
-    }
-
-    private int dp(float value) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                value,
-                getResources().getDisplayMetrics()
-        );
     }
 }

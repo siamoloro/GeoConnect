@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -42,7 +43,9 @@ public class BusinessSignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_signup);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
@@ -53,6 +56,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
         etBusinessName = findViewById(R.id.etBusinessName);
         spCategory = findViewById(R.id.spCategory);
         etAbout = findViewById(R.id.etAbout);
+        etAddress = findViewById(R.id.etAddress);
         etBusinessEmail = findViewById(R.id.etBusinessEmail);
         etContactNumber = findViewById(R.id.etContactNumber);
         etWebsite = findViewById(R.id.etWebsite);
@@ -67,10 +71,11 @@ public class BusinessSignupActivity extends AppCompatActivity {
     }
 
     private void registerBusinessUser() {
-        // Extract data safely
+        // Extract data
         String businessName = etBusinessName.getText() != null ? etBusinessName.getText().toString().trim() : "";
         String category = spCategory.getSelectedItem() != null ? spCategory.getSelectedItem().toString() : "";
         String description = etAbout.getText() != null ? etAbout.getText().toString().trim() : "";
+        String address = etAddress.getText() != null ? etAddress.getText().toString().trim() : "";
         String email = etBusinessEmail.getText() != null ? etBusinessEmail.getText().toString().trim() : "";
         String phone = etContactNumber.getText() != null ? etContactNumber.getText().toString().trim() : "";
         String website = etWebsite.getText() != null ? etWebsite.getText().toString().trim() : "";
@@ -79,6 +84,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
 
         // Basic Validation
         if (TextUtils.isEmpty(businessName) || TextUtils.isEmpty(category) ||
+                TextUtils.isEmpty(address) || TextUtils.isEmpty(email) ||
                 TextUtils.isEmpty(phone) || TextUtils.isEmpty(password)) {
             showError("Please fill in all required fields.");
             return;
@@ -108,17 +114,16 @@ public class BusinessSignupActivity extends AppCompatActivity {
                         if (firebaseUser != null) {
                             String userId = firebaseUser.getUid();
 
-                            // 2. Prepare data for 'users' collection
                             Map<String, Object> userMap = new HashMap<>();
                             userMap.put("email", email);
                             userMap.put("type", "business");
                             userMap.put("created_at", FieldValue.serverTimestamp());
 
-                            // 3. Prepare data for 'businesses' collection
                             Map<String, Object> businessMap = new HashMap<>();
                             businessMap.put("name", businessName);
                             businessMap.put("description", description);
                             businessMap.put("category", category);
+                            businessMap.put("address", address);
                             businessMap.put("phone", phone);
                             businessMap.put("website", website);
                             businessMap.put("totalRatings", 0);
@@ -127,11 +132,9 @@ public class BusinessSignupActivity extends AppCompatActivity {
                             businessMap.put("reviewStatus", "pending");
                             businessMap.put("approvalStatus", "pending");
 
-                            // Save to 'users' collection using userId as document ID
                             db.collection("users").document(userId)
                                     .set(userMap)
                                     .addOnSuccessListener(aVoid -> {
-                                        // Save to 'businesses' collection using the same userId as document ID
                                         db.collection("businesses").document(userId)
                                                 .set(businessMap)
                                                 .addOnSuccessListener(aVoid1 -> {
@@ -146,7 +149,7 @@ public class BusinessSignupActivity extends AppCompatActivity {
                                     .addOnFailureListener(e -> showError("Failed to save user data: " + e.getMessage()));
                         }
                     } else {
-                        // Handle registration failure gracefully
+                        // Handle registration failures
                         try {
                             throw task.getException();
                         } catch (com.google.firebase.auth.FirebaseAuthUserCollisionException e) {

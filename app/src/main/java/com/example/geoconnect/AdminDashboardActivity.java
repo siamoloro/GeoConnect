@@ -1,21 +1,30 @@
 package com.example.geoconnect;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
+
+import android.content.Intent;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-    private FirebaseFirestore db;
+    FirebaseFirestore db;
+
+    TextView txtTotalUsers;
+    TextView txtActiveListings;
+    TextView txtVerificationRequests;
+    TextView txtOpenReports;
+    Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +32,71 @@ public class AdminDashboardActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_dashboard);
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
+
+        txtTotalUsers =
+                findViewById(R.id.txtTotalUsers);
+
+        txtActiveListings =
+                findViewById(R.id.txtActiveListings);
+
+        txtVerificationRequests =
+                findViewById(R.id.txtVerificationRequests);
+
+        txtOpenReports =
+                findViewById(R.id.txtOpenReports);
+
+        btnLogout =
+                findViewById(R.id.btnLogout);
+
+        btnLogout.setOnClickListener(v -> {
+
+            FirebaseAuth.getInstance().signOut();
+
+            Intent intent =
+                    new Intent(
+                            AdminDashboardActivity.this,
+                            AdminSigninActivity.class);
+
+            intent.setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            startActivity(intent);
+
+            finish();
+
+        });
+
+        db.collection("users")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    txtTotalUsers.setText(
+                            String.valueOf(
+                                    queryDocumentSnapshots.size()));
+                });
+
+        db.collection("businesses")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    txtActiveListings.setText(
+                            String.valueOf(
+                                    queryDocumentSnapshots.size()));
+                });
+
+        db.collection("reports")
+                .whereEqualTo(
+                        "status",
+                        "Pending")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    txtOpenReports.setText(
+                            String.valueOf(
+                                    queryDocumentSnapshots.size()));
+                });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -32,42 +104,69 @@ public class AdminDashboardActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Load metrics from Firestore
-        loadDashboardMetrics();
+        BottomNavigationView bottomNav =
+                findViewById(R.id.bottom_navigation);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.nav_overview);
 
         bottomNav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
 
-            if (id == R.id.nav_overview) {
+            if (item.getItemId() == R.id.nav_overview) {
                 return true;
-            } else if (id == R.id.nav_users) {
-                startActivity(new Intent(AdminDashboardActivity.this, AdminUsersActivity.class));
+            }
+
+            if (item.getItemId() == R.id.nav_users) {
+                startActivity(new Intent(
+                        AdminDashboardActivity.this,
+                        AdminUsersActivity.class));
                 return true;
-            } else if (id == R.id.nav_review) {
-                startActivity(new Intent(AdminDashboardActivity.this, AdminReviewActivity.class));
+            }
+
+            if (item.getItemId() == R.id.nav_review) {
+                startActivity(new Intent(
+                        AdminDashboardActivity.this,
+                        AdminReviewActivity.class));
                 return true;
-            } else if (id == R.id.nav_reports) {
-                startActivity(new Intent(AdminDashboardActivity.this, AdminReportsActivity.class));
+            }
+
+            if (item.getItemId() == R.id.nav_reports) {
+                startActivity(new Intent(
+                        AdminDashboardActivity.this,
+                        AdminReportsActivity.class));
                 return true;
             }
 
             return false;
         });
+        loadVerificationRequests();
     }
-
-    private void loadDashboardMetrics() {
-        // Fetch users count from Firestore
-        db.collection("users")
+    private void loadVerificationRequests()
+    {
+        db.collection("businesses")
+                .whereEqualTo(
+                        "approvalStatus",
+                        "pending")
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    int totalUsers = queryDocumentSnapshots.size();
-                    // You can display totalUsers in a TextView if you want
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load metrics: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                .addOnSuccessListener(businessSnapshots -> {
+
+                    int businessCount =
+                            businessSnapshots.size();
+
+                    db.collection("freelancers")
+                            .whereEqualTo(
+                                    "approvalStatus",
+                                    "pending")
+                            .get()
+                            .addOnSuccessListener(
+                                    freelancerSnapshots -> {
+
+                                        int total =
+                                                businessCount +
+                                                        freelancerSnapshots.size();
+
+                                        txtVerificationRequests.setText(
+                                                String.valueOf(total));
+                                    });
                 });
     }
 }

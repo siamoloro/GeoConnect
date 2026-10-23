@@ -1,7 +1,6 @@
 
 package com.example.geoconnect;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -248,54 +247,7 @@ public class MyBookingActivity extends AppCompatActivity {
 
         bookingCard.setLayoutParams(params);
 
-// ADD BOOKING INFORMATION TO CONTAINER
-        LinearLayout bookingItem = new LinearLayout(this);
-        bookingItem.setOrientation(LinearLayout.VERTICAL);
-
-        bookingItem.addView(bookingCard);
-
-// SHOW REVIEW BUTTON ONLY FOR COMPLETED BOOKINGS
-        if ("Completed".equalsIgnoreCase(status)) {
-
-            Button reviewButton = new Button(this);
-            reviewButton.setText("Write a Review");
-
-            reviewButton.setOnClickListener(v -> {
-
-                String bookingId = booking.getId();
-                String providerId = booking.getString("providerId");
-                String providerTypeValue = booking.getString("providerType");
-                String providerNameValue = booking.getString("providerName");
-                String providerCategoryValue = booking.getString("providerCategory");
-
-                if (providerId == null || providerTypeValue == null) {
-                    Toast.makeText(
-                            this,
-                            "Provider information missing",
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    return;
-                }
-
-                Intent intent = new Intent(
-                        MyBookingActivity.this,
-                        ReviewActivity.class
-                );
-
-                intent.putExtra("bookingId", bookingId);
-                intent.putExtra("providerId", providerId);
-                intent.putExtra("providerType", providerTypeValue);
-                intent.putExtra("providerName", providerNameValue);
-                intent.putExtra("providerCategory", providerCategoryValue);
-                intent.putExtra("bookingStatus", status);
-
-                startActivity(intent);
-            });
-
-            bookingItem.addView(reviewButton);
-        }
-
-        bookingsContainer.addView(bookingItem);
+        bookingsContainer.addView(bookingCard);
     }
 
     // DISPLAY EMPTY, LOADING OR ERROR MESSAGE

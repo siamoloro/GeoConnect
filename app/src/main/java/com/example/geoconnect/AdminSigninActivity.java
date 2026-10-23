@@ -1,33 +1,19 @@
 package com.example.geoconnect;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import com.google.firebase.firestore.FirebaseFirestore;
+import android.content.Intent;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class AdminSigninActivity extends AppCompatActivity {
 
-    private ImageButton btnBack;
-    private EditText etEmail, etPassword;
-    private TextView txtForgot;
-    private MaterialButton btnLogin;
-
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,100 +21,62 @@ public class AdminSigninActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_signin);
 
-        // Initialize Firebase instances
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        TextInputEditText etUsername = findViewById(R.id.etUsername);
+        TextInputEditText etPassword = findViewById(R.id.etPassword);
+        MaterialButton btnLogin = findViewById(R.id.btnLogin);
 
-        // Bind Views matching your XML layout IDs
-        btnBack = findViewById(R.id.btnBack);
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        txtForgot = findViewById(R.id.txtForgot);
-        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(v -> {
 
-        // Back button action
-        btnBack.setOnClickListener(v -> finish());
+            String username = etUsername.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
 
-        // Login button action
-        btnLogin.setOnClickListener(v -> loginAdmin());
+            if (username.isEmpty() || password.isEmpty()) {
 
-        // Reset password action
-        txtForgot.setOnClickListener(v -> {
-            String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
-            if (TextUtils.isEmpty(email)) {
-                etEmail.setError("Enter your email address first");
-                etEmail.requestFocus();
+                Toast.makeText(
+                        AdminSigninActivity.this,
+                        "Please enter username and password",
+                        Toast.LENGTH_SHORT
+                ).show();
+
                 return;
             }
 
-            mAuth.sendPasswordResetEmail(email)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(this, "Password reset email sent!", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        });
-    }
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private void loginAdmin() {
-        String email = etEmail.getText() != null ? etEmail.getText().toString().trim() : "";
-        String password = etPassword.getText() != null ? etPassword.getText().toString().trim() : "";
+            db.collection("administrator")
+                    .whereEqualTo("userName", username)
+                    .whereEqualTo("password", password)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
 
-        if (TextUtils.isEmpty(email)) {
-            etEmail.setError("Email is required");
-            etEmail.requestFocus();
-            return;
-        }
+                        if (!queryDocumentSnapshots.isEmpty())
+                        {
+                            Toast.makeText(
+                                    AdminSigninActivity.this,
+                                    "Login Successful",
+                                    Toast.LENGTH_SHORT
+                            ).show();
 
-        if (TextUtils.isEmpty(password)) {
-            etPassword.setError("Password is required");
-            etPassword.requestFocus();
-            return;
-        }
+                            startActivity(
+                                    new Intent(
+                                            AdminSigninActivity.this,
+                                            AdminDashboardActivity.class));
 
-        // Step 1: Authenticate with Firebase Auth
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult -> {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    if (user != null) {
-                        checkIfUserIsAdmin(user.getUid());
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Login Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
-    }
-
-    private void checkIfUserIsAdmin(String uid) {
-        // Step 2: Check Firestore 'users' collection for admin privileges
-        db.collection("users").document(uid)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        // Adjust "role" field to match what you have in your Firestore document (e.g., "admin")
-                        String role = documentSnapshot.getString("role");
-
-                        if ("admin".equals(role)) {
-                            Toast.makeText(this, "Admin Login Successful!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(AdminSigninActivity.this, AdminDashboardActivity.class);
-                            startActivity(intent);
                             finish();
-                        } else {
-                            // If they authenticated successfully but are a customer/freelancer, deny access
-                            Toast.makeText(this, "Access Denied: You do not have administrator rights.", Toast.LENGTH_LONG).show();
-                            mAuth.signOut();
                         }
-                    } else {
-                        Toast.makeText(this, "User record not found in database.", Toast.LENGTH_LONG).show();
-                        mAuth.signOut();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to verify admin role: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    mAuth.signOut();
-                });
+                        else
+                        {
+                            Toast.makeText(
+                                    AdminSigninActivity.this,
+                                    "Invalid Username or Password",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    });
+        });
+
+
     }
 }

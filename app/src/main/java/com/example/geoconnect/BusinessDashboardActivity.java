@@ -6,13 +6,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -22,20 +22,21 @@ public class BusinessDashboardActivity extends AppCompatActivity {
     private ImageView btnSettings, btnEditProfile, btnEditHours, btnEditLocation, btnEditOfferings, btnNotifications;
     private TextView txtBusinessName, txtCategory, txtAbout, txtLocation, txtStatus, txtRating, txtMemberSince;
 
-    // Firebase instances
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_dashboard);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
-        // Initialize Firebase
+        // Initializes Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize Views
+        // Initializes Views
         btnSettings = findViewById(R.id.btnSettings);
         btnNotifications = findViewById(R.id.btnNotifications);
         txtBusinessName = findViewById(R.id.txtBusinessName);
@@ -53,10 +54,8 @@ public class BusinessDashboardActivity extends AppCompatActivity {
         btnEditLocation = findViewById(R.id.btnEditLocation);
         btnEditOfferings = findViewById(R.id.btnEditOfferings);
 
-        // Fetch and populate data from Firebase DB for the currently logged-in user
         loadBusinessDataFromFirestore();
 
-        // Setup Button Click Listeners & Navigation
         btnSettings.setOnClickListener(v -> {
             Intent intent = new Intent(BusinessDashboardActivity.this, SettingsActivity.class);
             startActivity(intent);
@@ -101,17 +100,62 @@ public class BusinessDashboardActivity extends AppCompatActivity {
 
         String userId = currentUser.getUid();
 
-        // 1. Fetch user 'type' from the 'users' collection to determine the correct target collection
-        db.collection("users").document(userId).get()
-                .addOnSuccessListener(userDoc -> {
-                    String userType = "business"; // Default fallback
-                    if (userDoc.exists()) {
-                        String type = userDoc.getString("type");
-                        if (type != null && !type.trim().isEmpty()) {
-                            userType = type.trim().toLowerCase();
+        db.collection("businesses").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("name");
+                        String category = documentSnapshot.getString("category");
+                        String description = documentSnapshot.getString("description");
+                        String address = documentSnapshot.getString("address");
+                        String approvalStatus = documentSnapshot.getString("approvalStatus");
+
+                        // Populates text fields
+                        if (name != null) {
+                            txtBusinessName.setText(name);
+                        }
+                        if (category != null) {
+                            txtCategory.setText(category);
+                        }
+                        if (description != null && !description.trim().isEmpty()) {
+                            txtAbout.setText(description);
+                        } else {
+                            txtAbout.setText("No description provided yet.");
+                        }
+                        if (address != null && !address.trim().isEmpty()) {
+                            txtLocation.setText(address);
+                        } else {
+                            txtLocation.setText("Location not set.");
                         }
 
-                        // Calculate 'Member Since' year
+                        if (approvalStatus != null) {
+                            if (approvalStatus.equalsIgnoreCase("approved")) {
+                                txtStatus.setText("Verified");
+                            } else {
+                                txtStatus.setText(capitalizeFirstLetter(approvalStatus));
+                            }
+                        } else {
+                            txtStatus.setText("Pending");
+                        }
+
+                        Long totalRatings = documentSnapshot.getLong("totalRatings");
+                        Long totalReviews = documentSnapshot.getLong("totalReviews");
+
+                        if (totalReviews != null && totalReviews > 0 && totalRatings != null) {
+                            double averageRating = (double) totalRatings / totalReviews;
+                            txtRating.setText(String.format("%.1f", averageRating));
+                        } else {
+                            txtRating.setText("0.0"); // Default if no reviews exist yet
+                        }
+
+                    } else {
+                        Toast.makeText(this, "Business profile data not found in database.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to load profile: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(userDoc -> {
+                    if (userDoc.exists()) {
                         Timestamp createdAtTimestamp = userDoc.getTimestamp("created_at");
                         if (createdAtTimestamp != null) {
                             Date creationDate = createdAtTimestamp.toDate();
@@ -130,105 +174,9 @@ public class BusinessDashboardActivity extends AppCompatActivity {
                         } else {
                             txtMemberSince.setText("1 yr");
                         }
-                    } else {
-                        txtMemberSince.setText("1 yr");
                     }
-
-                    // Resolve target collection name
-                    String targetCollection;
-                    switch (userType) {
-                        case "freelancer":
-                            targetCollection = "freelancers";
-                            break;
-                        case "customer":
-                            targetCollection = "customers";
-                            break;
-                        case "business":
-                        default:
-                            targetCollection = "businesses";
-                            break;
-                    }
-
-                    // 2. Fetch profile details from the resolved collection
-                    db.collection(targetCollection).document(userId).get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                if (documentSnapshot.exists()) {
-                                    String name = documentSnapshot.getString("name");
-                                    String category = documentSnapshot.getString("category");
-                                    String description = documentSnapshot.getString("description");
-                                    String approvalStatus = documentSnapshot.getString("approvalStatus");
-
-                                    if (name != null) {
-                                        txtBusinessName.setText(name);
-                                    }
-                                    if (category != null) {
-                                        txtCategory.setText(category);
-                                    }
-                                    if (description != null && !description.trim().isEmpty()) {
-                                        txtAbout.setText(description);
-                                    } else {
-                                        txtAbout.setText("No description provided yet.");
-                                    }
-
-                                    // Handle Status field mapping
-                                    if (approvalStatus != null) {
-                                        if (approvalStatus.equalsIgnoreCase("approved")) {
-                                            txtStatus.setText("Verified");
-                                        } else {
-                                            txtStatus.setText(capitalizeFirstLetter(approvalStatus));
-                                        }
-                                    } else {
-                                        txtStatus.setText("Pending");
-                                    }
-
-                                    // Handle Rating Calculation safely
-                                    Long totalRatings = documentSnapshot.getLong("totalRatings");
-                                    Long totalReviews = documentSnapshot.getLong("totalReviews");
-
-                                    if (totalReviews != null && totalReviews > 0 && totalRatings != null) {
-                                        double averageRating = (double) totalRatings / totalReviews;
-                                        txtRating.setText(String.format("%.1f", averageRating));
-                                    } else {
-                                        txtRating.setText("0.0");
-                                    }
-                                }
-                            })
-                            .addOnFailureListener(e -> Toast.makeText(this, "Failed to load profile: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
-                    // 3. Fetch address from the 'location' subcollection (with main document fallback)
-                    db.collection(targetCollection).document(userId).collection("location")
-                            .orderBy("timestamp", Query.Direction.DESCENDING)
-                            .limit(1)
-                            .get()
-                            .addOnSuccessListener(querySnapshot -> {
-                                if (!querySnapshot.isEmpty()) {
-                                    String address = querySnapshot.getDocuments().get(0).getString("address");
-                                    if (address != null && !address.trim().isEmpty()) {
-                                        txtLocation.setText(address);
-                                    } else {
-                                        txtLocation.setText("Address not set");
-                                    }
-                                } else {
-                                    // Fallback: Check if address is stored directly on the main document
-                                    db.collection(targetCollection).document(userId).get()
-                                            .addOnSuccessListener(doc -> {
-                                                String directAddress = doc.getString("address");
-                                                if (directAddress != null && !directAddress.trim().isEmpty()) {
-                                                    txtLocation.setText(directAddress);
-                                                } else {
-                                                    txtLocation.setText("Address not set");
-                                                }
-                                            })
-                                            .addOnFailureListener(e -> txtLocation.setText("Address not set"));
-                                }
-                            })
-                            .addOnFailureListener(e -> txtLocation.setText("Address not set"));
-
                 })
-                .addOnFailureListener(e -> {
-                    txtMemberSince.setText("1 yr");
-                    txtLocation.setText("Address not set");
-                });
+                .addOnFailureListener(e -> txtMemberSince.setText("1 yr"));
     }
 
     private String capitalizeFirstLetter(String text) {

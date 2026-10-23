@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Title -->
         <TextView
             android:id="@+id/txtHeaderTitle"
             android:layout_width="0dp"
@@ -25,7 +24,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <!-- Subtitle -->
         <TextView
             android:id="@+id/txtHeaderSubtitle"
             android:layout_width="0dp"
@@ -68,7 +66,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtHeaderSubtitle" />
 
-        <!-- ================= BUSINESS NAME ================= -->
         <TextView
             android:id="@+id/lblBusinessName"
             android:layout_width="wrap_content"
@@ -124,7 +121,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblCategory" />
 
-        <!-- ================= DESCRIPTION / ABOUT ================= -->
         <TextView
             android:id="@+id/lblAbout"
             android:layout_width="wrap_content"
@@ -155,6 +151,36 @@
             app:layout_constraintTop_toBottomOf="@id/lblAbout" />
 
         <TextView
+            android:id="@+id/lblAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Address *"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etAbout" />
+
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input_field"
+            android:drawableStart="@drawable/ic_location"
+            android:drawablePadding="12dp"
+            android:hint="Street address, City, Area"
+            android:inputType="textPostalAddress"
+            android:paddingHorizontal="16dp"
+            android:textColor="#111111"
+            android:textColorHint="#999999"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblAddress" />
+
+        <TextView
             android:id="@+id/lblBusinessEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -164,7 +190,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etAbout" />
+            app:layout_constraintTop_toBottomOf="@id/etAddress" />
 
         <EditText
             android:id="@+id/etBusinessEmail"

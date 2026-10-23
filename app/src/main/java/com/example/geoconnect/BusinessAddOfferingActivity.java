@@ -13,6 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -22,8 +23,6 @@ public class BusinessAddOfferingActivity extends AppCompatActivity {
 
     private TextInputEditText etOfferingName, etPrice, etDescription;
     private MaterialButton btnSaveOffering;
-
-    // Firebase instances
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String userId;
@@ -33,11 +32,12 @@ public class BusinessAddOfferingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_add_offering);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // Initialize Firebase instances
+        // Initializes Firebase instances
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -50,13 +50,12 @@ public class BusinessAddOfferingActivity extends AppCompatActivity {
             return;
         }
 
-        // Initialize Views
+        // Initializes Views
         etOfferingName = findViewById(R.id.etOfferingName);
         etPrice = findViewById(R.id.etPrice);
         etDescription = findViewById(R.id.etDescription);
         btnSaveOffering = findViewById(R.id.btnSaveOffering);
 
-        // Setup click listener for saving offering
         if (btnSaveOffering != null) {
             btnSaveOffering.setOnClickListener(v -> validateAndSave());
         }
@@ -67,7 +66,7 @@ public class BusinessAddOfferingActivity extends AppCompatActivity {
         String priceStr = etPrice.getText() != null ? etPrice.getText().toString().trim() : "";
         String description = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
 
-        // Validation checks
+        // User input validation checks
         if (TextUtils.isEmpty(name)) {
             etOfferingName.setError("Offering name is required");
             etOfferingName.requestFocus();
@@ -89,21 +88,23 @@ public class BusinessAddOfferingActivity extends AppCompatActivity {
             return;
         }
 
-        // Disable button to prevent multiple submissions
+        // Prevents multiple submissions
         btnSaveOffering.setEnabled(false);
 
-        // Prepare data map
+        // Prepares data map
         Map<String, Object> offeringMap = new HashMap<>();
         offeringMap.put("name", name);
         offeringMap.put("price", price);
         offeringMap.put("description", description);
         offeringMap.put("created_at", Timestamp.now());
 
-        // Save to Firestore subcollection: businesses/{userId}/offerings/{autoId}
+        // Saves to Firestore subcollection
         db.collection("businesses").document(userId)
                 .collection("offerings")
                 .add(offeringMap)
                 .addOnSuccessListener(documentReference -> {
+                    // Booking and Details screens read a 'services' list on the business doc, so keep it in sync
+                    db.collection("businesses").document(userId).update("services", FieldValue.arrayUnion(name));
                     Toast.makeText(BusinessAddOfferingActivity.this, "Offering added successfully!", Toast.LENGTH_SHORT).show();
                     finish(); // Return back to the previous screen
                 })
