@@ -56,6 +56,7 @@ public class BusinessOperatingHoursActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_operating_hours);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();

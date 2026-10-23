@@ -1,6 +1,7 @@
 package com.example.geoconnect;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -12,19 +13,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.SetOptions;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,6 +40,7 @@ import java.util.Map;
 public class LocationPreferencesActivity extends AppCompatActivity {
 
     private TextView txtCurrentLocation;
+    private SwitchMaterial switchPreciseLocation, switchAutoUpdate;
 
     private LatLng selectedLatLng = null;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
@@ -46,13 +52,12 @@ public class LocationPreferencesActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String userId;
 
-    // User type retrieved from the users collection ("type" field)
-    private String userType = "business"; // Default fallback
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_location_preferences);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -61,8 +66,6 @@ public class LocationPreferencesActivity extends AppCompatActivity {
 
         if (currentUser != null) {
             userId = currentUser.getUid();
-            // Fetch the user's type from the "users" collection, then load any existing saved location
-            fetchUserTypeAndExistingLocation();
         } else {
             Toast.makeText(this, "User session not found. Please log in again.", Toast.LENGTH_SHORT).show();
             finish();
@@ -87,79 +90,6 @@ public class LocationPreferencesActivity extends AppCompatActivity {
         btnCurrentLocation.setOnClickListener(v -> checkLocationPermissionAndFetch());
 
         btnSavePreferences.setOnClickListener(v -> savePreferencesToDatabase());
-    }
-
-    /**
-     * Fetches the "type" field from the "users" collection, determines the correct target collection,
-     * and queries Firestore for any previously saved location to display in txtCurrentLocation.
-     */
-    private void fetchUserTypeAndExistingLocation() {
-        db.collection("users").document(userId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String type = documentSnapshot.getString("type");
-                        if (type != null && !type.trim().isEmpty()) {
-                            userType = type.trim().toLowerCase(Locale.ROOT);
-                        }
-                    }
-
-                    // Once userType is determined, load the existing saved location
-                    loadExistingLocation();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Could not verify user type. Using default.", Toast.LENGTH_SHORT).show();
-                    loadExistingLocation();
-                });
-    }
-
-    private void loadExistingLocation() {
-        String targetCollection;
-        switch (userType) {
-            case "freelancer":
-                targetCollection = "freelancers";
-                break;
-            case "customer":
-                targetCollection = "customers";
-                break;
-            case "business":
-            default:
-                targetCollection = "businesses";
-                break;
-        }
-
-        // Query the 'location' subcollection for the most recent entry
-        db.collection(targetCollection).document(userId).collection("location")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(1)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    if (!querySnapshot.isEmpty()) {
-                        var doc = querySnapshot.getDocuments().get(0);
-                        String address = doc.getString("address");
-                        Double lat = doc.getDouble("latitude");
-                        Double lng = doc.getDouble("longitude");
-
-                        if (address != null && !address.trim().isEmpty()) {
-                            txtCurrentLocation.setText(address);
-                        }
-
-                        if (lat != null && lng != null) {
-                            selectedLatLng = new LatLng(lat, lng);
-                        }
-                    } else {
-                        // Fallback check on main document if address is stored directly there
-                        db.collection(targetCollection).document(userId).get()
-                                .addOnSuccessListener(mainDoc -> {
-                                    String directAddress = mainDoc.getString("address");
-                                    if (directAddress != null && !directAddress.trim().isEmpty()) {
-                                        txtCurrentLocation.setText(directAddress);
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Fail silently or keep placeholder text if network fails
-                });
     }
 
     private void showAddressSearchDialog() {
@@ -187,6 +117,7 @@ public class LocationPreferencesActivity extends AppCompatActivity {
     private void searchAddressUsingGeocoder(String locationName) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
+            // Convert typed string to a list of matching geographic coordinates
             List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
             if (addressList != null && !addressList.isEmpty()) {
                 Address address = addressList.get(0);
@@ -205,22 +136,31 @@ public class LocationPreferencesActivity extends AppCompatActivity {
         }
     }
 
+    // "Approximate" (coarse only) is a valid answer on Android 12+, so accept either permission
+    private boolean hasLocationPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
     private void checkLocationPermissionAndFetch() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (hasLocationPermission()) {
             fetchDeviceGpsLocation();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            // Android 12+ ignores a FINE-only request; FINE must be asked together with COARSE
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void fetchDeviceGpsLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (!hasLocationPermission()) {
             return;
         }
 
         Toast.makeText(this, "Fetching phone GPS location...", Toast.LENGTH_SHORT).show();
 
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+        // getLastLocation() is usually null on a fresh emulator; getCurrentLocation() asks for a new fix
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(this, location -> {
             if (location != null) {
                 selectedLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 reverseGeocodeCoordinates(selectedLatLng);
@@ -258,7 +198,7 @@ public class LocationPreferencesActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (hasLocationPermission()) {
                 fetchDeviceGpsLocation();
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
@@ -274,35 +214,33 @@ public class LocationPreferencesActivity extends AppCompatActivity {
             return;
         }
 
-        // Prepare the location data map
-        Map<String, Object> locationData = new HashMap<>();
-        locationData.put("address", addressText);
-        locationData.put("latitude", selectedLatLng.latitude);
-        locationData.put("longitude", selectedLatLng.longitude);
-        locationData.put("timestamp", com.google.firebase.Timestamp.now());
+        boolean isPreciseLocation = switchPreciseLocation != null && switchPreciseLocation.isChecked();
+        boolean isAutoUpdate = switchAutoUpdate != null && switchAutoUpdate.isChecked();
 
-        // Determine target collection dynamically based on the fetched user type
-        String targetCollection;
-        switch (userType) {
-            case "freelancer":
-                targetCollection = "freelancers";
-                break;
-            case "customer":
-                targetCollection = "customers";
-                break;
-            case "business":
-            default:
-                targetCollection = "businesses";
-                break;
-        }
+        // Prepare update map for Firestore
+        Map<String, Object> locationUpdate = new HashMap<>();
+        locationUpdate.put("address", addressText);
+        locationUpdate.put("latitude", selectedLatLng.latitude);
+        locationUpdate.put("longitude", selectedLatLng.longitude);
+        // The Discover map reads one GeoPoint field called 'location'
+        locationUpdate.put("location", new GeoPoint(selectedLatLng.latitude, selectedLatLng.longitude));
+        locationUpdate.put("preciseLocationEnabled", isPreciseLocation);
+        locationUpdate.put("autoUpdateLocation", isAutoUpdate);
 
-        // Save inside the appropriate collection based on user type
-        db.collection(targetCollection).document(userId)
-                .collection("location")
-                .add(locationData)
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(this, "Location preferences saved successfully to " + targetCollection + "!", Toast.LENGTH_SHORT).show();
-                    finish();
+        // Customers, businesses and freelancers all reach this screen, so save to the signed-in user's own collection
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(user -> {
+                    String type = user.getString("type");
+                    String collection = "business".equals(type) ? "businesses"
+                            : "freelancer".equals(type) ? "freelancers"
+                            : "customers";
+                    db.collection(collection).document(userId)
+                            .set(locationUpdate, SetOptions.merge())
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(this, "Location preferences saved successfully!", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(this, "Failed to save preferences: " + e.getMessage(), Toast.LENGTH_LONG).show());
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to save preferences: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }

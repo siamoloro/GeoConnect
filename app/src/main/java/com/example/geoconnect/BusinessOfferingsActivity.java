@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -36,6 +37,7 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_business_offerings);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -124,8 +126,13 @@ public class BusinessOfferingsActivity extends AppCompatActivity implements Prod
                 .collection("offerings").document(offeringId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    productList.remove(position);
-                    productAdapter.notifyItemRemoved(position);
+                    db.collection("businesses").document(userId).update("services", FieldValue.arrayRemove(clickedProduct.getName()));
+                    // Look the item up again: the list may have changed while the delete was in flight
+                    int index = productList.indexOf(clickedProduct);
+                    if (index >= 0) {
+                        productList.remove(index);
+                        productAdapter.notifyItemRemoved(index);
+                    }
                     Toast.makeText(BusinessOfferingsActivity.this, "Offering deleted successfully", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(BusinessOfferingsActivity.this, "Failed to delete offering: " + e.getMessage(), Toast.LENGTH_SHORT).show());

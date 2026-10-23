@@ -3,12 +3,12 @@ package com.example.geoconnect;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +35,7 @@ public class MyBookingActivity extends AppCompatActivity {
     private LinearLayout bookingsContainer;
     private LinearLayout emptyState;
     private TextView emptyMessage;
-    private ImageView backButton;
+    private TextView backButton;
 
     // BOOKING DATA
     private final List<DocumentSnapshot> allBookings =
@@ -47,13 +47,9 @@ public class MyBookingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_my_booking);
-
-        Toast.makeText(
-                this,
-                "My Bookings Activity opened",
-                Toast.LENGTH_LONG
-        ).show();
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // INITIALIZE FIREBASE
         firebaseAuth = FirebaseAuth.getInstance();
@@ -77,13 +73,13 @@ public class MyBookingActivity extends AppCompatActivity {
                         selectedStatus = "Pending";
 
                     } else if (checkedId == R.id.filterConfirmed) {
-                        selectedStatus = "Confirmed";
+                        selectedStatus = "Accepted";
 
                     } else if (checkedId == R.id.filterCompleted) {
                         selectedStatus = "Completed";
 
                     } else if (checkedId == R.id.filterRejected) {
-                        selectedStatus = "Rejected";
+                        selectedStatus = "Declined";
 
                     } else {
                         selectedStatus = "All";
@@ -111,7 +107,7 @@ public class MyBookingActivity extends AppCompatActivity {
 
         showMessage("Loading your bookings...");
 
-        bookingListener = firestore.collection("booking")
+        bookingListener = firestore.collection("bookings")
                 .whereEqualTo("customerID", customerId)
                 .addSnapshotListener((snapshot, error) -> {
 

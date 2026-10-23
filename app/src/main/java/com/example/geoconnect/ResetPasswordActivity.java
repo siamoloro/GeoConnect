@@ -65,6 +65,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(ResetPasswordActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
-                });
+});
     }
 }

@@ -10,9 +10,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +73,7 @@ public class BookingRequestsActivity extends AppCompatActivity {
         String currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // First, get the freelancer record corresponding to this user account (matching userID foreign key)
-        db.collection("freelancer")
+        db.collection("freelancers")
                 .whereEqualTo("userID", currentUserId)
                 .limit(1)
                 .get()
@@ -79,23 +81,26 @@ public class BookingRequestsActivity extends AppCompatActivity {
                     if (!freelancerSnapshots.isEmpty()) {
                         String freelancerId = freelancerSnapshots.getDocuments().get(0).getId();
 
-                        // Now query bookings filtered by both status and this freelancer's ID
+                        // Field names must match what BookingsActivity writes (providerID, service, bookingDate)
                         db.collection("bookings")
                                 .whereEqualTo("status", status)
-                                .whereEqualTo("freelancerId", freelancerId) // Matches ERD relationship
+                                .whereEqualTo("providerID", freelancerId)
                                 .get()
                                 .addOnSuccessListener(queryDocumentSnapshots -> {
                                     bookingList.clear();
                                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                        String customerName = document.getString("customerName");
+                                        if (customerName == null || customerName.isEmpty()) customerName = "Customer";
+                                        Timestamp when = document.getTimestamp("bookingDate");
                                         Booking booking = new Booking(
                                                 document.getId(),
-                                                document.getString("customerName"),
-                                                document.getString("serviceTitle"),
-                                                document.getString("price"),
-                                                document.getString("dateTime"),
+                                                customerName,
+                                                document.getString("service"),
+                                                "",
+                                                when != null ? DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(when.toDate()) : "",
                                                 document.getString("location"),
                                                 document.getString("status"),
-                                                document.getString("initials")
+                                                customerName.substring(0, 1).toUpperCase()
                                         );
                                         bookingList.add(booking);
                                     }

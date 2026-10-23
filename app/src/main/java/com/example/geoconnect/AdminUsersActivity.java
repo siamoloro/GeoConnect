@@ -19,6 +19,7 @@ public class AdminUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_users2);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();

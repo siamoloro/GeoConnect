@@ -61,7 +61,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         String userId = mAuth.getCurrentUser().getUid();
 
         // Query Firestore 'freelancer' collection matching the user's ID field
-        db.collection("freelancer")
+        db.collection("freelancers")
                 .whereEqualTo("userID", userId)
                 .limit(1)
                 .get()
@@ -77,6 +77,12 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                         // Optional rate/category fields if stored in your document
                         String rateStr = document.getString("rate");
                         if (rateStr != null) etRate.setText(rateStr);
+
+                        // Re-select the saved category, otherwise Save is blocked until the user picks it again
+                        String savedCategory = document.getString("category");
+                        for (int i = 1; i < spCategory.getCount(); i++) {
+                            if (spCategory.getItemAtPosition(i).toString().equals(savedCategory)) spCategory.setSelection(i);
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -125,7 +131,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         freelancerData.put("userID", userId);
 
         // Update or write back to Firestore 'freelancer' collection
-        db.collection("freelancer")
+        db.collection("freelancers")
                 .whereEqualTo("userID", userId)
                 .limit(1)
                 .get()
@@ -133,7 +139,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         // Update existing document
                         String docId = queryDocumentSnapshots.getDocuments().get(0).getId();
-                        db.collection("freelancer").document(docId)
+                        db.collection("freelancers").document(docId)
                                 .update(freelancerData)
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
@@ -142,8 +148,8 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                                 .addOnFailureListener(e -> Toast.makeText(this, "Error updating: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                     } else {
                         // Create new record if it doesn't exist yet
-                        db.collection("freelancer")
-                                .add(freelancerData)
+                        db.collection("freelancers").document(userId)
+                                .set(freelancerData)
                                 .addOnSuccessListener(documentReference -> {
                                     Toast.makeText(this, "Profile created successfully!", Toast.LENGTH_SHORT).show();
                                     finish();

@@ -110,8 +110,9 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                                     freelancerData.put("serviceArea", ""); // Initial blank service area
                                     freelancerData.put("availability", true);
 
-                                    db.collection("freelancers")
-                                            .add(freelancerData)
+                                    // Doc ID = auth uid, like customers and businesses, so bookings can point at it
+                                    db.collection("freelancers").document(userId)
+                                            .set(freelancerData)
                                             .addOnSuccessListener(documentReference -> {
                                                 Toast.makeText(this, "Freelancer account created successfully!", Toast.LENGTH_SHORT).show();
                                                 startActivity(new Intent(this, FreelancerDashboardActivity.class));

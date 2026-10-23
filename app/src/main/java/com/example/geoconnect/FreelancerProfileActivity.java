@@ -53,7 +53,7 @@ public class FreelancerProfileActivity extends AppCompatActivity {
         String userId = mAuth.getCurrentUser().getUid();
 
         // Query Firestore 'freelancer' collection matching your ERD relation (userID foreign key)
-        db.collection("freelancer")
+        db.collection("freelancers")
                 .whereEqualTo("userID", userId)
                 .limit(1)
                 .get()

@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -88,7 +89,9 @@ public class DiscoverActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_discover);
+        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // INITIALIZE FIREBASE
         firestore = FirebaseFirestore.getInstance();
@@ -120,7 +123,7 @@ public class DiscoverActivity extends AppCompatActivity
         navProviders = findViewById(R.id.navProviders);
         navProfile = findViewById(R.id.navProfile);
 
-        // INITIALIZE GOOGLE MAPS
+        // INITIALIZE GOOGLE MAP
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.marketMapFragment);
@@ -248,8 +251,8 @@ public class DiscoverActivity extends AppCompatActivity
 
         updateMarketResults();
 
-        loadProviderCollection("Business", "Business");
-        loadProviderCollection("Freelancer", "Freelancer");
+        loadProviderCollection("businesses", "Business");
+        loadProviderCollection("freelancers", "Freelancer");
     }
 
     private void loadProviderCollection(
@@ -282,8 +285,15 @@ public class DiscoverActivity extends AppCompatActivity
                             continue;
                         }
 
-                        GeoPoint location =
-                                document.getGeoPoint("location");
+                        // getGeoPoint() throws if 'location' was saved as text, so check the type first;
+                        // older saves only have separate latitude/longitude numbers
+                        Object loc = document.get("location");
+                        GeoPoint location = loc instanceof GeoPoint ? (GeoPoint) loc : null;
+                        Object lat = document.get("latitude");
+                        Object lng = document.get("longitude");
+                        if (location == null && lat instanceof Number && lng instanceof Number) {
+                            location = new GeoPoint(((Number) lat).doubleValue(), ((Number) lng).doubleValue());
+                        }
 
                         providers.add(new ProviderItem(
                                 document.getId(),
