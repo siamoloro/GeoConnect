@@ -1,6 +1,9 @@
 
 package com.example.geoconnect;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -166,7 +169,7 @@ public class SearchActivity extends AppCompatActivity {
             providerTypeGroup.check(R.id.allProvidersRadio);
         }
 
-        showEmptyState();
+        searchProviders();
     }
 
     // SEARCH FIRESTORE
@@ -350,35 +353,136 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    // CREATE A CLICKABLE PROVIDER RESULT
+    // CREATE A STYLED PROVIDER RESULT CARD
     private void addProviderCard(ProviderResult provider) {
 
-        TextView card = new TextView(this);
+        // MAIN CARD
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setPadding(dp(16), dp(16), dp(16), dp(16));
+        card.setBackgroundResource(
+                R.drawable.market_provider_card_background
+        );
+        card.setElevation(dp(3));
+        card.setClickable(true);
+        card.setFocusable(true);
 
-        String details =
-                provider.name + "\n" +
-                        provider.type +
-                        (provider.category.isEmpty()
-                                ? ""
-                                : "\nCategory: " + provider.category) +
-                        (provider.location.isEmpty()
-                                ? ""
-                                : "\nLocation: " + provider.location);
-
-        card.setText(details);
-        card.setTextSize(16);
-        card.setPadding(28, 24, 28, 24);
-
-        LinearLayout.LayoutParams params =
+        LinearLayout.LayoutParams cardParams =
                 new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
 
-        params.bottomMargin = 16;
-        card.setLayoutParams(params);
+        cardParams.setMargins(dp(8), dp(6), dp(8), dp(12));
+        card.setLayoutParams(cardParams);
 
-        card.setOnClickListener(v -> {
+        // BUSINESS OR FREELANCER HEADING
+        TextView heading = new TextView(this);
+
+        heading.setText(
+                provider.type.equalsIgnoreCase("Business")
+                        ? "BUSINESS"
+                        : "FREELANCER"
+        );
+
+        heading.setTextSize(12);
+        heading.setTextColor(Color.parseColor("#176B50"));
+        heading.setTypeface(null, Typeface.BOLD);
+
+        card.addView(heading);
+
+        // PROVIDER NAME
+        TextView nameText = new TextView(this);
+
+        String nameLabel =
+                provider.type.equalsIgnoreCase("Business")
+                        ? "Business Name: "
+                        : "Freelancer Name: ";
+
+        nameText.setText(nameLabel + provider.name);
+        nameText.setTextSize(16);
+        nameText.setTextColor(Color.parseColor("#292929"));
+        nameText.setTypeface(null, Typeface.BOLD);
+
+        LinearLayout.LayoutParams nameParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        nameParams.topMargin = dp(12);
+        nameText.setLayoutParams(nameParams);
+
+        card.addView(nameText);
+
+        // CATEGORY
+        TextView categoryText = new TextView(this);
+
+        categoryText.setText(
+                "Category: " +
+                        (provider.category.isEmpty()
+                                ? "Not specified"
+                                : provider.category)
+        );
+
+        categoryText.setTextSize(14);
+        categoryText.setTextColor(Color.parseColor("#666666"));
+
+        LinearLayout.LayoutParams categoryParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        categoryParams.topMargin = dp(8);
+        categoryText.setLayoutParams(categoryParams);
+
+        card.addView(categoryText);
+
+        // LOCATION
+        if (!provider.location.isEmpty()) {
+
+            TextView locationText = new TextView(this);
+            locationText.setText("Location: " + provider.location);
+            locationText.setTextSize(14);
+            locationText.setTextColor(Color.parseColor("#666666"));
+
+            LinearLayout.LayoutParams locationParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
+            locationParams.topMargin = dp(8);
+            locationText.setLayoutParams(locationParams);
+
+            card.addView(locationText);
+        }
+
+        // VIEW DETAILS BUTTON
+        Button detailsButton = new Button(this);
+
+        detailsButton.setText("View Details");
+        detailsButton.setAllCaps(false);
+        detailsButton.setTextColor(Color.WHITE);
+
+        detailsButton.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(
+                        Color.parseColor("#176B50")
+                )
+        );
+
+        LinearLayout.LayoutParams buttonParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        dp(48)
+                );
+
+        buttonParams.topMargin = dp(14);
+        detailsButton.setLayoutParams(buttonParams);
+
+        // SAME NAVIGATION FOR BUTTON AND CARD
+        View.OnClickListener openDetails = v -> {
 
             Intent intent = new Intent(
                     SearchActivity.this,
@@ -391,11 +495,15 @@ public class SearchActivity extends AppCompatActivity {
             intent.putExtra("providerType", provider.type);
 
             startActivity(intent);
-        });
+        };
+
+        detailsButton.setOnClickListener(openDetails);
+        card.setOnClickListener(openDetails);
+
+        card.addView(detailsButton);
 
         providersListContainer.addView(card);
     }
-
     // SHOW EMPTY, LOADING OR ERROR STATE
     private void showState(String title, String message) {
 
@@ -435,5 +543,13 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = new Intent(this, destination);
         startActivity(intent);
         finish();
+    }
+
+    private int dp(float value) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                value,
+                getResources().getDisplayMetrics()
+        );
     }
 }
