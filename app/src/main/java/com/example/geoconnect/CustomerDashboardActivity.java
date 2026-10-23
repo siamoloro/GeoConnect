@@ -25,6 +25,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Build;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationTokenSource;
+
+import java.io.IOException;
+import java.util.List;
+
 public class CustomerDashboardActivity extends AppCompatActivity {
 
     // FIREBASE
@@ -50,6 +69,11 @@ public class CustomerDashboardActivity extends AppCompatActivity {
     private TextView dashboardSearchEmpty;
     private RadioGroup dashboardSearchFilters;
 
+    private FusedLocationProviderClient fusedLocationClient;
+    private ActivityResultLauncher<String[]> locationPermissionLauncher;
+    // CUSTOMER LOCATION
+    private TextView locationValue;
+
     // BOTTOM NAVIGATION
     private View navHome;
     private View navMarket;
@@ -70,6 +94,41 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_customer_dashboard);
+
+
+
+        // Connect the existing location TextView
+        locationValue = findViewById(R.id.locationValue);
+
+// Initialize location services
+        fusedLocationClient =
+                LocationServices.getFusedLocationProviderClient(this);
+
+// Handle location permission
+        locationPermissionLauncher =
+                registerForActivityResult(
+                        new ActivityResultContracts.RequestMultiplePermissions(),
+                        permissions -> {
+
+                            Boolean fine = permissions.get(
+                                    Manifest.permission.ACCESS_FINE_LOCATION);
+
+                            Boolean coarse = permissions.get(
+                                    Manifest.permission.ACCESS_COARSE_LOCATION);
+
+                            if (Boolean.TRUE.equals(fine)
+                                    || Boolean.TRUE.equals(coarse)) {
+
+                                getCurrentLocation();
+
+                            } else {
+                                locationValue.setText("Location permission denied");
+                            }
+                        }
+                );
+
+// Request location when Dashboard opens
+        checkLocationPermission();
 
         // INITIALIZE FIREBASE
         firebaseAuth = FirebaseAuth.getInstance();
@@ -229,7 +288,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
 
         currentEmail = firebaseUser.getEmail();
 
-        firestore.collection("Customer")
+        firestore.collection("customers")
                 .document(userId)
                 .get()
                 .addOnSuccessListener(document -> {
@@ -324,7 +383,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
 
         if (includeBusinesses) {
 
-            firestore.collection("Business")
+            firestore.collection("businesses")
                     .get()
                     .addOnSuccessListener(snapshot -> {
 
@@ -344,7 +403,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
 
         if (includeFreelancers) {
 
-            firestore.collection("Freelancer")
+            firestore.collection("freelancers")
                     .get()
                     .addOnSuccessListener(snapshot -> {
 
@@ -512,5 +571,214 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         intent.putExtra("customerPhone", currentPhone);
 
         startActivity(intent);
+    }
+
+    // CHECK LOCATION PERMISSION
+    private void checkLocationPermission() {
+
+        boolean fineGranted =
+                ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED;
+
+        boolean coarseGranted =
+                ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED;
+
+        if (fineGranted || coarseGranted) {
+            getCurrentLocation();
+        } else {
+            locationPermissionLauncher.launch(
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    }
+            );
+        }
+    }
+
+
+    // GET CUSTOMER'S CURRENT LOCATION
+    private void getCurrentLocation() {
+
+        boolean fineGranted =
+                ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED;
+
+        boolean coarseGranted =
+                ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED;
+
+        if (!fineGranted && !coarseGranted) {
+            locationValue.setText("Location permission required");
+            return;
+        }
+
+        locationValue.setText("Detecting your location...");
+
+        int priority = fineGranted
+                ? Priority.PRIORITY_HIGH_ACCURACY
+                : Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+
+        CancellationTokenSource tokenSource =
+                new CancellationTokenSource();
+
+        fusedLocationClient.getCurrentLocation(
+                        priority,
+                        tokenSource.getToken()
+                )
+                .addOnSuccessListener(location -> {
+
+                    if (location != null) {
+                        displayLocation(location);
+                    } else {
+                        locationValue.setText("Location unavailable");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    locationValue.setText("Unable to detect location");
+                });
+    }
+
+
+    // DISPLAY LOCATION NAME
+    private void displayLocation(Location location) {
+
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        Geocoder geocoder =
+                new Geocoder(this, Locale.getDefault());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            geocoder.getFromLocation(
+                    latitude,
+                    longitude,
+                    1,
+                    new Geocoder.GeocodeListener() {
+
+                        @Override
+                        public void onGeocode(
+                                List<Address> addresses) {
+
+                            runOnUiThread(() ->
+                                    showAddress(addresses, latitude, longitude)
+                            );
+                        }
+
+                        @Override
+                        public void onError(String errorMessage) {
+                            runOnUiThread(() ->
+                                    showCoordinates(latitude, longitude)
+                            );
+                        }
+                    }
+            );
+
+        } else {
+
+            new Thread(() -> {
+
+                List<Address> addresses = null;
+
+                try {
+                    addresses = geocoder.getFromLocation(
+                            latitude, longitude, 1);
+                } catch (IOException | IllegalArgumentException e) {
+                    // Coordinates will be shown instead
+                }
+
+                List<Address> finalAddresses = addresses;
+
+                runOnUiThread(() ->
+                        showAddress(finalAddresses, latitude, longitude)
+                );
+
+            }).start();
+        }
+    }
+
+
+    // SHOW READABLE ADDRESS
+    private void showAddress(
+            List<Address> addresses,
+            double latitude,
+            double longitude) {
+
+        if (addresses != null && !addresses.isEmpty()) {
+
+            Address address = addresses.get(0);
+
+            String area = address.getSubLocality();
+            String city = address.getLocality();
+
+            if (area != null && city != null
+                    && !area.equalsIgnoreCase(city)) {
+
+                locationValue.setText(area + ", " + city);
+
+            } else if (city != null) {
+
+                locationValue.setText(city);
+
+            } else if (address.getAdminArea() != null) {
+
+                locationValue.setText(address.getAdminArea());
+
+            } else {
+                showCoordinates(latitude, longitude);
+            }
+
+        } else {
+            showCoordinates(latitude, longitude);
+        }
+    }
+
+
+    // FALLBACK IF ADDRESS IS UNAVAILABLE
+    private void showCoordinates(
+            double latitude,
+            double longitude) {
+
+        locationValue.setText(
+                String.format(
+                        Locale.getDefault(),
+                        "%.5f, %.5f",
+                        latitude,
+                        longitude
+                )
+        );
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (locationValue != null
+                && locationPermissionLauncher != null) {
+
+            boolean fineGranted =
+                    ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED;
+
+            boolean coarseGranted =
+                    ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED;
+
+            if (fineGranted || coarseGranted) {
+                getCurrentLocation();
+            }
+        }
     }
 }

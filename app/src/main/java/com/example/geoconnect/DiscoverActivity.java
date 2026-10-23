@@ -120,7 +120,7 @@ public class DiscoverActivity extends AppCompatActivity
         navProviders = findViewById(R.id.navProviders);
         navProfile = findViewById(R.id.navProfile);
 
-        // INITIALIZE GOOGLE MAP
+        // INITIALIZE GOOGLE MAPS
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.marketMapFragment);

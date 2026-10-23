@@ -371,7 +371,7 @@ public class BookingsActivity extends AppCompatActivity {
         // Prevent duplicate submissions
         submitBookingButton.setEnabled(false);
 
-        db.collection("Booking")
+        db.collection("booking")
                 .add(booking)
                 .addOnSuccessListener(documentReference -> {
 

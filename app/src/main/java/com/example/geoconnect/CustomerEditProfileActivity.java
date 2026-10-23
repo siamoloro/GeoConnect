@@ -133,7 +133,7 @@ public class CustomerEditProfileActivity extends AppCompatActivity {
 
         saveChangesButton.setEnabled(false);
 
-        firestore.collection("Customer")
+        firestore.collection("customers")
                 .document(customerId)
                 .get()
                 .addOnSuccessListener(document -> {
@@ -243,7 +243,7 @@ public class CustomerEditProfileActivity extends AppCompatActivity {
         saveChangesButton.setEnabled(false);
 
         // UPDATE THE EXISTING CUSTOMER DOCUMENT
-        firestore.collection("Customer")
+        firestore.collection("customers")
                 .document(customerId)
                 .update(updates)
                 .addOnSuccessListener(unused -> {

@@ -348,7 +348,7 @@ public class DetailsActivity extends AppCompatActivity {
                 currentProviderType.toLowerCase()
                         + "_" + currentProviderId;
 
-        firestore.collection("Customer")
+        firestore.collection("customers")
                 .document(user.getUid())
                 .collection("SavedProviders")
                 .document(savedId)
@@ -396,7 +396,7 @@ public class DetailsActivity extends AppCompatActivity {
                     com.google.firebase.firestore.FieldValue
                             .serverTimestamp());
 
-            firestore.collection("Customer")
+            firestore.collection("customers")
                     .document(user.getUid())
                     .collection("SavedProviders")
                     .document(savedId)
@@ -423,7 +423,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         } else {
 
-            firestore.collection("Customer")
+            firestore.collection("customers")
                     .document(user.getUid())
                     .collection("SavedProviders")
                     .document(savedId)

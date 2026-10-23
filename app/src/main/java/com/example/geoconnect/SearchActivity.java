@@ -223,7 +223,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if (includeBusinesses) {
 
-            firestore.collection("Business")
+            firestore.collection("businesses")
                     .get()
                     .addOnSuccessListener(snapshot -> {
 
@@ -249,7 +249,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if (includeFreelancers) {
 
-            firestore.collection("Freelancer")
+            firestore.collection("freelancers")
                     .get()
                     .addOnSuccessListener(snapshot -> {
 

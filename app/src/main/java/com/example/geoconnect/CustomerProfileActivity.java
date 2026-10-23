@@ -86,8 +86,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
         // BOTTOM NAVIGATION
         navHome = findViewById(R.id.navHome);
         navMarket = findViewById(R.id.navMarket);
-        navFreelancers = findViewById(R.id.navFreelancers);
+        navFreelancers = findViewById(R.id.navProviders);
         navProfile = findViewById(R.id.navProfile);
+
 
         // PROFILE ICON
         profileImage.setImageResource(R.drawable.ic_person);
@@ -219,7 +220,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
         currentEmail = firebaseUser.getEmail();
 
-        firestore.collection("Customer")
+        firestore.collection("customers")
                 .document(userId)
                 .get()
                 .addOnSuccessListener(document -> {

@@ -104,7 +104,7 @@ public class MyBookingActivity extends AppCompatActivity {
 
         showMessage("Loading your bookings...");
 
-        bookingListener = firestore.collection("Booking")
+        bookingListener = firestore.collection("booking")
                 .whereEqualTo("customerID", customerId)
                 .addSnapshotListener((snapshot, error) -> {
 
