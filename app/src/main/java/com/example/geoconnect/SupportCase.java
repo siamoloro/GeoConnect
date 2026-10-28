@@ -7,7 +7,6 @@ public class SupportCase {
     private String description;
     private long timestamp;
 
-    // Required empty constructor for Firestore
     public SupportCase() {}
 
     public SupportCase(String caseId, String userId, String title, String description, long timestamp) {

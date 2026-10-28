@@ -51,7 +51,6 @@ public class BookingsActivity extends AppCompatActivity {
     private String providerType;
     private String selectedProviderName;
     private String selectedProviderCategory;
-    private String customerName = "";
 
     private boolean providerLoaded = false;
     private boolean servicesLoaded = false;
@@ -63,14 +62,12 @@ public class BookingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_bookings);
-        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Connect Java to existing XML views
+        // Connects Java to existing XML views
         providerName = findViewById(R.id.providerName);
         providerCategory = findViewById(R.id.providerCategory);
         servicePrice = findViewById(R.id.servicePrice);
@@ -96,12 +93,12 @@ public class BookingsActivity extends AppCompatActivity {
         // Back button
         backButton.setOnClickListener(v -> finish());
 
-        // Prevent choosing previous dates
+        // Prevents choosing previous dates
         bookingDatePicker.setMinDate(
                 System.currentTimeMillis() - 1000
         );
 
-        // Get provider information from DetailsActivity
+        // Gets provider information from DetailsActivity
         Intent intent = getIntent();
 
         providerId = intent.getStringExtra("providerId");
@@ -123,18 +120,8 @@ public class BookingsActivity extends AppCompatActivity {
             return;
         }
 
-        // Load selected provider from Firebase
+        // Loads selected provider from Firebase
         loadProvider();
-
-        // The provider's request list shows the customer's name, so save it on the booking
-        FirebaseUser me = auth.getCurrentUser();
-        if (me != null) {
-            db.collection("customers").document(me.getUid()).get()
-                    .addOnSuccessListener(doc -> {
-                        String name = doc.getString("fullname");
-                        if (name != null) customerName = name;
-                    });
-        }
 
         // Booking request button
         submitBookingButton.setOnClickListener(v ->
@@ -235,11 +222,6 @@ public class BookingsActivity extends AppCompatActivity {
                     );
                 }
             }
-        }
-
-        // Freelancers (and businesses with no offerings yet) have no 'services' list: book their category instead
-        if (serviceNames.isEmpty() && !selectedProviderCategory.isEmpty()) {
-            serviceNames.add(selectedProviderCategory);
         }
 
         if (serviceNames.isEmpty()) {
@@ -360,8 +342,7 @@ public class BookingsActivity extends AppCompatActivity {
                 currentUser.getUid()
         );
 
-        booking.put("customerName", customerName);
-        booking.put("providerID", providerId);
+        booking.put("providerId", providerId);
         booking.put("providerType", providerType);
 
         booking.put(
@@ -390,7 +371,7 @@ public class BookingsActivity extends AppCompatActivity {
         // Prevent duplicate submissions
         submitBookingButton.setEnabled(false);
 
-        db.collection("bookings")
+        db.collection("booking")
                 .add(booking)
                 .addOnSuccessListener(documentReference -> {
 

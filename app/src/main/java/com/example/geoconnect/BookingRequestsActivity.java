@@ -72,7 +72,6 @@ public class BookingRequestsActivity extends AppCompatActivity {
         if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() == null) return;
         String currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // First, get the freelancer record corresponding to this user account (matching userID foreign key)
         db.collection("freelancers")
                 .whereEqualTo("userID", currentUserId)
                 .limit(1)

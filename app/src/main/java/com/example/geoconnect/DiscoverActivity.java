@@ -1,6 +1,10 @@
 
 package com.example.geoconnect;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.util.TypedValue;
+import android.widget.Button;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,7 +18,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -89,9 +92,7 @@ public class DiscoverActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_discover);
-        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         // INITIALIZE FIREBASE
         firestore = FirebaseFirestore.getInstance();
@@ -123,7 +124,7 @@ public class DiscoverActivity extends AppCompatActivity
         navProviders = findViewById(R.id.navProviders);
         navProfile = findViewById(R.id.navProfile);
 
-        // INITIALIZE GOOGLE MAP
+        // INITIALIZE GOOGLE MAPS
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.marketMapFragment);
@@ -212,12 +213,10 @@ public class DiscoverActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap map) {
-
         googleMap = map;
 
-        // INITIAL CAMERA POSITION ONLY
-        LatLng initialLocation =
-                new LatLng(-25.7479, 28.2293);
+        // INITIAL CAMERA POSITION ONLY (-25.7479, 28.2293)
+        LatLng initialLocation = new LatLng(-25.7479, 28.2293);
 
         googleMap.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
@@ -225,20 +224,48 @@ public class DiscoverActivity extends AppCompatActivity
                 )
         );
 
-        googleMap.getUiSettings()
-                .setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         // OPEN PROVIDER DETAILS WHEN MARKER IS CLICKED
         googleMap.setOnInfoWindowClickListener(marker -> {
-
             Object tag = marker.getTag();
-
             if (tag instanceof ProviderItem) {
                 openProviderDetails((ProviderItem) tag);
             }
         });
 
+        // Safely draw markers now that the map instance is ready
         updateMapMarkers();
+    }
+
+    // ADD PROVIDERS WITH LOCATIONS TO GOOGLE MAPS
+    private void updateMapMarkers() {
+        // Guard check: do nothing if the map hasn't finished initializing yet
+        if (googleMap == null) return;
+
+        googleMap.clear();
+
+        for (ProviderItem provider : filteredProviders) {
+            if (provider.location == null) {
+                continue;
+            }
+
+            LatLng position = new LatLng(
+                    provider.location.getLatitude(),
+                    provider.location.getLongitude()
+            );
+
+            Marker marker = googleMap.addMarker(
+                    new MarkerOptions()
+                            .position(position)
+                            .title(provider.name)
+                            .snippet(provider.category)
+            );
+
+            if (marker != null) {
+                marker.setTag(provider);
+            }
+        }
     }
 
     // LOAD BUSINESSES AND FREELANCERS
@@ -285,15 +312,8 @@ public class DiscoverActivity extends AppCompatActivity
                             continue;
                         }
 
-                        // getGeoPoint() throws if 'location' was saved as text, so check the type first;
-                        // older saves only have separate latitude/longitude numbers
-                        Object loc = document.get("location");
-                        GeoPoint location = loc instanceof GeoPoint ? (GeoPoint) loc : null;
-                        Object lat = document.get("latitude");
-                        Object lng = document.get("longitude");
-                        if (location == null && lat instanceof Number && lng instanceof Number) {
-                            location = new GeoPoint(((Number) lat).doubleValue(), ((Number) lng).doubleValue());
-                        }
+                        GeoPoint location =
+                                document.getGeoPoint("location");
 
                         providers.add(new ProviderItem(
                                 document.getId(),
@@ -394,7 +414,7 @@ public class DiscoverActivity extends AppCompatActivity
         updateMapMarkers();
     }
 
-    // DISPLAY REAL PROVIDERS IN LIST VIEW
+    // DISPLAY PROVIDERS AS CLICKABLE CARDS
     private void displayProviderList() {
 
         marketProvidersList.removeAllViews();
@@ -406,12 +426,8 @@ public class DiscoverActivity extends AppCompatActivity
         }
 
         if (filteredProviders.isEmpty()) {
-
             marketListEmpty.setVisibility(View.VISIBLE);
-            marketListEmpty.setText(
-                    "No matching providers found."
-            );
-
+            marketListEmpty.setText("No matching providers found.");
             return;
         }
 
@@ -419,65 +435,128 @@ public class DiscoverActivity extends AppCompatActivity
 
         for (ProviderItem provider : filteredProviders) {
 
-            TextView providerCard = new TextView(this);
+            // MAIN CARD
+            LinearLayout card = new LinearLayout(this);
+            card.setOrientation(LinearLayout.VERTICAL);
+            card.setPadding(dp(16), dp(16), dp(16), dp(16));
+            card.setBackgroundResource(
+                    R.drawable.market_provider_card_background
+            );
+            card.setElevation(dp(3));
+            card.setClickable(true);
+            card.setFocusable(true);
 
-            String details =
-                    provider.name + "\n" +
-                            provider.type +
-                            (provider.category.isEmpty()
-                                    ? ""
-                                    : "\n" + provider.category);
-
-            providerCard.setText(details);
-            providerCard.setTextSize(16);
-            providerCard.setPadding(28, 24, 28, 24);
-
-            LinearLayout.LayoutParams params =
+            LinearLayout.LayoutParams cardParams =
                     new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                     );
 
-            params.bottomMargin = 16;
-            providerCard.setLayoutParams(params);
+            cardParams.setMargins(
+                    dp(8), dp(6), dp(8), dp(12)
+            );
 
-            providerCard.setOnClickListener(v ->
-                    openProviderDetails(provider));
+            card.setLayoutParams(cardParams);
 
-            marketProvidersList.addView(providerCard);
+            // PROVIDER TYPE HEADING
+            TextView heading = new TextView(this);
+
+            heading.setText(
+                    provider.type.equalsIgnoreCase("Business")
+                            ? "BUSINESS"
+                            : "FREELANCER"
+            );
+
+            heading.setTextSize(12);
+            heading.setTextColor(Color.parseColor("#176B50"));
+            heading.setTypeface(null, Typeface.BOLD);
+
+            card.addView(heading);
+
+            // PROVIDER NAME
+            TextView nameText = new TextView(this);
+
+            String nameLabel =
+                    provider.type.equalsIgnoreCase("Business")
+                            ? "Business Name: "
+                            : "Freelancer Name: ";
+
+            nameText.setText(nameLabel + provider.name);
+            nameText.setTextSize(16);
+            nameText.setTextColor(Color.parseColor("#292929"));
+            nameText.setTypeface(null, Typeface.BOLD);
+
+            LinearLayout.LayoutParams nameParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
+            nameParams.topMargin = dp(12);
+            nameText.setLayoutParams(nameParams);
+
+            card.addView(nameText);
+
+            // CATEGORY
+            TextView categoryText = new TextView(this);
+
+            categoryText.setText(
+                    "Category: " +
+                            (provider.category.isEmpty()
+                                    ? "Not specified"
+                                    : provider.category)
+            );
+
+            categoryText.setTextSize(14);
+            categoryText.setTextColor(Color.parseColor("#666666"));
+
+            LinearLayout.LayoutParams categoryParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
+            categoryParams.topMargin = dp(8);
+            categoryText.setLayoutParams(categoryParams);
+
+            card.addView(categoryText);
+
+            // VIEW DETAILS BUTTON
+            Button detailsButton = new Button(this);
+
+            detailsButton.setText("View Details");
+            detailsButton.setAllCaps(false);
+            detailsButton.setTextColor(Color.WHITE);
+            detailsButton.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            Color.parseColor("#176B50")
+                    )
+            );
+
+            LinearLayout.LayoutParams buttonParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            dp(48)
+                    );
+
+            buttonParams.topMargin = dp(14);
+            detailsButton.setLayoutParams(buttonParams);
+
+            detailsButton.setOnClickListener(v ->
+                    openProviderDetails(provider)
+            );
+
+            card.addView(detailsButton);
+
+            // ENTIRE CARD IS CLICKABLE
+            card.setOnClickListener(v ->
+                    openProviderDetails(provider)
+            );
+
+            marketProvidersList.addView(card);
         }
     }
 
-    // ADD PROVIDERS WITH LOCATIONS TO GOOGLE MAPS
-    private void updateMapMarkers() {
-
-        if (googleMap == null) return;
-
-        googleMap.clear();
-
-        for (ProviderItem provider : filteredProviders) {
-
-            if (provider.location == null) {
-                continue;
-            }
-
-            LatLng position = new LatLng(
-                    provider.location.getLatitude(),
-                    provider.location.getLongitude()
-            );
-
-            Marker marker = googleMap.addMarker(
-                    new MarkerOptions()
-                            .position(position)
-                            .title(provider.name)
-                            .snippet(provider.category)
-            );
-
-            if (marker != null) {
-                marker.setTag(provider);
-            }
-        }
-    }
 
     // OPEN SELECTED PROVIDER DETAILS
     private void openProviderDetails(ProviderItem provider) {
@@ -516,5 +595,13 @@ public class DiscoverActivity extends AppCompatActivity
         Intent intent = new Intent(this, destination);
         startActivity(intent);
         finish();
+    }
+
+    private int dp(float value) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                value,
+                getResources().getDisplayMetrics()
+        );
     }
 }

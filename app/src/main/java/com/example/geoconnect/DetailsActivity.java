@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,16 +60,11 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_details);
-        FreelancerUi.applyInsets(findViewById(android.R.id.content));
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        // CONNECT XML COMPONENTS
-        providerCoverImage =
-                findViewById(R.id.providerCoverImage);
 
         providerName =
                 findViewById(R.id.providerName);
@@ -181,11 +175,18 @@ public class DetailsActivity extends AppCompatActivity {
         // WRITE REVIEW
         writeReviewButton.setOnClickListener(v -> {
 
-            Toast.makeText(
-                    this,
-                    "Review page will be connected later",
-                    Toast.LENGTH_SHORT
-            ).show();
+
+            Intent intent = new Intent(
+                    DetailsActivity.this,
+                    ReviewActivity.class
+            );
+
+            intent.putExtra("providerId", currentProviderId);
+            intent.putExtra("providerType", currentProviderType);
+            intent.putExtra("providerName", currentProviderName);
+            intent.putExtra("providerCategory", currentProviderCategory);
+
+            startActivity(intent);
         });
     }
 
@@ -250,10 +251,11 @@ public class DetailsActivity extends AppCompatActivity {
                     String address = firstString(
                             document,
                             "address",
+                            "businessAddress",
+                            "physicalAddress",
                             "city",
                             "locationName"
                     );
-
                     providerDistance.setText(
                             address.isEmpty()
                                     ? "Location not available"
@@ -353,7 +355,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         firestore.collection("customers")
                 .document(user.getUid())
-                .collection("SavedProviders")
+                .collection("savedProviders")
                 .document(savedId)
                 .get()
                 .addOnSuccessListener(document -> {
@@ -401,7 +403,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             firestore.collection("customers")
                     .document(user.getUid())
-                    .collection("SavedProviders")
+                    .collection("savedProviders")
                     .document(savedId)
                     .set(savedProvider)
                     .addOnSuccessListener(unused -> {
@@ -428,7 +430,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             firestore.collection("customers")
                     .document(user.getUid())
-                    .collection("SavedProviders")
+                    .collection("savedProviders")
                     .document(savedId)
                     .delete()
                     .addOnSuccessListener(unused -> {

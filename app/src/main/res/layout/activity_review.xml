@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/glitter"
     tools:context=".ReviewActivity">
 
     <ScrollView
@@ -196,7 +197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
-                android:text="Tell us more"
+                android:text="Tell us more (Optional)"
                 android:textColor="#263A2C"
                 android:textSize="17sp"
                 android:textStyle="bold" />

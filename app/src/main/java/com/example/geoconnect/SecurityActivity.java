@@ -45,7 +45,7 @@ public class SecurityActivity extends AppCompatActivity {
         });
 
         btnDeleteAccount.setOnClickListener(v -> {
-            // Show a confirmation dialog first to prevent accidental deletions
+
             new AlertDialog.Builder(this)
                     .setTitle("Delete Account")
                     .setMessage("Are you sure you want to delete your account? This action is permanent and cannot be undone.")
@@ -72,13 +72,11 @@ public class SecurityActivity extends AppCompatActivity {
 
         // Disable button to prevent multi-clicks during network call
         btnDeleteAccount.setEnabled(false);
-
-        // 1. Fetch the user document to check their type ("customer", "business", etc.)
         db.collection("users").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     String userType = documentSnapshot.getString("type");
 
-                    // 2. Delete from the appropriate role-specific collection
+                    // Delete from the appropriate role-specific collection
                     com.google.android.gms.tasks.Task<Void> roleDeleteTask;
                     if ("customer".equals(userType)) {
                         roleDeleteTask = db.collection("customers").document(userId).delete();
@@ -92,16 +90,14 @@ public class SecurityActivity extends AppCompatActivity {
                     }
 
                     roleDeleteTask.addOnSuccessListener(aVoid -> {
-                        // 3. Delete from the general 'users' collection
                         db.collection("users").document(userId).delete()
                                 .addOnSuccessListener(aVoid2 -> {
 
-                                    // 4. Finally, delete the account from Firebase Authentication
+                                    // Delete the account from Firebase Authentication
                                     currentUser.delete().addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(this, "Your account has been completely deleted.", Toast.LENGTH_LONG).show();
 
-                                            // Redirect to SigninActivity and clear stack
                                             Intent intent = new Intent(this, SigninActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(intent);

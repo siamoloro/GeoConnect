@@ -101,7 +101,7 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
 
     private void loadProfileHeader() {
         if (mAuth.getCurrentUser() == null) return;
-        db.collection("Freelancers")
+        db.collection("freelancers")
                 .whereEqualTo("userID", mAuth.getCurrentUser().getUid())
                 .limit(1).get()
                 .addOnSuccessListener(snap -> {

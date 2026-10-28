@@ -8,15 +8,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-/**
- * Small helper shared by the freelancer and shared screens:
- * window insets, the Back link and the bottom navigation bar.
- */
+
 public final class FreelancerUi {
 
     private FreelancerUi() {}
 
-    /** Keeps content clear of the status bar and navigation bar. */
     public static void applyInsets(View root) {
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -25,13 +21,11 @@ public final class FreelancerUi {
         });
     }
 
-    /** Makes the "Back" link (id tvBack) close the current screen. */
     public static void setupBack(Activity a) {
         View back = a.findViewById(R.id.tvBack);
         if (back != null) back.setOnClickListener(v -> a.finish());
     }
 
-    /** Wires Home / Requests / Profile in the bottom bar. active = "Home", "Requests" or "Profile". */
     public static void setupNav(Activity a, String active) {
         bind(a, R.id.navHome, active, "Home", FreelancerDashboardActivity.class);
         bind(a, R.id.navRequests, active, "Requests", BookingRequestsActivity.class);

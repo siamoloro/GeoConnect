@@ -1,14 +1,16 @@
 
 package com.example.geoconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +37,7 @@ public class MyBookingActivity extends AppCompatActivity {
     private LinearLayout bookingsContainer;
     private LinearLayout emptyState;
     private TextView emptyMessage;
-    private TextView backButton;
+    private ImageView backButton;
 
     // BOOKING DATA
     private final List<DocumentSnapshot> allBookings =
@@ -47,9 +49,13 @@ public class MyBookingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_my_booking);
-        FreelancerUi.applyInsets(findViewById(android.R.id.content));
+
+        Toast.makeText(
+                this,
+                "My Bookings Activity opened",
+                Toast.LENGTH_LONG
+        ).show();
 
         // INITIALIZE FIREBASE
         firebaseAuth = FirebaseAuth.getInstance();
@@ -73,13 +79,13 @@ public class MyBookingActivity extends AppCompatActivity {
                         selectedStatus = "Pending";
 
                     } else if (checkedId == R.id.filterConfirmed) {
-                        selectedStatus = "Accepted";
+                        selectedStatus = "Confirmed";
 
                     } else if (checkedId == R.id.filterCompleted) {
                         selectedStatus = "Completed";
 
                     } else if (checkedId == R.id.filterRejected) {
-                        selectedStatus = "Declined";
+                        selectedStatus = "Rejected";
 
                     } else {
                         selectedStatus = "All";
@@ -107,7 +113,7 @@ public class MyBookingActivity extends AppCompatActivity {
 
         showMessage("Loading your bookings...");
 
-        bookingListener = firestore.collection("bookings")
+        bookingListener = firestore.collection("booking")
                 .whereEqualTo("customerID", customerId)
                 .addSnapshotListener((snapshot, error) -> {
 
@@ -242,7 +248,54 @@ public class MyBookingActivity extends AppCompatActivity {
 
         bookingCard.setLayoutParams(params);
 
-        bookingsContainer.addView(bookingCard);
+// ADD BOOKING INFORMATION TO CONTAINER
+        LinearLayout bookingItem = new LinearLayout(this);
+        bookingItem.setOrientation(LinearLayout.VERTICAL);
+
+        bookingItem.addView(bookingCard);
+
+// SHOW REVIEW BUTTON ONLY FOR COMPLETED BOOKINGS
+        if ("Completed".equalsIgnoreCase(status)) {
+
+            Button reviewButton = new Button(this);
+            reviewButton.setText("Write a Review");
+
+            reviewButton.setOnClickListener(v -> {
+
+                String bookingId = booking.getId();
+                String providerId = booking.getString("providerId");
+                String providerTypeValue = booking.getString("providerType");
+                String providerNameValue = booking.getString("providerName");
+                String providerCategoryValue = booking.getString("providerCategory");
+
+                if (providerId == null || providerTypeValue == null) {
+                    Toast.makeText(
+                            this,
+                            "Provider information missing",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+
+                Intent intent = new Intent(
+                        MyBookingActivity.this,
+                        ReviewActivity.class
+                );
+
+                intent.putExtra("bookingId", bookingId);
+                intent.putExtra("providerId", providerId);
+                intent.putExtra("providerType", providerTypeValue);
+                intent.putExtra("providerName", providerNameValue);
+                intent.putExtra("providerCategory", providerCategoryValue);
+                intent.putExtra("bookingStatus", status);
+
+                startActivity(intent);
+            });
+
+            bookingItem.addView(reviewButton);
+        }
+
+        bookingsContainer.addView(bookingItem);
     }
 
     // DISPLAY EMPTY, LOADING OR ERROR MESSAGE
