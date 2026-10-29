@@ -4,59 +4,91 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class OpenCaseActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+
+    private Spinner spCaseType;
+    private EditText etSubject, etDescription;
+    private Button btnSubmitCase;
+    private TextView tvBack, tvCancel, tvAttach;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_open_case);
-        FreelancerUi.applyInsets(findViewById(R.id.main));
-        FreelancerUi.setupBack(this);
 
-        Spinner spCaseType = findViewById(R.id.spCaseType);
-        EditText etSubject = findViewById(R.id.etSubject);
-        EditText etDescription = findViewById(R.id.etDescription);
-        Button btnSubmit = findViewById(R.id.btnSubmitCase);
+        // Initializes Firebase
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
-        findViewById(R.id.tvAttach).setOnClickListener(v -> {
-            //TODO: open the file/image picker and attach the file to the case
-            Toast.makeText(this, "Attachments coming soon", Toast.LENGTH_SHORT).show();
-        });
+        // Binds fields from your XML
+        spCaseType = findViewById(R.id.spCaseType);
+        etSubject = findViewById(R.id.etSubject);
+        etDescription = findViewById(R.id.etDescription);
+        btnSubmitCase = findViewById(R.id.btnSubmitCase);
+        tvBack = findViewById(R.id.tvBack);
+        tvCancel = findViewById(R.id.tvCancel);
+        tvAttach = findViewById(R.id.tvAttach);
 
-        btnSubmit.setOnClickListener(v -> {
+        // Back and Cancel actions
+        tvBack.setOnClickListener(v -> finish());
+        tvCancel.setOnClickListener(v -> finish());
+
+        // Submits Case Button Logic
+        btnSubmitCase.setOnClickListener(v -> {
+            String caseType = spCaseType.getSelectedItem() != null ? spCaseType.getSelectedItem().toString() : "";
             String subject = etSubject.getText().toString().trim();
             String description = etDescription.getText().toString().trim();
 
-            if (spCaseType.getSelectedItemPosition() == 0) {
-                Toast.makeText(this, "Please select a case type", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (subject.isEmpty()) {
-                etSubject.setError("Enter a short subject");
-                etSubject.requestFocus();
-                return;
-            }
-            if (description.length() < 10) {
-                etDescription.setError("Please describe the problem (at least 10 characters)");
-                etDescription.requestFocus();
+            if (subject.isEmpty() || description.isEmpty()) {
+                Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            //TODO: send the case type, subject, description and attachment to the backend/API
-            Toast.makeText(this, "Case submitted. We will reply within 24 hours.", Toast.LENGTH_SHORT).show();
-            finish();
+            // Gets currently logged-in user's email
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            String userEmail = (currentUser != null && currentUser.getEmail() != null)
+                    ? currentUser.getEmail()
+                    : "Anonymous";
+
+            // Generates unique identifiers
+            String caseId = UUID.randomUUID().toString();
+            long timestamp = System.currentTimeMillis();
+
+            // Constructs payload
+            Map<String, Object> reportData = new HashMap<>();
+            reportData.put("caseId", caseId);
+            reportData.put("email", userEmail);
+            reportData.put("title", "[" + caseType + "] " + subject);
+            reportData.put("reason", description);
+            reportData.put("status", "Pending");
+            reportData.put("timestamp", timestamp);
+
+            db.collection("reports")
+                    .document(caseId)
+                    .set(reportData)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "Case submitted successfully", Toast.LENGTH_SHORT).show();
+                        finish(); // Return to previous screen
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
         });
-
-        findViewById(R.id.tvCancel).setOnClickListener(v -> finish());
-
     }
 }

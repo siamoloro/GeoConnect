@@ -1,4 +1,3 @@
-
 package com.example.geoconnect;
 
 import android.content.Intent;
@@ -13,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.Timestamp;
@@ -167,6 +167,8 @@ public class CustomerSignupActivity extends AppCompatActivity {
 
                     batch.commit()
                             .addOnSuccessListener(unused -> {
+                                // Automatically add welcome notification
+                                addWelcomeNotification(userId);
 
                                 Toast.makeText(this,
                                         "Account created successfully!",
@@ -194,5 +196,17 @@ public class CustomerSignupActivity extends AppCompatActivity {
                                         Toast.LENGTH_LONG).show();
                             });
                 });
+    }
+
+    private void addWelcomeNotification(String userId) {
+        Map<String, Object> notificationMap = new HashMap<>();
+        notificationMap.put("title", "Welcome to GeoConnect");
+        notificationMap.put("content", "Your customer account has been successfully created. Explore nearby service providers and book appointments easily.");
+        notificationMap.put("timestamp", FieldValue.serverTimestamp());
+
+        firestore.collection("users")
+                .document(userId)
+                .collection("notifications")
+                .add(notificationMap);
     }
 }

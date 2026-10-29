@@ -8,7 +8,14 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class ChangePasswordActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,15 +25,17 @@ public class ChangePasswordActivity extends AppCompatActivity {
         FreelancerUi.applyInsets(findViewById(R.id.main));
         FreelancerUi.setupBack(this);
 
+        mAuth = FirebaseAuth.getInstance();
+
         EditText etCurrent = findViewById(R.id.etCurrentPassword);
         EditText etNew = findViewById(R.id.etNewPassword);
         EditText etConfirm = findViewById(R.id.etConfirmPassword);
         Button btnUpdate = findViewById(R.id.btnUpdatePassword);
 
         btnUpdate.setOnClickListener(v -> {
-            String current = etCurrent.getText().toString();
-            String newPass = etNew.getText().toString();
-            String confrim = etConfirm.getText().toString();
+            String current = etCurrent.getText().toString().trim();
+            String newPass = etNew.getText().toString().trim();
+            String confirm = etConfirm.getText().toString().trim();
 
             if (current.isEmpty()) {
                 etCurrent.setError("Enter your current password");
@@ -38,17 +47,40 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 etNew.requestFocus();
                 return;
             }
-            if (!newPass.equals(confrim)) {
+            if (!newPass.equals(confirm)) {
                 etConfirm.setError("Passwords do not match");
                 etConfirm.requestFocus();
                 return;
             }
-            //TODO: send the current and new password to the backend/API
-            Toast.makeText(this, "Password updated", Toast.LENGTH_SHORT).show();
-            finish();
+
+            FirebaseUser user = mAuth.getCurrentUser();
+            if (user != null && user.getEmail() != null) {
+
+                btnUpdate.setEnabled(false);
+
+                AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), current);
+
+                user.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
+                    if (reauthTask.isSuccessful()) {
+                        user.updatePassword(newPass).addOnCompleteListener(updateTask -> {
+                            btnUpdate.setEnabled(true);
+                            if (updateTask.isSuccessful()) {
+                                Toast.makeText(ChangePasswordActivity.this, "Password updated successfully", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(ChangePasswordActivity.this, "Failed to update password: " + updateTask.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        btnUpdate.setEnabled(true);
+                        etCurrent.setError("Incorrect current password");
+                        etCurrent.requestFocus();
+                        Toast.makeText(ChangePasswordActivity.this, "Authentication failed. Check your current password.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                Toast.makeText(this, "No active user session found.", Toast.LENGTH_SHORT).show();
+            }
         });
-
-        findViewById(R.id.tvCancel).setOnClickListener(v -> finish());
-
     }
 }

@@ -67,7 +67,7 @@ public class BookingsActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Connect Java to existing XML views
+        // Connects Java to existing XML views
         providerName = findViewById(R.id.providerName);
         providerCategory = findViewById(R.id.providerCategory);
         servicePrice = findViewById(R.id.servicePrice);
@@ -93,12 +93,12 @@ public class BookingsActivity extends AppCompatActivity {
         // Back button
         backButton.setOnClickListener(v -> finish());
 
-        // Prevent choosing previous dates
+        // Prevents choosing previous dates
         bookingDatePicker.setMinDate(
                 System.currentTimeMillis() - 1000
         );
 
-        // Get provider information from DetailsActivity
+        // Gets provider information from DetailsActivity
         Intent intent = getIntent();
 
         providerId = intent.getStringExtra("providerId");
@@ -120,7 +120,7 @@ public class BookingsActivity extends AppCompatActivity {
             return;
         }
 
-        // Load selected provider from Firebase
+        // Loads selected provider from Firebase
         loadProvider();
 
         // Booking request button

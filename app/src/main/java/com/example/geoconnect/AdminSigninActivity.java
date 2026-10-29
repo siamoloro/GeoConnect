@@ -1,19 +1,20 @@
 package com.example.geoconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.firestore.FirebaseFirestore;
-import android.content.Intent;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminSigninActivity extends AppCompatActivity {
 
-    FirebaseFirestore firestore;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,62 +22,52 @@ public class AdminSigninActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_signin);
 
-        firestore = FirebaseFirestore.getInstance();
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
-        TextInputEditText etUsername = findViewById(R.id.etUsername);
+        TextView textViewError = findViewById(R.id.textViewError);
+        TextInputEditText etUsername = findViewById(R.id.etUsername); // Acts as the email field
         TextInputEditText etPassword = findViewById(R.id.etPassword);
         MaterialButton btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> {
 
-            String username = etUsername.getText().toString().trim();
+            String email = etUsername.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (username.isEmpty() || password.isEmpty()) {
-
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(
                         AdminSigninActivity.this,
-                        "Please enter username and password",
+                        "Please enter email and password",
                         Toast.LENGTH_SHORT
                 ).show();
-
                 return;
             }
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            // Clear previous errors
+            textViewError.setText("");
 
-            db.collection("administrator")
-                    .whereEqualTo("userName", username)
-                    .whereEqualTo("password", password)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnSuccessListener(authResult -> {
+                        Toast.makeText(
+                                AdminSigninActivity.this,
+                                "Login Successful",
+                                Toast.LENGTH_SHORT
+                        ).show();
 
-                        if (!queryDocumentSnapshots.isEmpty())
-                        {
-                            Toast.makeText(
-                                    AdminSigninActivity.this,
-                                    "Login Successful",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-
-                            startActivity(
-                                    new Intent(
-                                            AdminSigninActivity.this,
-                                            AdminDashboardActivity.class));
-
-                            finish();
-                        }
-                        else
-                        {
-                            Toast.makeText(
-                                    AdminSigninActivity.this,
-                                    "Invalid Username or Password",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                        }
+                        startActivity(new Intent(
+                                AdminSigninActivity.this,
+                                AdminDashboardActivity.class));
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        textViewError.setText(e.getMessage());
+                        Toast.makeText(
+                                AdminSigninActivity.this,
+                                "Login Failed: " + e.getMessage(),
+                                Toast.LENGTH_LONG
+                        ).show();
                     });
         });
-
-
     }
 }
