@@ -107,12 +107,19 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
                 .addOnSuccessListener(snap -> {
                     if (snap.isEmpty()) return;
                     DocumentSnapshot d = snap.getDocuments().get(0);
+
                     String name = str(d, "fullName");
+                    if (name.isEmpty()) name = str(d, "name");
                     String first = name.isEmpty() ? "" : name.split("\\s+")[0];
                     tvGreeting.setText(first.isEmpty() ? "Hello" : "Hello, " + first);
-                    tvSubtitle.setText(str(d, "skills"));
+
+                    String category = str(d, "category");
+                    if (category.isEmpty()) category = str(d, "skills");
+                    tvSubtitle.setText(category);
+
                     Double rating = d.getDouble("rating");
-                    tvRating.setText(rating != null ? String.format(java.util.Locale.getDefault(), "%.1f", rating) : "—");
+                    tvRating.setText(rating != null
+                            ? String.format(java.util.Locale.getDefault(), "%.1f", rating) : "—");
                 });
     }
 

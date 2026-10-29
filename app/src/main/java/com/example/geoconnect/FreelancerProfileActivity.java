@@ -2,6 +2,7 @@ package com.example.geoconnect;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -9,6 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FreelancerProfileActivity extends AppCompatActivity {
@@ -57,6 +59,7 @@ public class FreelancerProfileActivity extends AppCompatActivity {
         super.onResume();
         loadFreelancerProfile();
     }
+
     private void loadFreelancerProfile() {
         if (mAuth.getCurrentUser() == null) return;
         String userId = mAuth.getCurrentUser().getUid();
@@ -66,63 +69,71 @@ public class FreelancerProfileActivity extends AppCompatActivity {
                 .limit(1)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        var document = queryDocumentSnapshots.getDocuments().get(0);
+                    if (queryDocumentSnapshots.isEmpty()) return;
+                    DocumentSnapshot document = queryDocumentSnapshots.getDocuments().get(0);
 
-                        String name = document.getString("name");
-                        if (name == null || name.isEmpty()) {
-                            name = document.getString("fullName");
-                        }
+                    String name = document.getString("fullName");
+                    if (name == null || name.isEmpty()) {
+                        name = document.getString("name");
+                    }
 
-                        String category = document.getString("category");
-                        String serviceArea = document.getString("serviceArea");
-                        String bio = document.getString("description");
-                        String phone = document.getString("phone");
+                    String category = document.getString("category");
+                    if (category == null || category.isEmpty()) {
+                        category = document.getString("skills");
+                    }
 
-                        // Fetch approval status from database
-                        String approvalStatus = document.getString("approvalStatus");
+                    String serviceArea = document.getString("serviceArea");
+                    String bio = document.getString("description");
+                    String phone = document.getString("phone");
 
-                        Double rating = document.getDouble("rating");
-                        Long reviewsCount = document.getLong("reviewsCount");
-                        Long jobsDone = document.getLong("jobsDone");
-                        String responseRate = document.getString("responseRate");
-                        String experience = document.getString("experience");
-                        String serviceRate1 = document.getString("serviceRate1");
+                    // Fetch approval status from database
+                    String approvalStatus = document.getString("approvalStatus");
 
-                        // Update standard UI fields
-                        if (tvProfileName != null) tvProfileName.setText(name != null ? name : "Unnamed Freelancer");
-                        if (tvProfileCategory != null && category != null) tvProfileCategory.setText(category);
-                        if (tvProfileServiceArea != null && serviceArea != null) tvProfileServiceArea.setText(serviceArea);
-                        if (tvProfilePhone != null && phone != null) tvProfilePhone.setText(phone);
-                        if (tvProfileBio != null && bio != null) tvProfileBio.setText(bio);
+                    Double rating = document.getDouble("rating");
+                    Long reviewsCount = document.getLong("reviewsCount");
+                    Long jobsDone = document.getLong("jobsDone");
+                    String responseRate = document.getString("responseRate");
+                    String experience = document.getString("experience");
 
-                        if (tvProfileRating != null && rating != null) {
-                            String reviews = reviewsCount != null ? " (" + reviewsCount + " reviews)" : "";
-                            tvProfileRating.setText("★ " + rating + reviews);
-                        }
-                        if (tvProfileJobsDone != null && jobsDone != null) tvProfileJobsDone.setText(String.valueOf(jobsDone));
-                        if (tvProfileResponse != null && responseRate != null) tvProfileResponse.setText(responseRate);
-                        if (tvProfileExperience != null && experience != null) tvProfileExperience.setText(experience);
-                        if (tvServiceRate1 != null && serviceRate1 != null) tvServiceRate1.setText(serviceRate1);
+                    // The hourly rate is saved as "rate" by the Edit profile screen
+                    String serviceRate1 = document.getString("rate");
+                    if (serviceRate1 != null && !serviceRate1.isEmpty()) {
+                        serviceRate1 = "R" + serviceRate1 + "/hr";
+                    } else {
+                        serviceRate1 = document.getString("serviceRate1");
+                    }
 
-                        // --- Dynamic Verified Badge Logic ---
-                        TextView tvVerifiedBadge = findViewById(R.id.tvVerifiedBadge); // Make sure to give your badge TextView this ID in XML if it doesn't have one
-                        if (tvVerifiedBadge != null) {
-                            if ("Approved".equalsIgnoreCase(approvalStatus) || "Verified".equalsIgnoreCase(approvalStatus)) {
-                                tvVerifiedBadge.setVisibility(android.view.View.VISIBLE);
-                                tvVerifiedBadge.setText(approvalStatus); // Displays "Approved" or "Verified"
-                            } else if ("Pending".equalsIgnoreCase(approvalStatus)) {
-                                tvVerifiedBadge.setVisibility(android.view.View.VISIBLE);
-                                tvVerifiedBadge.setText("Pending Approval");
-                            } else {
-                                // Hide badge or show unverified if status is missing/rejected
-                                tvVerifiedBadge.setVisibility(android.view.View.GONE);
-                            }
+                    // Update standard UI fields
+                    if (tvProfileName != null) tvProfileName.setText(name != null && !name.isEmpty() ? name : "Unnamed Freelancer");
+                    if (tvProfileCategory != null && category != null) tvProfileCategory.setText(category);
+                    if (tvProfileServiceArea != null && serviceArea != null) tvProfileServiceArea.setText(serviceArea);
+                    if (tvProfilePhone != null && phone != null) tvProfilePhone.setText(phone);
+                    if (tvProfileBio != null && bio != null) tvProfileBio.setText(bio);
+
+                    if (tvProfileRating != null && rating != null) {
+                        String reviews = reviewsCount != null ? " (" + reviewsCount + " reviews)" : "";
+                        tvProfileRating.setText("★ " + rating + reviews);
+                    }
+                    if (tvProfileJobsDone != null && jobsDone != null) tvProfileJobsDone.setText(String.valueOf(jobsDone));
+                    if (tvProfileResponse != null && responseRate != null) tvProfileResponse.setText(responseRate);
+                    if (tvProfileExperience != null && experience != null) tvProfileExperience.setText(experience);
+                    if (tvServiceRate1 != null && serviceRate1 != null) tvServiceRate1.setText(serviceRate1);
+
+                    // Dynamic verified badge
+                    TextView tvVerifiedBadge = findViewById(R.id.tvVerifiedBadge);
+                    if (tvVerifiedBadge != null) {
+                        if ("Approved".equalsIgnoreCase(approvalStatus) || "Verified".equalsIgnoreCase(approvalStatus)) {
+                            tvVerifiedBadge.setVisibility(View.VISIBLE);
+                            tvVerifiedBadge.setText(approvalStatus);
+                        } else if ("Pending".equalsIgnoreCase(approvalStatus)) {
+                            tvVerifiedBadge.setVisibility(View.VISIBLE);
+                            tvVerifiedBadge.setText("Pending Approval");
+                        } else {
+                            tvVerifiedBadge.setVisibility(View.GONE);
                         }
                     }
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this,
+                        "Failed to load profile: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }

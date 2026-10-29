@@ -81,6 +81,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                     DocumentSnapshot d = snap.getDocuments().get(0);
 
                     String name = str(d, "fullName");
+                    if (name.isEmpty()) name = str(d, "name");
                     etFullName.setText(name);
                     tvAvatar.setText(initialsOf(name));
                     etPhone.setText(str(d, "phone"));
@@ -89,7 +90,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                     etRate.setText(str(d, "rate"));
 
                     // Re-select the saved category so Save isn't blocked
-                    String saved = str(d, "skills");
+                    String saved = str(d, "category");
                     for (int i = 1; i < spCategory.getCount(); i++) {
                         if (spCategory.getItemAtPosition(i).toString().equals(saved)) {
                             spCategory.setSelection(i);
@@ -135,11 +136,14 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         Map<String, Object> data = new HashMap<>();
         data.put("fullName", name);
         data.put("phone", phone);
-        data.put("skills", category);
+        data.put("category", category);
         data.put("rate", rate);
         data.put("serviceArea", serviceArea);
         data.put("description", bio);
         data.put("userID", userId);
+        if (mAuth.getCurrentUser().getEmail() != null) {
+            data.put("email", mAuth.getCurrentUser().getEmail());
+        }
 
         db.collection("freelancers")
                 .whereEqualTo("userID", userId)
@@ -148,7 +152,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(snap -> {
                     if (!snap.isEmpty()) {
                         String docId = snap.getDocuments().get(0).getId();
-                        db.collection("Freelancers").document(docId)
+                        db.collection("freelancers").document(docId)
                                 .update(data)
                                 .addOnSuccessListener(a -> {
                                     Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
@@ -157,13 +161,13 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                                 .addOnFailureListener(e -> Toast.makeText(this,
                                         "Error updating: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                     } else {
-                        data.put("accountStatus", "Active");
-                        data.put("approvalStatus", "Pending");
-                        data.put("reviewStatus", "Pending");
+                        data.put("accountStatus", "active");
+                        data.put("approvalStatus", "pending");
+                        data.put("reviewStatus", "pending");
                         data.put("availability", true);
-                        db.collection("Freelancers")
-                                .add(data)
-                                .addOnSuccessListener(ref -> {
+                        db.collection("freelancers").document(userId)
+                                .set(data)
+                                .addOnSuccessListener(a -> {
                                     Toast.makeText(this, "Profile created successfully!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 })

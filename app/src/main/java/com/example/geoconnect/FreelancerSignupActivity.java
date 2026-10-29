@@ -100,26 +100,24 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                         db.collection("users").document(userId)
                                 .set(userAccount)
                                 .addOnSuccessListener(aVoid -> {
-                                    // 2. Store profile specifics in 'freelancers' collection with default profile metadata
+                                    // 2. Store profile specifics in 'freelancers' collection
                                     Map<String, Object> freelancerData = new HashMap<>();
                                     freelancerData.put("userID", userId);
+                                    freelancerData.put("email", email);
                                     freelancerData.put("fullName", name);
                                     freelancerData.put("phone", phone);
                                     freelancerData.put("accountStatus", "active");
                                     freelancerData.put("reviewStatus", "pending");
                                     freelancerData.put("approvalStatus", "pending");
                                     freelancerData.put("category", category);
-                                    freelancerData.put("description", "New freelancer on GeoConnect.");
-                                    freelancerData.put("serviceArea", "Johannesburg");
+                                    freelancerData.put("description", "");
+                                    freelancerData.put("serviceArea", "");
                                     freelancerData.put("availability", true);
 
-                                    // Default initial stats to match profile view components cleanly
-                                    freelancerData.put("rating", 5.0);
+                                    // Counters start at zero; rating, response rate and
+                                    // experience are only added once real data exists
                                     freelancerData.put("reviewsCount", 0L);
                                     freelancerData.put("jobsDone", 0L);
-                                    freelancerData.put("responseRate", "100%");
-                                    freelancerData.put("experience", "1 yr");
-                                    freelancerData.put("serviceRate1", "R350");
 
                                     db.collection("freelancers").document(userId)
                                             .set(freelancerData)
