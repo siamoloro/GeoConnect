@@ -23,7 +23,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
-    private EditText etFullName, etPhone, etRate, etServiceArea, etBio;
+    private EditText etFullName, etPhone, etRate, etExperience, etServiceArea, etBio;
     private Spinner spCategory;
     private TextView tvAvatar;
 
@@ -43,6 +43,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etPhone);
         spCategory = findViewById(R.id.spCategory);
         etRate = findViewById(R.id.etRate);
+        etExperience = findViewById(R.id.etExperience);
         etServiceArea = findViewById(R.id.etServiceArea);
         etBio = findViewById(R.id.etBio);
         Button btnSave = findViewById(R.id.btnSaveChanges);
@@ -88,6 +89,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                     etServiceArea.setText(str(d, "serviceArea"));
                     etBio.setText(str(d, "description"));
                     etRate.setText(str(d, "rate"));
+                    etExperience.setText(str(d, "experienceYears"));
 
                     // Re-select the saved category so Save isn't blocked
                     String saved = str(d, "category");
@@ -106,6 +108,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         String name = etFullName.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
         String rate = etRate.getText().toString().trim();
+        String experience = etExperience.getText().toString().trim();
         String serviceArea = etServiceArea.getText().toString().trim();
         String bio = etBio.getText().toString().trim();
         String category = spCategory.getSelectedItem() != null ? spCategory.getSelectedItem().toString() : "";
@@ -129,6 +132,12 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
             etRate.requestFocus();
             return;
         }
+        if (!experience.isEmpty()
+                && (!TextUtils.isDigitsOnly(experience) || experience.length() > 2)) {
+            etExperience.setError("Enter whole years, for example 3");
+            etExperience.requestFocus();
+            return;
+        }
 
         if (mAuth.getCurrentUser() == null) return;
         String userId = mAuth.getCurrentUser().getUid();
@@ -141,6 +150,9 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         data.put("serviceArea", serviceArea);
         data.put("description", bio);
         data.put("userID", userId);
+        if (!experience.isEmpty()) {
+            data.put("experienceYears", Long.parseLong(experience));
+        }
         if (mAuth.getCurrentUser().getEmail() != null) {
             data.put("email", mAuth.getCurrentUser().getEmail());
         }
