@@ -146,32 +146,42 @@ public class FreelancerProfileActivity extends AppCompatActivity {
     // Jobs done and response rate are calculated from this freelancer's real bookings
     private void loadBookingStats() {
         if (mAuth.getCurrentUser() == null) return;
+        String uid = mAuth.getCurrentUser().getUid();
 
-        db.collection("booking")
-                .whereEqualTo("providerID", mAuth.getCurrentUser().getUid())
+        // Bookings store the freelancer's document ID in "providerId"
+        db.collection("freelancers")
+                .whereEqualTo("userID", uid)
+                .limit(1)
                 .get()
-                .addOnSuccessListener(snap -> {
-                    int total = 0;
-                    int answered = 0;
-                    int completed = 0;
+                .addOnSuccessListener(fs -> {
+                    String providerId = fs.isEmpty() ? uid : fs.getDocuments().get(0).getId();
 
-                    for (DocumentSnapshot b : snap.getDocuments()) {
-                        total++;
-                        String status = str(b, "status");
-                        if (!"Pending".equalsIgnoreCase(status) && !status.isEmpty()) answered++;
-                        if ("Completed".equalsIgnoreCase(status)) completed++;
-                    }
+                    db.collection("booking")
+                            .whereEqualTo("providerId", providerId)
+                            .get()
+                            .addOnSuccessListener(snap -> {
+                                int total = 0;
+                                int answered = 0;
+                                int completed = 0;
 
-                    tvProfileJobsDone.setText(String.valueOf(completed));
-                    if (total == 0) {
-                        tvProfileResponse.setText("—");
-                    } else {
-                        tvProfileResponse.setText(Math.round(answered * 100f / total) + "%");
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    tvProfileJobsDone.setText("—");
-                    tvProfileResponse.setText("—");
+                                for (DocumentSnapshot b : snap.getDocuments()) {
+                                    total++;
+                                    String status = str(b, "status");
+                                    if (!status.isEmpty() && !"Pending".equalsIgnoreCase(status)) answered++;
+                                    if ("Completed".equalsIgnoreCase(status)) completed++;
+                                }
+
+                                tvProfileJobsDone.setText(String.valueOf(completed));
+                                if (total == 0) {
+                                    tvProfileResponse.setText("—");
+                                } else {
+                                    tvProfileResponse.setText(Math.round(answered * 100f / total) + "%");
+                                }
+                            })
+                            .addOnFailureListener(e -> {
+                                tvProfileJobsDone.setText("—");
+                                tvProfileResponse.setText("—");
+                            });
                 });
     }
 }
