@@ -208,6 +208,7 @@ public class BookingsActivity extends AppCompatActivity {
 
         serviceNames.clear();
 
+        // 1. Check whether the provider has services
         Object services = document.get("services");
 
         if (services instanceof List<?>) {
@@ -217,29 +218,40 @@ public class BookingsActivity extends AppCompatActivity {
                 if (item instanceof String &&
                         !((String) item).trim().isEmpty()) {
 
-                    serviceNames.add(
-                            ((String) item).trim()
-                    );
+                    serviceNames.add(((String) item).trim());
                 }
             }
         }
 
+        // 2. If no services exist, use the provider's category
+        // Works for BOTH businesses and freelancers
         if (serviceNames.isEmpty()) {
 
-            serviceNames.add("No services available");
-            servicesLoaded = false;
+            String category = firstString(
+                    document,
+                    "category",
+                    "serviceCategory",
+                    "service"
+            );
 
-        } else {
-
-            servicesLoaded = true;
+            if (!category.isEmpty()) {
+                serviceNames.add(category);
+            }
         }
 
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(
-                        this,
-                        android.R.layout.simple_spinner_item,
-                        serviceNames
-                );
+        // 3. Check if a valid booking option exists
+        servicesLoaded = !serviceNames.isEmpty();
+
+        if (!servicesLoaded) {
+            serviceNames.add("No services available");
+        }
+
+        // 4. Display services or category
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                serviceNames
+        );
 
         adapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item
@@ -247,10 +259,12 @@ public class BookingsActivity extends AppCompatActivity {
 
         serviceSpinner.setAdapter(adapter);
 
+        // 5. Display price information
         servicePrice.setText(
                 "Price will be confirmed by the provider"
         );
 
+        // 6. Enable booking if a valid option exists
         submitBookingButton.setEnabled(
                 providerLoaded && servicesLoaded
         );

@@ -330,18 +330,36 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         }
     }
 
-    // CHECK WHETHER A PROVIDER MATCHES THE SEARCH (Updated with fullName check)
+    // SEARCH PROVIDERS BY NAME, CATEGORY AND SERVICES
     private boolean matchesQuery(DocumentSnapshot document, String query) {
-        String searchText = (
-                safeValue(document, "name") + " " +
-                        safeValue(document, "businessName") + " " +
-                        safeValue(document, "fullname") + " " +
-                        safeValue(document, "fullName") + " " + // Fixed field mismatch
-                        safeValue(document, "category") + " " +
-                        safeValue(document, "service")
-        ).toLowerCase(Locale.ROOT);
 
-        return searchText.contains(query.toLowerCase(Locale.ROOT));
+        StringBuilder searchText = new StringBuilder();
+
+        // Provider names and categories
+        searchText.append(safeValue(document, "name")).append(" ");
+        searchText.append(safeValue(document, "businessName")).append(" ");
+        searchText.append(safeValue(document, "fullname")).append(" ");
+        searchText.append(safeValue(document, "fullName")).append(" ");
+        searchText.append(safeValue(document, "category")).append(" ");
+        searchText.append(safeValue(document, "serviceCategory")).append(" ");
+        searchText.append(safeValue(document, "service")).append(" ");
+
+        // Business or freelancer services stored as an array
+        Object services = document.get("services");
+
+        if (services instanceof List<?>) {
+
+            for (Object item : (List<?>) services) {
+
+                if (item instanceof String) {
+                    searchText.append((String) item).append(" ");
+                }
+            }
+        }
+
+        return searchText.toString()
+                .toLowerCase(Locale.ROOT)
+                .contains(query.trim().toLowerCase(Locale.ROOT));
     }
 
     private String safeValue(DocumentSnapshot document, String field) {
