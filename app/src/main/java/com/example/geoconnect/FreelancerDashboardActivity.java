@@ -69,11 +69,11 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnAccept1).setOnClickListener(v -> {
-            if (activeBookingId != null) updateBookingStatus(activeBookingId, "Accepted");
+            if (activeBookingId != null) BookingStatusHelper.update(this, activeBookingId, "Confirmed", this::loadBookings);
             else Toast.makeText(this, "No active request to accept", Toast.LENGTH_SHORT).show();
         });
         findViewById(R.id.btnDecline1).setOnClickListener(v -> {
-            if (activeBookingId != null) updateBookingStatus(activeBookingId, "Declined");
+            if (activeBookingId != null) BookingStatusHelper.update(this, activeBookingId, "Rejected", this::loadBookings);
             else Toast.makeText(this, "No active request to decline", Toast.LENGTH_SHORT).show();
         });
     }
@@ -107,12 +107,19 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
                 .addOnSuccessListener(snap -> {
                     if (snap.isEmpty()) return;
                     DocumentSnapshot d = snap.getDocuments().get(0);
+
                     String name = str(d, "fullName");
+                    if (name.isEmpty()) name = str(d, "name");
                     String first = name.isEmpty() ? "" : name.split("\\s+")[0];
                     tvGreeting.setText(first.isEmpty() ? "Hello" : "Hello, " + first);
-                    tvSubtitle.setText(str(d, "skills"));
+
+                    String category = str(d, "category");
+                    if (category.isEmpty()) category = str(d, "skills");
+                    tvSubtitle.setText(category);
+
                     Double rating = d.getDouble("rating");
-                    tvRating.setText(rating != null ? String.format(java.util.Locale.getDefault(), "%.1f", rating) : "—");
+                    tvRating.setText(rating != null
+                            ? String.format(java.util.Locale.getDefault(), "%.1f", rating) : "—");
                 });
     }
 
@@ -139,64 +146,73 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
                         "Failed to update availability: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
-    private void loadBookings() {
-        if (mAuth.getCurrentUser() == null) return;
-        db.collection("bookings")
-                .whereEqualTo("providerID", mAuth.getCurrentUser().getUid())
-                .get()
-                .addOnSuccessListener(snap -> {
-                    List<DocumentSnapshot> pending = new ArrayList<>();
-                    List<DocumentSnapshot> accepted = new ArrayList<>();
-                    for (DocumentSnapshot d : snap.getDocuments()) {
-                        String status = str(d, "status");
-                        if ("Pending".equals(status)) pending.add(d);
-                        else if ("Accepted".equals(status)) accepted.add(d);
-                    }
-
-                    tvNewCount.setText(String.valueOf(pending.size()));
-                    tvAcceptedCount.setText(String.valueOf(accepted.size()));
-
-                    if (pending.isEmpty()) {
-                        activeBookingId = null;
-                        cardRequest.setVisibility(View.GONE);
-                    } else {
-                        DocumentSnapshot d = pending.get(0);
-                        activeBookingId = d.getId();
-                        String customer = str(d, "customerName");
-                        String initials = str(d, "initials");
-                        tvInitials.setText(initials.isEmpty() ? initialsOf(customer) : initials);
-                        tvCustomerName.setText(customer);
-                        tvServiceDetails.setText(str(d, "serviceTitle") + " · " + str(d, "dateTime"));
-                        tvPrice.setText(str(d, "price"));
-                        cardRequest.setVisibility(View.VISIBLE);
-                    }
-
-                    for (int i = 0; i < upCards.length; i++) {
-                        if (i < accepted.size()) {
-                            DocumentSnapshot d = accepted.get(i);
-                            String customer = str(d, "customerName");
-                            String initials = str(d, "initials");
-                            upInitials[i].setText(initials.isEmpty() ? initialsOf(customer) : initials);
-                            upTitle[i].setText(customer + " · " + str(d, "serviceTitle"));
-                            upSub[i].setText(str(d, "dateTime") + " · " + str(d, "location"));
-                            upCards[i].setVisibility(View.VISIBLE);
-                        } else {
-                            upCards[i].setVisibility(View.GONE);
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(this,
-                        "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    private String whenOf(DocumentSnapshot d) {
+        com.google.firebase.Timestamp t = d.getTimestamp("bookingDate");
+        if (t == null) return "";
+        return java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.MEDIUM, java.text.DateFormat.SHORT).format(t.toDate());
     }
 
-    private void updateBookingStatus(String docId, String newStatus) {
-        db.collection("bookings").document(docId)
-                .update("status", newStatus)
-                .addOnSuccessListener(a -> {
-                    Toast.makeText(this, "Request " + newStatus.toLowerCase(), Toast.LENGTH_SHORT).show();
-                    loadBookings();
+    private void loadBookings() {
+        if (mAuth.getCurrentUser() == null) return;
+        String uid = mAuth.getCurrentUser().getUid();
+
+        // Bookings store the freelancer's document ID in "providerId"
+        db.collection("freelancers")
+                .whereEqualTo("userID", uid)
+                .limit(1).get()
+                .addOnSuccessListener(fs -> {
+                    String providerId = fs.isEmpty() ? uid : fs.getDocuments().get(0).getId();
+                    db.collection("booking")
+                            .whereEqualTo("providerId", providerId)
+                            .get()
+                            .addOnSuccessListener(snap -> showBookings(snap.getDocuments()))
+                            .addOnFailureListener(e -> Toast.makeText(this,
+                                    "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 })
                 .addOnFailureListener(e -> Toast.makeText(this,
-                        "Error updating request: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        "Failed to load profile: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void showBookings(List<DocumentSnapshot> docs) {
+        List<DocumentSnapshot> pending = new ArrayList<>();
+        List<DocumentSnapshot> accepted = new ArrayList<>();
+        for (DocumentSnapshot d : docs) {
+            String status = str(d, "status");
+            if (status.isEmpty() || "Pending".equalsIgnoreCase(status)) pending.add(d);
+            else if ("Confirmed".equalsIgnoreCase(status) || "Accepted".equalsIgnoreCase(status)) accepted.add(d);
+        }
+
+        tvNewCount.setText(String.valueOf(pending.size()));
+        tvAcceptedCount.setText(String.valueOf(accepted.size()));
+
+        if (pending.isEmpty()) {
+            activeBookingId = null;
+            cardRequest.setVisibility(View.GONE);
+        } else {
+            DocumentSnapshot d = pending.get(0);
+            activeBookingId = d.getId();
+            String customer = str(d, "customerName");
+            if (customer.isEmpty()) customer = "Customer";
+            tvInitials.setText(initialsOf(customer));
+            tvCustomerName.setText(customer);
+            tvServiceDetails.setText(str(d, "service") + " · " + whenOf(d));
+            tvPrice.setText(str(d, "price"));
+            cardRequest.setVisibility(View.VISIBLE);
+        }
+
+        for (int i = 0; i < upCards.length; i++) {
+            if (i < accepted.size()) {
+                DocumentSnapshot d = accepted.get(i);
+                String customer = str(d, "customerName");
+                if (customer.isEmpty()) customer = "Customer";
+                upInitials[i].setText(initialsOf(customer));
+                upTitle[i].setText(customer + " · " + str(d, "service"));
+                upSub[i].setText(whenOf(d) + " · " + str(d, "location"));
+                upCards[i].setVisibility(View.VISIBLE);
+            } else {
+                upCards[i].setVisibility(View.GONE);
+            }
+        }
     }
 }

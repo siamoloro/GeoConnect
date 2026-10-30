@@ -151,15 +151,6 @@ public class ReviewActivity extends AppCompatActivity {
             return;
         }
 
-        // CHECK COMMENT
-        if (comment.isEmpty()) {
-            reviewCommentInput.setError(
-                    "Please write a review"
-            );
-            reviewCommentInput.requestFocus();
-            return;
-        }
-
         // COLLECT SELECTED TAGS
         ArrayList<String> selectedTags = new ArrayList<>();
 
@@ -258,6 +249,17 @@ public class ReviewActivity extends AppCompatActivity {
                                         Toast.LENGTH_LONG
                                 ).show();
 
+                                Intent intent = new Intent(
+                                        ReviewActivity.this,
+                                        MyBookingActivity.class
+                                );
+
+                                intent.addFlags(
+                                        Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                                Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                );
+
+                                startActivity(intent);
                                 finish();
                             })
                             .addOnFailureListener(e -> {

@@ -298,7 +298,8 @@ public class DiscoverActivity extends AppCompatActivity
                                 document,
                                 "name",
                                 "businessName",
-                                "fullname"
+                                "fullname",
+                                "fullName"
                         );
 
                         String category = getFirstAvailable(
@@ -312,8 +313,15 @@ public class DiscoverActivity extends AppCompatActivity
                             continue;
                         }
 
-                        GeoPoint location =
-                                document.getGeoPoint("location");
+                        // Support both GeoPoint and individual latitude/longitude fields
+                        GeoPoint location = document.getGeoPoint("location");
+                        if (location == null) {
+                            Double lat = document.getDouble("latitude");
+                            Double lng = document.getDouble("longitude");
+                            if (lat != null && lng != null) {
+                                location = new GeoPoint(lat, lng);
+                            }
+                        }
 
                         providers.add(new ProviderItem(
                                 document.getId(),
@@ -335,7 +343,6 @@ public class DiscoverActivity extends AppCompatActivity
                     finishProviderRequest();
                 });
     }
-
     private void finishProviderRequest() {
 
         completedRequests++;

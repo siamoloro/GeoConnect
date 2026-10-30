@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +24,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_change_password);
         FreelancerUi.applyInsets(findViewById(R.id.main));
-        FreelancerUi.setupBack(this);
+
+        // This screen uses a toolbar arrow, not a "tvBack" text link,
+        // so the arrow must be wired to close the screen here
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         mAuth = FirebaseAuth.getInstance();
 

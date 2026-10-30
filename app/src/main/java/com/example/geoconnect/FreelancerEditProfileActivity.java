@@ -23,7 +23,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
 
-    private EditText etFullName, etPhone, etRate, etServiceArea, etBio;
+    private EditText etFullName, etPhone, etRate, etExperience, etServiceArea, etBio;
     private Spinner spCategory;
     private TextView tvAvatar;
 
@@ -43,6 +43,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etPhone);
         spCategory = findViewById(R.id.spCategory);
         etRate = findViewById(R.id.etRate);
+        etExperience = findViewById(R.id.etExperience);
         etServiceArea = findViewById(R.id.etServiceArea);
         etBio = findViewById(R.id.etBio);
         Button btnSave = findViewById(R.id.btnSaveChanges);
@@ -81,15 +82,17 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                     DocumentSnapshot d = snap.getDocuments().get(0);
 
                     String name = str(d, "fullName");
+                    if (name.isEmpty()) name = str(d, "name");
                     etFullName.setText(name);
                     tvAvatar.setText(initialsOf(name));
                     etPhone.setText(str(d, "phone"));
                     etServiceArea.setText(str(d, "serviceArea"));
                     etBio.setText(str(d, "description"));
                     etRate.setText(str(d, "rate"));
+                    etExperience.setText(str(d, "experienceYears"));
 
                     // Re-select the saved category so Save isn't blocked
-                    String saved = str(d, "skills");
+                    String saved = str(d, "category");
                     for (int i = 1; i < spCategory.getCount(); i++) {
                         if (spCategory.getItemAtPosition(i).toString().equals(saved)) {
                             spCategory.setSelection(i);
@@ -105,6 +108,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         String name = etFullName.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
         String rate = etRate.getText().toString().trim();
+        String experience = etExperience.getText().toString().trim();
         String serviceArea = etServiceArea.getText().toString().trim();
         String bio = etBio.getText().toString().trim();
         String category = spCategory.getSelectedItem() != null ? spCategory.getSelectedItem().toString() : "";
@@ -128,6 +132,12 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
             etRate.requestFocus();
             return;
         }
+        if (!experience.isEmpty()
+                && (!TextUtils.isDigitsOnly(experience) || experience.length() > 2)) {
+            etExperience.setError("Enter whole years, for example 3");
+            etExperience.requestFocus();
+            return;
+        }
 
         if (mAuth.getCurrentUser() == null) return;
         String userId = mAuth.getCurrentUser().getUid();
@@ -135,11 +145,17 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
         Map<String, Object> data = new HashMap<>();
         data.put("fullName", name);
         data.put("phone", phone);
-        data.put("skills", category);
+        data.put("category", category);
         data.put("rate", rate);
         data.put("serviceArea", serviceArea);
         data.put("description", bio);
         data.put("userID", userId);
+        if (!experience.isEmpty()) {
+            data.put("experienceYears", Long.parseLong(experience));
+        }
+        if (mAuth.getCurrentUser().getEmail() != null) {
+            data.put("email", mAuth.getCurrentUser().getEmail());
+        }
 
         db.collection("freelancers")
                 .whereEqualTo("userID", userId)
@@ -148,7 +164,7 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(snap -> {
                     if (!snap.isEmpty()) {
                         String docId = snap.getDocuments().get(0).getId();
-                        db.collection("Freelancers").document(docId)
+                        db.collection("freelancers").document(docId)
                                 .update(data)
                                 .addOnSuccessListener(a -> {
                                     Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
@@ -157,13 +173,13 @@ public class FreelancerEditProfileActivity extends AppCompatActivity {
                                 .addOnFailureListener(e -> Toast.makeText(this,
                                         "Error updating: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                     } else {
-                        data.put("accountStatus", "Active");
-                        data.put("approvalStatus", "Pending");
-                        data.put("reviewStatus", "Pending");
+                        data.put("accountStatus", "active");
+                        data.put("approvalStatus", "pending");
+                        data.put("reviewStatus", "pending");
                         data.put("availability", true);
-                        db.collection("Freelancers")
-                                .add(data)
-                                .addOnSuccessListener(ref -> {
+                        db.collection("freelancers").document(userId)
+                                .set(data)
+                                .addOnSuccessListener(a -> {
                                     Toast.makeText(this, "Profile created successfully!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 })

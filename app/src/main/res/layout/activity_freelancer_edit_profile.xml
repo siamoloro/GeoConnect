@@ -160,6 +160,26 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="@color/black" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Years of experience"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginTop="14dp" />
+
+        <EditText
+            android:id="@+id/etExperience"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_input"
+            android:hint="e.g. 3"
+            android:inputType="number"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/black" />
 
         <TextView
             android:layout_width="wrap_content"

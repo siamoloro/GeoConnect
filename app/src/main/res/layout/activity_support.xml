@@ -43,7 +43,9 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_input"
             android:hint="Search for help"
+            android:textColorHint="#5A6B5A"
             android:inputType="text"
+            android:maxLines="1"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="@color/black" />
@@ -57,163 +59,23 @@
             android:textStyle="bold"
             android:layout_marginTop="22dp" />
 
+        <!-- FAQ rows are added here by SupportActivity -->
         <LinearLayout
+            android:id="@+id/faqContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_card"
-            android:padding="14dp">
+            android:layout_marginTop="2dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="How do I book a service?"
-                android:textColor="@color/forest_green"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Search for a business or freelancer, open their profile, choose a service and send a booking request."
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:layout_marginTop="6dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvNoResults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_card"
-            android:padding="12dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="How do I reset my password?"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/forest_green"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_card"
-            android:padding="12dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="How are freelancers verified?"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/forest_green"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_card"
-            android:padding="12dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="How do I cancel a booking?"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/forest_green"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_card"
-            android:padding="12dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="How do I leave a review?"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="›"
-                    android:textColor="@color/forest_green"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+            android:text="No matching questions. Try different words, or open a case below."
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"

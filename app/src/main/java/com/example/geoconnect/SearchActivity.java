@@ -69,8 +69,7 @@ public class SearchActivity extends AppCompatActivity {
                     "name", "businessName", "fullname");
             this.category = firstString(doc,
                     "category", "serviceCategory");
-            this.service = firstString(doc,
-                    "service", "serviceName");
+            this.service = readServices(doc);
             this.location = firstString(doc,
                     "address", "locationName", "city");
         }
@@ -89,6 +88,24 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         return "";
+    }
+    private static String readServices(DocumentSnapshot doc) {
+
+        Object value = doc.get("services");
+
+        if (value instanceof List<?>) {
+            StringBuilder services = new StringBuilder();
+
+            for (Object item : (List<?>) value) {
+                if (item instanceof String) {
+                    services.append(item).append(" ");
+                }
+            }
+
+            return services.toString().trim();
+        }
+
+        return firstString(doc, "services", "service", "serviceName");
     }
 
     @Override
