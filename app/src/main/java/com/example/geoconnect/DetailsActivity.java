@@ -172,19 +172,30 @@ public class DetailsActivity extends AppCompatActivity {
             startActivity(bookingIntent);
         });
 
-        // WRITE REVIEW
+        // WRITE REVIEW - CUSTOMER MUST HAVE A COMPLETED BOOKING
         writeReviewButton.setOnClickListener(v -> {
 
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+
+            if (user == null) {
+                Toast.makeText(
+                        this,
+                        "Please log in to review a provider",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
+
+            Toast.makeText(
+                    this,
+                    "Select a completed booking to write your review",
+                    Toast.LENGTH_LONG
+            ).show();
 
             Intent intent = new Intent(
                     DetailsActivity.this,
-                    ReviewActivity.class
+                    MyBookingActivity.class
             );
-
-            intent.putExtra("providerId", currentProviderId);
-            intent.putExtra("providerType", currentProviderType);
-            intent.putExtra("providerName", currentProviderName);
-            intent.putExtra("providerCategory", currentProviderCategory);
 
             startActivity(intent);
         });
@@ -236,16 +247,8 @@ public class DetailsActivity extends AppCompatActivity {
                     providerCategory.setText(currentProviderCategory);
                     providerDescription.setText(description);
 
-                    // SHOW RATING ONLY IF STORED
-                    Object ratingValue = document.get("rating");
-
-                    if (ratingValue instanceof Number) {
-                        providerRating.setText(
-                                String.valueOf(ratingValue)
-                        );
-                    } else {
-                        providerRating.setText("No ratings yet");
-                    }
+                    // LOAD ACTUAL RATINGS FROM CUSTOMER REVIEWS
+                    loadProviderRating();
 
                     // SHOW ADDRESS, NOT AN INVENTED DISTANCE
                     String address = firstString(
@@ -283,6 +286,75 @@ public class DetailsActivity extends AppCompatActivity {
                             "Unable to load provider: "
                                     + e.getMessage(),
                             Toast.LENGTH_LONG).show();
+                });
+    }
+
+    // CALCULATE PROVIDER'S AVERAGE RATING FROM FIRESTORE
+    private void loadProviderRating() {
+
+        providerRating.setText("Loading rating...");
+
+        firestore.collection("reviews")
+                .whereEqualTo("providerId", currentProviderId)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+
+                    double totalRating = 0;
+                    int reviewCount = 0;
+
+                    for (DocumentSnapshot review : snapshot.getDocuments()) {
+
+                        String reviewProviderType =
+                                review.getString("providerType");
+
+                        // Only include reviews for this provider type
+                        if (reviewProviderType == null ||
+                                !reviewProviderType.equalsIgnoreCase(
+                                        currentProviderType)) {
+                            continue;
+                        }
+
+                        Object ratingValue = review.get("rating");
+
+                        if (ratingValue instanceof Number) {
+
+                            double rating =
+                                    ((Number) ratingValue).doubleValue();
+
+                            if (rating >= 1 && rating <= 5) {
+                                totalRating += rating;
+                                reviewCount++;
+                            }
+                        }
+                    }
+
+                    if (reviewCount > 0) {
+
+                        double averageRating =
+                                totalRating / reviewCount;
+
+                        providerRating.setText(
+                                String.format(
+                                        java.util.Locale.US,
+                                        "★ %.1f (%d reviews)",
+                                        averageRating,
+                                        reviewCount
+                                )
+                        );
+
+                    } else {
+                        providerRating.setText("No ratings yet");
+                    }
+                })
+                .addOnFailureListener(e -> {
+
+                    providerRating.setText("Rating unavailable");
+
+                    android.util.Log.e(
+                            "DETAILS_RATING",
+                            "Unable to load provider reviews",
+                            e
+                    );
                 });
     }
 
