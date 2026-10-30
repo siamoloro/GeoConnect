@@ -148,7 +148,7 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
 
     private void loadBookings() {
         if (mAuth.getCurrentUser() == null) return;
-        db.collection("bookings")
+        db.collection("booking")
                 .whereEqualTo("providerID", mAuth.getCurrentUser().getUid())
                 .get()
                 .addOnSuccessListener(snap -> {
@@ -197,7 +197,7 @@ public class FreelancerDashboardActivity extends AppCompatActivity {
     }
 
     private void updateBookingStatus(String docId, String newStatus) {
-        db.collection("bookings").document(docId)
+        db.collection("booking").document(docId)
                 .update("status", newStatus)
                 .addOnSuccessListener(a -> {
                     Toast.makeText(this, "Request " + newStatus.toLowerCase(), Toast.LENGTH_SHORT).show();

@@ -81,7 +81,7 @@ public class BookingRequestsActivity extends AppCompatActivity {
                         String freelancerId = freelancerSnapshots.getDocuments().get(0).getId();
 
                         // Field names must match what BookingsActivity writes (providerID, service, bookingDate)
-                        db.collection("bookings")
+                        db.collection("booking")
                                 .whereEqualTo("status", status)
                                 .whereEqualTo("providerID", freelancerId)
                                 .get()
@@ -116,7 +116,7 @@ public class BookingRequestsActivity extends AppCompatActivity {
     }
 
     private void updateBookingStatus(String docId, String newStatus) {
-        db.collection("bookings").document(docId)
+        db.collection("booking").document(docId)
                 .update("status", newStatus)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Booking " + newStatus.toLowerCase(), Toast.LENGTH_SHORT).show();

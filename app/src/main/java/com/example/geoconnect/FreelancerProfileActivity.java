@@ -147,7 +147,7 @@ public class FreelancerProfileActivity extends AppCompatActivity {
     private void loadBookingStats() {
         if (mAuth.getCurrentUser() == null) return;
 
-        db.collection("bookings")
+        db.collection("booking")
                 .whereEqualTo("providerID", mAuth.getCurrentUser().getUid())
                 .get()
                 .addOnSuccessListener(snap -> {
