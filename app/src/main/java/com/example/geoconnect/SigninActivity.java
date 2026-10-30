@@ -3,6 +3,7 @@ package com.example.geoconnect;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -70,6 +71,18 @@ public class SigninActivity extends AppCompatActivity {
         // Basic Validation
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             showError("Please enter both email and password.");
+            return;
+        }
+
+        // Validates email format using Android Patterns regex
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            showError("Please enter a valid email address.");
+            return;
+        }
+
+        // Validates password requirements (minimum 9 characters)
+        if (password.length() < 9) {
+            showError("Password must be at least 9 characters long.");
             return;
         }
 
