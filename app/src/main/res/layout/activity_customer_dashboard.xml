@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#F7FAF8">
+        android:background="@color/glitter">
 
 
         <ScrollView
@@ -31,8 +31,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="@color/forest_green"
-                    android:padding="20dp">
+                    android:background="@drawable/bg_header"
+                    android:padding="20dp"
+                    android:paddingTop="28dp"
+                    android:paddingBottom="24dp">
 
 
                     <LinearLayout
@@ -243,7 +245,52 @@
                         android:layout_marginTop="18dp"
                         android:orientation="vertical">
 
-                        <!-- Actual categories will be added later -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Business"
+                            android:textColor="#173D31"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="10dp"/>
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fillViewport="false"
+                            android:scrollbars="none">
+
+                            <LinearLayout
+                                android:id="@+id/businessCategoriesRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"/>
+
+                        </HorizontalScrollView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Freelancer"
+                            android:textColor="#173D31"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fillViewport="false"
+                            android:scrollbars="none">
+
+                            <LinearLayout
+                                android:id="@+id/freelancerCategoriesRow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"/>
+
+                        </HorizontalScrollView>
 
                     </LinearLayout>
 
@@ -252,7 +299,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
-                        android:background="@color/forest_green"
+                        android:background="@drawable/bg_header"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="20dp"

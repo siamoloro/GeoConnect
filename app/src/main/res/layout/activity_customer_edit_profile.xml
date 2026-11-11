@@ -57,22 +57,12 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center"
-                        android:background="#DFE9DF"
                         android:src="@drawable/ic_person"
+                        android:background="@drawable/bg_avatar"
                         android:contentDescription="Customer profile photo"
                         android:padding="22dp" />
 
-                    <TextView
-                        android:id="@+id/changePhotoButton"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="bottom|end"
-                        android:background="@color/jade_green"
-                        android:gravity="center"
-                        android:text="+"
-                        android:textColor="#FFFFFF"
-                        android:textSize="23sp"
-                        android:contentDescription="Change profile photo" />
+
 
                 </FrameLayout>
 

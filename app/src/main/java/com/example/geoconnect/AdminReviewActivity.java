@@ -19,6 +19,7 @@ public class AdminReviewActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
     LinearLayout reviewContainer;
+    private String currentTab = "pending";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +139,8 @@ public class AdminReviewActivity extends AppCompatActivity {
 
     private void loadPendingApplications()
     {
+        currentTab = "pending";
+
         reviewContainer.removeAllViews();
 
         db.collection("businesses")
@@ -205,6 +208,15 @@ public class AdminReviewActivity extends AppCompatActivity {
         Button btnReject =
                 card.findViewById(R.id.btnReject);
 
+        if(currentTab.equals("approved"))
+        {
+            btnApprove.setVisibility(android.view.View.GONE);
+        }
+        else if(currentTab.equals("rejected"))
+        {
+            btnReject.setVisibility(android.view.View.GONE);
+        }
+
         txtName.setText(name);
         txtType.setText(type);
 
@@ -267,6 +279,7 @@ public class AdminReviewActivity extends AppCompatActivity {
 
     private void loadApprovedApplications()
     {
+        currentTab = "approved";
         reviewContainer.removeAllViews();
 
         db.collection("businesses")
@@ -310,6 +323,7 @@ public class AdminReviewActivity extends AppCompatActivity {
 
     private void loadRejectedApplications()
     {
+        currentTab = "rejected";
         reviewContainer.removeAllViews();
 
         db.collection("businesses")
