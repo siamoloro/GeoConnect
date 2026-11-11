@@ -25,16 +25,17 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="155dp"
-                android:background="@color/forest_green">
+                android:layout_height="137dp"
+                android:background="@drawable/bg_header">
+
                 <TextView
                     android:id="@+id/settingsButton"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:layout_gravity="end|top"
                     android:layout_margin="18dp"
-                    android:gravity="center"
                     android:drawableStart="@drawable/ic_settings"
+                    android:gravity="center"
                     android:paddingStart="12dp"
                     android:textSize="22sp" />
             </FrameLayout>
@@ -46,16 +47,17 @@
                 android:paddingStart="22dp"
                 android:paddingEnd="22dp"
                 android:paddingBottom="20dp">
+
                 <ImageView
                     android:id="@+id/profileImage"
                     android:layout_width="78dp"
                     android:layout_height="78dp"
-                    android:layout_marginTop="-36dp"
-                    android:background="#D8E6D9"
-                    android:src="@drawable/ic_person"
-                    android:padding="15dp"
+                    android:background="@drawable/bg_avatar"
                     android:contentDescription="Customer profile picture"
-                    android:scaleType="fitCenter"/>
+                    android:padding="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_person" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

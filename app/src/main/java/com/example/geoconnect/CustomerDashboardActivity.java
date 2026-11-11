@@ -1,9 +1,12 @@
 package com.example.geoconnect;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -200,6 +203,118 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         navProfile.setOnClickListener(v -> openPage(CustomerProfileActivity.class));
 
         showNormalDashboard();
+    }
+    // LOAD BUSINESS AND FREELANCER CATEGORIES
+    private void loadServiceCategories() {
+
+        LinearLayout businessRow =
+                findViewById(R.id.businessCategoriesRow);
+
+        LinearLayout freelancerRow =
+                findViewById(R.id.freelancerCategoriesRow);
+
+        businessRow.removeAllViews();
+        freelancerRow.removeAllViews();
+
+        String[] businessCategories = getResources()
+                .getStringArray(R.array.business_categories_array);
+
+        String[] freelancerCategories = getResources()
+                .getStringArray(R.array.service_categories);
+
+        // BUSINESS CATEGORIES
+        for (int i = 1; i < businessCategories.length; i++) {
+            addCategoryCard(
+                    businessRow,
+                    businessCategories[i],
+                    "Business"
+            );
+        }
+
+        // FREELANCER CATEGORIES
+        for (int i = 1; i < freelancerCategories.length; i++) {
+            addCategoryCard(
+                    freelancerRow,
+                    freelancerCategories[i],
+                    "Freelancer"
+            );
+        }
+    }
+
+
+    // CREATE HORIZONTAL CATEGORY CARDS
+    private void addCategoryCard(
+            LinearLayout container,
+            String category,
+            String providerType) {
+
+        TextView card = new TextView(this);
+
+        card.setText(category);
+        card.setTextSize(14);
+        card.setTextColor(Color.parseColor("#173D31"));
+        card.setGravity(Gravity.CENTER);
+        card.setMaxLines(3);
+
+        card.setPadding(
+                dp(12),
+                dp(12),
+                dp(12),
+                dp(12)
+        );
+
+        GradientDrawable background = new GradientDrawable();
+
+        background.setColor(Color.WHITE);
+        background.setCornerRadius(dp(14));
+        background.setStroke(
+                dp(1),
+                Color.parseColor("#D5E9DE")
+        );
+
+        card.setBackground(background);
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+                        dp(160),
+                        dp(85)
+                );
+
+        params.setMargins(0, 0, dp(10), 0);
+        card.setLayoutParams(params);
+
+        card.setClickable(true);
+        card.setFocusable(true);
+
+        // Search for providers in the selected category
+        card.setOnClickListener(v -> {
+
+            // Use the dashboard's existing search functionality
+            dashboardSearchInput.setText(category);
+
+            if ("Business".equals(providerType)) {
+                dashboardSearchFilters.check(
+                        R.id.searchFilterBusinesses
+                );
+            } else {
+                dashboardSearchFilters.check(
+                        R.id.searchFilterFreelancers
+                );
+            }
+
+            searchProviders(category);
+        });
+
+        container.addView(card);
+    }
+
+
+    // CONVERT DP TO PIXELS
+    private int dp(int value) {
+        return (int) (
+                value * getResources()
+                        .getDisplayMetrics().density + 0.5f
+        );
     }
 
     // LOAD CUSTOMER INFORMATION FROM FIRESTORE
