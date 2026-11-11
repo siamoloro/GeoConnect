@@ -92,6 +92,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_dashboard);
 
+        loadServiceCategories();
         // Connect the existing location TextView
         locationValue = findViewById(R.id.locationValue);
 
@@ -251,16 +252,16 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         TextView card = new TextView(this);
 
         card.setText(category);
-        card.setTextSize(14);
+        card.setTextSize(12);
         card.setTextColor(Color.parseColor("#173D31"));
         card.setGravity(Gravity.CENTER);
-        card.setMaxLines(3);
+        card.setMaxLines(4);
 
         card.setPadding(
-                dp(12),
-                dp(12),
-                dp(12),
-                dp(12)
+                dp(8),
+                dp(6),
+                dp(8),
+                dp(6)
         );
 
         GradientDrawable background = new GradientDrawable();
@@ -276,11 +277,11 @@ public class CustomerDashboardActivity extends AppCompatActivity {
 
         LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(
-                        dp(160),
-                        dp(85)
+                        dp(125),
+                        dp(65)
                 );
 
-        params.setMargins(0, 0, dp(10), 0);
+        params.setMargins(0, 0, dp(8), 0);
         card.setLayoutParams(params);
 
         card.setClickable(true);
@@ -483,7 +484,10 @@ public class CustomerDashboardActivity extends AppCompatActivity {
     }
 
     // CREATE A CLICKABLE SEARCH RESULT (Updated with fullName check)
+    // CREATE A PROVIDER SEARCH RESULT CARD
     private void addProviderResult(DocumentSnapshot document, String type) {
+
+        // GET PROVIDER NAME
         String name = safeValue(document, "name");
 
         if (name.isEmpty()) {
@@ -495,32 +499,178 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         }
 
         if (name.isEmpty()) {
-            name = safeValue(document, "fullName"); // Fixed field mismatch
+            name = safeValue(document, "fullName");
         }
 
         if (name.isEmpty()) {
             name = "Unnamed provider";
         }
 
+        // GET CATEGORY
         String category = safeValue(document, "category");
-        TextView resultView = new TextView(this);
 
-        resultView.setText(name + "\n" + type + (category.isEmpty() ? "" : " • " + category));
-        resultView.setTextSize(16);
-        resultView.setPadding(24, 20, 24, 20);
-        resultView.setClickable(true);
+        if (category.isEmpty()) {
+            category = safeValue(document, "serviceCategory");
+        }
 
+        // GET LOCATION
+        String location = safeValue(document, "address");
+
+        // CREATE CARD
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setPadding(dp(16), dp(16), dp(16), dp(16));
+
+        GradientDrawable cardBackground = new GradientDrawable();
+        cardBackground.setColor(Color.WHITE);
+        cardBackground.setCornerRadius(dp(16));
+        cardBackground.setStroke(
+                dp(1),
+                Color.parseColor("#DDE5E0")
+        );
+
+        card.setBackground(cardBackground);
+        card.setElevation(dp(3));
+
+        LinearLayout.LayoutParams cardParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        cardParams.setMargins(
+                dp(16), dp(10), dp(16), dp(10)
+        );
+
+        card.setLayoutParams(cardParams);
+
+        // PROVIDER TYPE
+        TextView typeText = new TextView(this);
+        typeText.setText(type.toUpperCase(Locale.ROOT));
+        typeText.setTextSize(12);
+        typeText.setTextColor(Color.parseColor("#315E50"));
+        typeText.setTypeface(null, android.graphics.Typeface.BOLD);
+
+        card.addView(typeText);
+
+        // PROVIDER NAME
+        TextView nameText = new TextView(this);
+
+        String nameLabel = type.equalsIgnoreCase("Business")
+                ? "Business Name: "
+                : "Freelancer Name: ";
+
+        nameText.setText(nameLabel + name);
+        nameText.setTextSize(16);
+        nameText.setTextColor(Color.parseColor("#173D31"));
+
+        LinearLayout.LayoutParams nameParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        nameParams.topMargin = dp(12);
+        nameText.setLayoutParams(nameParams);
+
+        card.addView(nameText);
+
+        // CATEGORY
+        TextView categoryText = new TextView(this);
+        categoryText.setText(
+                "Category: " +
+                        (category.isEmpty() ? "Not specified" : category)
+        );
+
+        categoryText.setTextSize(14);
+        categoryText.setTextColor(Color.parseColor("#74867D"));
+
+        LinearLayout.LayoutParams categoryParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        categoryParams.topMargin = dp(6);
+        categoryText.setLayoutParams(categoryParams);
+
+        card.addView(categoryText);
+
+        // LOCATION (ONLY IF AVAILABLE)
+        if (!location.isEmpty()) {
+
+            TextView locationText = new TextView(this);
+            locationText.setText("Location: " + location);
+            locationText.setTextSize(13);
+            locationText.setTextColor(Color.parseColor("#74867D"));
+
+            LinearLayout.LayoutParams locationParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
+            locationParams.topMargin = dp(6);
+            locationText.setLayoutParams(locationParams);
+
+            card.addView(locationText);
+        }
+
+        // VIEW DETAILS BUTTON
+        TextView detailsButton = new TextView(this);
+        detailsButton.setText("View Details");
+        detailsButton.setTextSize(14);
+        detailsButton.setTextColor(Color.WHITE);
+        detailsButton.setGravity(Gravity.CENTER);
+        detailsButton.setPadding(
+                dp(14), dp(10), dp(14), dp(10)
+        );
+
+        GradientDrawable buttonBackground = new GradientDrawable();
+        buttonBackground.setColor(Color.parseColor("#176B50"));
+        buttonBackground.setCornerRadius(dp(4));
+
+        detailsButton.setBackground(buttonBackground);
+
+        LinearLayout.LayoutParams buttonParams =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        buttonParams.topMargin = dp(16);
+        detailsButton.setLayoutParams(buttonParams);
+
+        // OPEN PROVIDER DETAILS
         final String providerName = name;
-        resultView.setOnClickListener(v -> {
-            Intent intent = new Intent(this, DetailsActivity.class);
+        final String providerCategory = category;
+
+        View.OnClickListener openDetails = v -> {
+
+            Intent intent = new Intent(
+                    CustomerDashboardActivity.this,
+                    DetailsActivity.class
+            );
+
             intent.putExtra("providerId", document.getId());
             intent.putExtra("providerName", providerName);
-            intent.putExtra("providerCategory", category);
+            intent.putExtra("providerCategory", providerCategory);
             intent.putExtra("providerType", type);
-            startActivity(intent);
-        });
 
-        dashboardResultsContainer.addView(resultView);
+            startActivity(intent);
+        };
+
+        detailsButton.setOnClickListener(openDetails);
+
+        card.addView(detailsButton);
+
+        // MAKE ENTIRE CARD CLICKABLE
+        card.setOnClickListener(openDetails);
+        card.setClickable(true);
+        card.setFocusable(true);
+
+        // ADD CARD TO SEARCH RESULTS
+        dashboardResultsContainer.addView(card);
     }
 
     // SHOW NORMAL DASHBOARD

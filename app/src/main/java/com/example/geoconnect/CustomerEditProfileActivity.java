@@ -33,7 +33,6 @@ public class CustomerEditProfileActivity extends AppCompatActivity {
     private EditText editEmail;
     private EditText editPhone;
 
-    private TextView changePhotoButton;
     private TextView changePasswordButton;
 
     private Button saveChangesButton;
@@ -54,8 +53,6 @@ public class CustomerEditProfileActivity extends AppCompatActivity {
         customerProfileImage =
                 findViewById(R.id.customerProfileImage);
 
-        changePhotoButton =
-                findViewById(R.id.changePhotoButton);
 
         editFirstName =
                 findViewById(R.id.editFirstName);
@@ -83,15 +80,6 @@ public class CustomerEditProfileActivity extends AppCompatActivity {
         // LOAD CUSTOMER INFORMATION
         loadCustomerDetails();
 
-        // CHANGE PROFILE PHOTO
-        changePhotoButton.setOnClickListener(v -> {
-
-            Toast.makeText(
-                    this,
-                    "Change profile photo coming soon",
-                    Toast.LENGTH_SHORT
-            ).show();
-        });
 
         // CHANGE PASSWORD
         changePasswordButton.setOnClickListener(v -> {
