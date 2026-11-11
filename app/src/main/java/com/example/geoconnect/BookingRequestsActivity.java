@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class BookingRequestsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BookingAdapter bookingAdapter;
     private List<Booking> bookingList;
-    private String currentStatus = "Pending";
+    private String currentTab = "Pending";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +43,15 @@ public class BookingRequestsActivity extends AppCompatActivity {
         bookingAdapter = new BookingAdapter(bookingList, new BookingAdapter.OnBookingActionListener() {
             @Override
             public void onAccept(Booking booking) {
-                updateBookingStatus(booking.getId(), "Accepted");
+                // The customer screens call an accepted booking "Confirmed"
+                BookingStatusHelper.update(BookingRequestsActivity.this, booking.getId(), "Confirmed",
+                        () -> loadBookings(currentTab));
             }
 
             @Override
             public void onDecline(Booking booking) {
-                updateBookingStatus(booking.getId(), "Declined");
+                BookingStatusHelper.update(BookingRequestsActivity.this, booking.getId(), "Rejected",
+                        () -> loadBookings(currentTab));
             }
         });
         recyclerView.setAdapter(bookingAdapter);
@@ -60,71 +64,80 @@ public class BookingRequestsActivity extends AppCompatActivity {
         for (TextView tab : tabs) {
             tab.setOnClickListener(v -> {
                 selectTab(tab, tabs);
-                currentStatus = tab.getText().toString();
-                loadBookingsFromFirestore(currentStatus);
+                currentTab = tab.getText().toString();
+                loadBookings(currentTab);
             });
         }
-
-        loadBookingsFromFirestore("Pending");
     }
 
-    private void loadBookingsFromFirestore(String status) {
-        if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() == null) return;
-        String currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getUid();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadBookings(currentTab);
+    }
 
+    // Tab label shown to the freelancer -> status values stored in Firestore
+    private boolean matchesTab(String tab, String status) {
+        if (status == null) status = "Pending";
+        switch (tab) {
+            case "Accepted":
+                return status.equalsIgnoreCase("Confirmed") || status.equalsIgnoreCase("Accepted");
+            case "Completed":
+                return status.equalsIgnoreCase("Completed");
+            default:
+                return status.equalsIgnoreCase("Pending");
+        }
+    }
+
+    private void loadBookings(String tab) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Bookings store the freelancer's document ID in "providerId"
         db.collection("freelancers")
-                .whereEqualTo("userID", currentUserId)
+                .whereEqualTo("userID", uid)
                 .limit(1)
                 .get()
-                .addOnSuccessListener(freelancerSnapshots -> {
-                    if (!freelancerSnapshots.isEmpty()) {
-                        String freelancerId = freelancerSnapshots.getDocuments().get(0).getId();
+                .addOnSuccessListener(fs -> {
+                    String providerId = fs.isEmpty() ? uid : fs.getDocuments().get(0).getId();
 
-                        // Field names must match what BookingsActivity writes (providerID, service, bookingDate)
-                        db.collection("bookings")
-                                .whereEqualTo("status", status)
-                                .whereEqualTo("providerID", freelancerId)
-                                .get()
-                                .addOnSuccessListener(queryDocumentSnapshots -> {
-                                    bookingList.clear();
-                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                        String customerName = document.getString("customerName");
-                                        if (customerName == null || customerName.isEmpty()) customerName = "Customer";
-                                        Timestamp when = document.getTimestamp("bookingDate");
-                                        Booking booking = new Booking(
-                                                document.getId(),
-                                                customerName,
-                                                document.getString("service"),
-                                                "",
-                                                when != null ? DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(when.toDate()) : "",
-                                                document.getString("location"),
-                                                document.getString("status"),
-                                                customerName.substring(0, 1).toUpperCase()
-                                        );
-                                        bookingList.add(booking);
-                                    }
-                                    bookingAdapter.notifyDataSetChanged();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(this, "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to identify freelancer profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
-    }
+                    db.collection("booking")
+                            .whereEqualTo("providerId", providerId)
+                            .get()
+                            .addOnSuccessListener(snap -> {
+                                bookingList.clear();
+                                for (DocumentSnapshot d : snap.getDocuments()) {
+                                    String status = d.getString("status");
+                                    if (!matchesTab(tab, status)) continue;
 
-    private void updateBookingStatus(String docId, String newStatus) {
-        db.collection("bookings").document(docId)
-                .update("status", newStatus)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Booking " + newStatus.toLowerCase(), Toast.LENGTH_SHORT).show();
-                    loadBookingsFromFirestore(currentStatus);
+                                    String customerName = d.getString("customerName");
+                                    if (customerName == null || customerName.isEmpty()) customerName = "Customer";
+
+                                    Timestamp when = d.getTimestamp("bookingDate");
+                                    String whenText = when != null
+                                            ? DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
+                                            .format(when.toDate())
+                                            : "";
+
+                                    String price = d.getString("price");
+                                    bookingList.add(new Booking(
+                                            d.getId(),
+                                            customerName,
+                                            d.getString("service"),
+                                            price != null ? price : "",
+                                            whenText,
+                                            d.getString("location"),
+                                            status,
+                                            customerName.substring(0, 1).toUpperCase()
+                                    ));
+                                }
+                                bookingAdapter.notifyDataSetChanged();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(this,
+                                    "Failed to load bookings: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error updating status: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this,
+                        "Failed to identify freelancer profile: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     private void selectTab(TextView selected, TextView[] all) {
