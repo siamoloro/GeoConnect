@@ -25,7 +25,7 @@ public class OpenCaseActivity extends AppCompatActivity {
     private Spinner spCaseType;
     private EditText etSubject, etDescription;
     private Button btnSubmitCase;
-    private TextView tvBack, tvCancel, tvAttach;
+    private TextView tvBack, tvCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,6 @@ public class OpenCaseActivity extends AppCompatActivity {
         btnSubmitCase = findViewById(R.id.btnSubmitCase);
         tvBack = findViewById(R.id.tvBack);
         tvCancel = findViewById(R.id.tvCancel);
-        tvAttach = findViewById(R.id.tvAttach);
 
         // Back and Cancel actions
         tvBack.setOnClickListener(v -> finish());
