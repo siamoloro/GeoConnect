@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -136,7 +137,7 @@ public class FreelancerSignupActivity extends AppCompatActivity {
                     userAccount.put("email", email);
                     userAccount.put("type", "freelancer");
                     userAccount.put("status", "Active");
-                    userAccount.put("created_at", System.currentTimeMillis());
+                    userAccount.put("created_at", FieldValue.serverTimestamp());
 
                     db.collection("users").document(userId)
                             .set(userAccount)
