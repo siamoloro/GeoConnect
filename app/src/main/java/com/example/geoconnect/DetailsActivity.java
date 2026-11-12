@@ -226,7 +226,8 @@ public class DetailsActivity extends AppCompatActivity {
                             document,
                             "name",
                             "businessName",
-                            "fullname"
+                            "fullname",
+                            "fullName"
                     );
 
                     currentProviderCategory = firstString(
@@ -257,7 +258,8 @@ public class DetailsActivity extends AppCompatActivity {
                             "businessAddress",
                             "physicalAddress",
                             "city",
-                            "locationName"
+                            "locationName",
+                            "serviceArea"
                     );
                     providerDistance.setText(
                             address.isEmpty()
