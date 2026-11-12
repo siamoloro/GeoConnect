@@ -18,6 +18,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     public interface OnBookingActionListener {
         void onAccept(Booking booking);
         void onDecline(Booking booking);
+        void onComplete(Booking booking);   // NEW
     }
 
     public BookingAdapter(List<Booking> bookingList, OnBookingActionListener actionListener) {
@@ -39,16 +40,21 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         holder.txtCustomerName.setText(booking.getCustomerName());
         holder.txtServiceTitle.setText(booking.getServiceTitle());
         holder.txtPrice.setText(booking.getPrice());
-        holder.txtDateTime.setText(booking. getDateTime());
+        holder.txtDateTime.setText(booking.getDateTime());
         holder.txtLocation.setText(booking.getLocation());
 
-        if ("Pending".equals(booking.getStatus())) {
-            holder.layoutActionButtons.setVisibility(View.VISIBLE);
-            holder.btnAccept.setOnClickListener(v -> actionListener.onAccept(booking));
-            holder.btnDecline.setOnClickListener(v -> actionListener.onDecline(booking));
-        } else {
-            holder.layoutActionButtons.setVisibility(View.GONE);
-        }
+        String status = booking.getStatus();
+        boolean isPending = status == null || "Pending".equalsIgnoreCase(status);
+        boolean isAccepted = "Confirmed".equalsIgnoreCase(status) || "Accepted".equalsIgnoreCase(status);
+
+        // Accept / Decline only for pending requests
+        holder.layoutActionButtons.setVisibility(isPending ? View.VISIBLE : View.GONE);
+        holder.btnAccept.setOnClickListener(v -> actionListener.onAccept(booking));
+        holder.btnDecline.setOnClickListener(v -> actionListener.onDecline(booking));
+
+        // "Mark as completed" only for accepted jobs
+        holder.btnComplete.setVisibility(isAccepted ? View.VISIBLE : View.GONE);
+        holder.btnComplete.setOnClickListener(v -> actionListener.onComplete(booking));
     }
 
     @Override
@@ -57,7 +63,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     }
 
     public static class BookingViewHolder extends RecyclerView.ViewHolder {
-        TextView txtInitials, txtCustomerName, txtServiceTitle, txtPrice, txtDateTime, txtLocation, btnAccept, btnDecline;
+        TextView txtInitials, txtCustomerName, txtServiceTitle, txtPrice, txtDateTime, txtLocation,
+                btnAccept, btnDecline, btnComplete;
         ViewGroup layoutActionButtons;
 
         public BookingViewHolder(@NonNull View itemView) {
@@ -70,6 +77,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             txtLocation = itemView.findViewById(R.id.txtLocation);
             btnAccept = itemView.findViewById(R.id.btnAccept);
             btnDecline = itemView.findViewById(R.id.btnDecline);
+            btnComplete = itemView.findViewById(R.id.btnComplete);   // NEW
             layoutActionButtons = itemView.findViewById(R.id.layoutActionButtons);
         }
     }

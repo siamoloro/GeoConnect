@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +53,19 @@ public class BookingRequestsActivity extends AppCompatActivity {
             public void onDecline(Booking booking) {
                 BookingStatusHelper.update(BookingRequestsActivity.this, booking.getId(), "Rejected",
                         () -> loadBookings(currentTab));
+            }
+
+            @Override
+            public void onComplete(Booking booking) {
+                new AlertDialog.Builder(BookingRequestsActivity.this)
+                        .setTitle("Mark as completed?")
+                        .setMessage("The customer will see this job as Completed and can leave a review.")
+                        .setPositiveButton("Yes, completed", (d, w) ->
+                                BookingStatusHelper.update(BookingRequestsActivity.this,
+                                        booking.getId(), "Completed",
+                                        () -> loadBookings(currentTab)))
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
         });
         recyclerView.setAdapter(bookingAdapter);

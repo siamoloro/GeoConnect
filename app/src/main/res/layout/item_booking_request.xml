@@ -82,7 +82,7 @@
         android:textSize="12sp"
         android:layout_marginTop="4dp" />
 
-    <!-- Action Buttons (Visible only on Pending tab, or configurable) -->
+    <!-- Action Buttons (Visible only for Pending requests) -->
     <LinearLayout
         android:id="@+id/layoutActionButtons"
         android:layout_width="match_parent"
@@ -120,5 +120,21 @@
             android:focusable="true" />
 
     </LinearLayout>
+
+    <!-- Visible only for accepted jobs -->
+    <TextView
+        android:id="@+id/btnComplete"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Mark as completed"
+        android:textColor="@color/glitter"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/bg_button_primary"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone" />
 
 </LinearLayout>
