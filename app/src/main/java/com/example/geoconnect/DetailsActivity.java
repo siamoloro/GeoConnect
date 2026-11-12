@@ -526,6 +526,19 @@ public class DetailsActivity extends AppCompatActivity {
                     });
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (firebaseAuth != null &&
+                currentProviderId != null &&
+                currentProviderType != null &&
+                ("Business".equalsIgnoreCase(currentProviderType)
+                        || "Freelancer".equalsIgnoreCase(currentProviderType))) {
+
+            checkSavedProvider();
+        }
+    }
 
     // UPDATE SAVE BUTTON APPEARANCE
     private void updateSavedIcon() {

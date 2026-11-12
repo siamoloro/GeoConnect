@@ -28,6 +28,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private TextView customerName;
     private TextView memberSince;
     private TextView bookingCount;
+    private TextView savedCount;
 
     // PROFILE BUTTONS
     private View settingsButton;
@@ -81,6 +82,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
         customerName = findViewById(R.id.customerName);
         memberSince = findViewById(R.id.memberSince);
         bookingCount = findViewById(R.id.bookingCount);
+        savedCount = findViewById(R.id.savedCount);
 
         settingsButton = findViewById(R.id.settingsButton);
         editProfileButton = findViewById(R.id.editProfileButton);
@@ -154,11 +156,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
         // SAVED PROVIDERS
         savedCard.setOnClickListener(v -> {
 
-            Toast.makeText(
-                    this,
-                    "Saved Providers page coming soon",
-                    Toast.LENGTH_SHORT
-            ).show();
+            Intent intent = new Intent(
+                    CustomerProfileActivity.this,
+                    SavedProvidersActivity.class
+            );
+
+            startActivity(intent);
         });
 
         // HOME NAVIGATION
@@ -197,6 +200,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             loadCustomerDetails();
             loadMemberSince();
             loadBookingSummary();
+            loadSavedProvidersCount();
         }
     }
 
@@ -348,6 +352,47 @@ public class CustomerProfileActivity extends AppCompatActivity {
                             CustomerProfileActivity.this,
                             "Unable to load bookings: " + e.getMessage(),
                             Toast.LENGTH_LONG
+                    ).show();
+                });
+    }
+    // LOAD CUSTOMER'S SAVED PROVIDERS COUNT
+    private void loadSavedProvidersCount() {
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        if (user == null) {
+            savedCount.setText("Please log in");
+            return;
+        }
+
+        savedCount.setText("Loading...");
+
+        firestore.collection("customers")
+                .document(user.getUid())
+                .collection("savedProviders")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+
+                    int totalSaved = snapshot.size();
+
+                    if (totalSaved == 0) {
+                        savedCount.setText("No saved providers");
+                    } else if (totalSaved == 1) {
+                        savedCount.setText("1 saved provider");
+                    } else {
+                        savedCount.setText(
+                                totalSaved + " saved providers"
+                        );
+                    }
+                })
+                .addOnFailureListener(e -> {
+
+                    savedCount.setText("Saved providers unavailable");
+
+                    Toast.makeText(
+                            this,
+                            "Unable to load saved providers",
+                            Toast.LENGTH_SHORT
                     ).show();
                 });
     }
