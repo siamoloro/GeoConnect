@@ -74,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:buttonTint="@color/forest_green"
+                    android:textColor="@color/black"
                     android:text="All"
                     android:textSize="13sp" />
 
@@ -83,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:buttonTint="@color/forest_green"
+                    android:textColor="@color/black"
                     android:text="Businesses"
                     android:textSize="13sp" />
 
@@ -92,6 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:buttonTint="@color/forest_green"
+                    android:textColor="@color/black"
                     android:text="Freelancers"
                     android:textSize="13sp" />
 
@@ -111,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:buttonTint="@color/forest_green"
+                    android:textColor="@color/black"
                     android:text="Map View" />
 
                 <RadioButton
@@ -119,6 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:buttonTint="@color/forest_green"
+                    android:textColor="@color/black"
                     android:text="List View" />
 
             </RadioGroup>
